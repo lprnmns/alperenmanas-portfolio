@@ -46,7 +46,7 @@ const ProjectDetailPage: React.FC = () => {
             Projeyi Canlı Gör
           </a>
           <a href={projectData.githubUrl} className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">
-            GitHub'da İncele
+            GitHub&apos;da İncele
           </a>
         </div>
       </div>
