@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 interface ImageCarouselProps {
   images: string[];
@@ -17,9 +18,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
 }) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Autoplay functionality
+  // Autoplay functionality - handle SSR environment
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (typeof window === 'undefined' || images.length <= 1) return;
 
     timerRef.current = setTimeout(() => {
       onNext();
@@ -55,10 +56,13 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
     <div className="relative w-full overflow-hidden rounded-lg" style={{ aspectRatio: '16/9' }}>
       {/* Image display with fade transition */}
       <div className="absolute inset-0 transition-opacity duration-500 ease-in-out flex items-center justify-center">
-        <img
+        <Image
           src={images[currentIndex]}
           alt={`Carousel image ${currentIndex + 1}`}
           className="max-w-full max-h-full object-contain"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+          priority={currentIndex === 0}
         />
       </div>
       

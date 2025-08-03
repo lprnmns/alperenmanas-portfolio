@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 interface EvolutionAccordionProps {
   version: string;
@@ -53,11 +54,13 @@ const EvolutionAccordion: React.FC<EvolutionAccordionProps> = ({
           <p className="text-gray-300 mb-4">{summary}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {imageUrls.map((url, index) => (
-              <div key={index} className="overflow-hidden rounded-lg">
-                <img
+              <div key={index} className="overflow-hidden rounded-lg relative h-48">
+                <Image
                   src={url}
                   alt={`Version ${version} image ${index + 1}`}
-                  className="w-full h-48 object-contain"
+                  className="w-full h-full object-contain"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               </div>
             ))}
