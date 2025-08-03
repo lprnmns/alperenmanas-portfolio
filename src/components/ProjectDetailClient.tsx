@@ -63,7 +63,7 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
             rel="noopener noreferrer"
             className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
           >
-            GitHub'da İncele
+            GitHub&apos;da İncele
           </a>
         </div>
       </div>
@@ -86,7 +86,7 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
 
       {/* Tech Stack & APIs */}
       <div className="mb-12">
-        <h2 className="text-2xl font-semibold mb-6 text-white">Teknolojiler ve API'ler</h2>
+        <h2 className="text-2xl font-semibold mb-6 text-white">Teknolojiler ve API&apos;ler</h2>
         
         {/* Tech Stack */}
         <div className="mb-8">
@@ -105,7 +105,7 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
         
         {/* APIs */}
         <div>
-          <h3 className="text-xl font-semibold mb-4 text-white">Kullanılan API'ler</h3>
+          <h3 className="text-xl font-semibold mb-4 text-white">Kullanılan API&apos;ler</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {project.apis.map((api, index) => (
               <div key={index} className="bg-gray-800 p-4 rounded-lg">

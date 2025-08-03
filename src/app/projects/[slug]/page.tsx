@@ -5,8 +5,9 @@ import ProjectDetailClient from '@/components/ProjectDetailClient';
 import { notFound } from 'next/navigation';
 
 // This is the Server Component
-export default function ProjectDetailPage({ params }: { params: { slug: string } }) {
-  const project = projectsData.find((p) => p.slug === params.slug);
+export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const project = projectsData.find((p) => p.slug === slug);
 
   if (!project) {
     notFound(); // If project doesn't exist, show a 404 page
