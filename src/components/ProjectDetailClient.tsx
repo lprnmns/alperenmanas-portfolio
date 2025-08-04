@@ -5,6 +5,7 @@ import TechBadge from '@/components/TechBadge';
 import ImageCarousel from '@/components/ImageCarousel';
 import EvolutionAccordion from '@/components/EvolutionAccordion';
 import { Project } from '@/data/projectsData';
+import { Info } from 'lucide-react';
 
 interface ProjectDetailClientProps {
   project: Project;
@@ -16,7 +17,7 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
   
   // State for evolution accordion (default open item should be the first item)
   const [openEvolution, setOpenEvolution] = useState<string>(
-    project.evolution.length > 0 ? project.evolution[0].version : ''
+    project.evolution && project.evolution.length > 0 ? project.evolution[0].version : ''
   );
 
   // Carousel handlers
@@ -82,6 +83,22 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
       <div className="mb-12">
         <h2 className="text-2xl font-semibold mb-4 text-white">Projenin Amacı</h2>
         <p className="text-gray-300">{project.purpose}</p>
+        {project.slug === 'lokaskor-ai-location-analysis' && (
+          <div className="mt-6 flex items-start space-x-4 rounded-lg bg-gray-800 border-l-4 border-blue-500 p-4">
+            <div className="flex-shrink-0">
+              <Info className="h-6 w-6 text-blue-400" />
+            </div>
+            <div>
+              <h4 className="font-bold text-white">Güncel Durum & Tavsiyeler</h4>
+              <p className="mt-1 text-gray-300">
+                Şu an için pilot bölge Yenimahalle/Ankara'dır. "Yeni Fırsatları Keşfet" modu henüz tamamlanmadı. En stabil sonuçlar için Yenimahalle bölgesinden, "Eczane" işletme türü için Karşılaştırma Modunu seçiniz.
+              </p>
+            </div>
+          </div>
+        )}
+        {project.subscriberCount && (
+          <p className="text-blue-400 mt-4">Aktif Abone: {project.subscriberCount}</p>
+        )}
       </div>
 
       {/* Tech Stack & APIs */}
@@ -118,20 +135,22 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
       </div>
 
       {/* Evolution Gallery */}
-      <div>
-        <h2 className="text-3xl font-bold mb-8 text-white">Neydi, Ne Oldu? (Projenin Evrimi)</h2>
-        {project.evolution.map((item) => (
-          <EvolutionAccordion
-            key={item.version}
-            version={item.version}
-            title={item.title}
-            summary={item.summary}
-            imageUrls={item.imageUrls}
-            isOpen={openEvolution === item.version}
-            onToggle={() => setOpenEvolution(openEvolution === item.version ? '' : item.version)}
-          />
-        ))}
-      </div>
+      {project.evolution && project.evolution.length > 0 && (
+        <div>
+          <h2 className="text-3xl font-bold mb-8 text-white">Neydi, Ne Oldu? (Projenin Evrimi)</h2>
+          {project.evolution.map((item) => (
+            <EvolutionAccordion
+              key={item.version}
+              version={item.version}
+              title={item.title}
+              summary={item.summary}
+              imageUrls={item.imageUrls}
+              isOpen={openEvolution === item.version}
+              onToggle={() => setOpenEvolution(openEvolution === item.version ? '' : item.version)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -32,17 +32,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, shortDescription, cove
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
-        <div className="p-4">
+        <div className="p-4 flex flex-col h-full">
           <h3 className="text-xl font-semibold mb-2 text-white">{title}</h3>
-          <p className="text-gray-400 mb-4">{shortDescription}</p>
-          {liveUrl && (
+          <p className="text-gray-400 mb-4 flex-grow">{shortDescription}</p>
+          <div className="mt-auto">
             <button
-              className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              className={`inline-block px-4 py-2 rounded transition-colors ${
+                liveUrl
+                  ? 'bg-blue-600 text-white hover:bg-blue-700 cursor-pointer'
+                  : 'bg-gray-600 text-gray-400 cursor-not-allowed'
+              }`}
               onClick={handleLiveUrlClick}
+              disabled={!liveUrl}
             >
               Test Et
             </button>
-          )}
+          </div>
         </div>
       </div>
     </Link>
