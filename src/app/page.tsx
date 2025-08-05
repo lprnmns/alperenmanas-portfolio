@@ -4,7 +4,6 @@ import React from 'react';
 import { projectsData } from '@/data/projectsData';
 import ProjectCard from '@/components/ProjectCard';
 import { aboutMe, skills, certificates } from '@/data/cvData';
-import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -81,13 +80,11 @@ export default function Home() {
                 {certificates.map((cert, index) => (
                   <div key={index} className="bg-gray-800 p-6 rounded-lg shadow-md flex items-center">
                     <div className="mr-4">
-                      <Image
+                      <img
                         src={cert.imageUrl}
                         alt={`Certificate for ${cert.title}`}
-                        width={200}
-                        height={140}
-                        quality={75}
-                        className="object-contain rounded-md"
+                        width="200"
+                        className="object-contain h-auto w-full rounded-md"
                       />
                     </div>
                     <div>
