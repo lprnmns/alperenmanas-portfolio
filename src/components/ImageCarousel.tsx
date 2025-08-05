@@ -60,9 +60,11 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
           src={images[currentIndex]}
           alt={`Carousel image ${currentIndex + 1}`}
           className="max-w-full max-h-full object-contain"
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+          width={1200}
+          height={675}
+          quality={80}
           priority={currentIndex === 0}
+          loading={currentIndex === 0 ? "eager" : "lazy"}
         />
       </div>
       

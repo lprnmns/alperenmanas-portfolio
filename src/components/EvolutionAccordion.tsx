@@ -59,8 +59,10 @@ const EvolutionAccordion: React.FC<EvolutionAccordionProps> = ({
                   src={url}
                   alt={`Version ${version} image ${index + 1}`}
                   className="w-full h-full object-contain"
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  width={400}
+                  height={192}
+                  quality={80}
+                  loading="lazy"
                 />
               </div>
             ))}

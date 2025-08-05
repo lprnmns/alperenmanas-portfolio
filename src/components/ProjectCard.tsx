@@ -23,8 +23,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, shortDescription, cove
               src={coverImageUrl}
               alt={title}
               className="w-full h-full object-cover"
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              width={400}
+              height={192}
+              quality={80}
+              priority
+              loading="eager"
             />
           </div>
           <div className="p-4 flex flex-col flex-grow">

@@ -83,9 +83,10 @@ export default function Home() {
                     <div className="mr-4">
                       <Image
                         src={cert.imageUrl}
-                        alt={`${cert.title} certificate`}
+                        alt={`Certificate for ${cert.title}`}
                         width={200}
-                        height={150}
+                        height={140}
+                        quality={75}
                         className="object-contain rounded-md"
                       />
                     </div>
