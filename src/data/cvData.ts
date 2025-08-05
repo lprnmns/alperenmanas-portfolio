@@ -1,7 +1,8 @@
 export const aboutMe = {
   name: "Alperen Manas",
+  email: "manasalperen@gmail.com",
   education: "Kırıkkale Üniversitesi – Bilgisayar Mühendisliği (2. Sınıf)",
-  bio: "15 yaşından beri bilgisayar ve özellikle Android işletim sistemi yazılımlarıyla (custom, port rom vb.) ilgileniyorum. Şuan aklımdaki gerçek hayat problemlerini çözeceğini düşündüğüm projeleri AI araçlarıyla hayata geçirmeye çalışıyorum. Amacım düşük bütçe ile en iyisi yapmak."
+  bio: "15 yaşından beri bilgisayar ve özellikle Android işletim sistemi yazılımlarıyla (custom, port rom vb.) ilgileniyorum. Son birkaç yıldır odağım yapay zeka modelleri. Özellikle çalışma mantığı farklı olan modelleri kullanıp test etmeyi seviyorum. Şuan aklımdaki gerçek hayat problemlerini çözeceğini düşündüğüm projeleri AI araçlarıyla hayata geçirmeye çalışıyorum. Amacım düşük bütçe ile en iyisi yapmak."
 };
 
 export const skills = {
@@ -14,11 +15,11 @@ export const certificates = [
   {
     title: "Huawei HCIA-AI V3.5 (Turkish)",
     issuer: "Huawei",
-    imageUrl: "/certs/huawei-hcia-ai.png" // Assume certificate image is in /public/certs/
+    imageUrl: "/sertifikalar/huawei-hcia-ai-v3-5-turkish.png"
   },
   {
     title: "BTK-Veri Tabanına Giriş",
     issuer: "BTK Akademi",
-    imageUrl: "/certs/btk-veritabani.png"
+    imageUrl: "/sertifikalar/btk-veri-tabanina-giris.png"
   }
 ];

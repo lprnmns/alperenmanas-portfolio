@@ -23,7 +23,7 @@ export const projectsData: Project[] = [
   {
     slug: 'lokaskor-ai-location-analysis',
     title: 'LokaSkor Pro',
-    shortDescription: "KOBİ'ler ve girişimciler için yapay zeka destekli, veri-odaklı lokasyon analizi ve skorlama platformu.",
+    shortDescription: "KOBİ&apos;ler ve girişimciler için yapay zeka destekli, veri-odaklı lokasyon analizi ve skorlama platformu.",
     coverImageUrl: '/projects/lokaskor/cover.png',
     liveUrl: 'https://lokaskor.alperenmanas.app',
     githubUrl: 'https://github.com/lprnmns/lokaSkor',
@@ -41,7 +41,7 @@ export const projectsData: Project[] = [
     techStack: [
       { name: 'JavaScript', category: 'Frontend' }, { name: 'TypeScript', category: 'Frontend' }, { name: 'Tailwind CSS', category: 'Frontend' }, { name: 'HTML', category: 'Frontend' },
       { name: 'Python', category: 'Backend' }, { name: 'Flask', category: 'Backend' }, { name: 'Jupyter Notebook', category: 'Backend' },
-      { name: 'SQL', category: 'Database' },
+      { name: 'SQLite', category: 'Database' },
       { name: 'Kimi K-2', category: 'AI & Tools' }, { name: 'Qwen3-Coder', category: 'AI & Tools' }, { name: 'Kiro Code', category: 'AI & Tools' }, { name: 'Roo Code', category: 'AI & Tools' }, { name: 'Claude 4 Sonnet', category: 'AI & Tools' }, { name: 'Prompt Engineering', category: 'AI & Tools' }
     ],
     apis: [
@@ -51,7 +51,7 @@ export const projectsData: Project[] = [
     evolution: [
       // ORDER: V4 -> V3 -> V2 -> V1
       { version: 'V4', title: 'Profesyonel Analiz ve Optimizasyon', summary: "Önceki sürümdeki parametre geliştirme önerileri iyiydi ama sürekli değiştirme kısmı zorluyordu. Bunun için daha modern, esnek bir parametre düzenleme sayfası oluşturdum. Buradan 100 puanlık skorun bölümlere göre ağırlıklarını da kolayca ayarlayabildim.", imageUrls: ['/projects/lokaskor/v4-1.png', '/projects/lokaskor/v4-2.png', '/projects/lokaskor/v4-3.png']},
-      { version: 'V3', title: 'Modern Karşılaştırma Arayüzü & AI Destekli Optimizasyon', summary: "Parametreleri kusursuza yaklaştırmak için, proje tarafından desteklenen bölgeden rastgele iki lokasyon seçilip, tüm verileriyle karşılaştırıldığı ve benim manuel puanlama yaptığım bir sistem geliştirdim. Bu verileri AI'ya göndererek parametreler için yeni değer önerileri aldım ve sistemi mükemmele yaklaştırdım.", imageUrls: ['/projects/lokaskor/v3-1.png']},
+      { version: 'V3', title: 'Modern Karşılaştırma Arayüzü & AI Destekli Optimizasyon', summary: "Parametreleri kusursuza yaklaştırmak için, proje tarafından desteklenen bölgeden rastgele iki lokasyon seçilip, tüm verileriyle karşılaştırıldığı ve benim manuel puanlama yaptığım bir sistem geliştirdim. Bu verileri AI&apos;ya göndererek parametreler için yeni değer önerileri aldım ve sistemi mükemmele yaklaştırdım.", imageUrls: ['/projects/lokaskor/v3-1.png']},
       { version: 'V2', title: 'Veri Yönetim Altyapısı ve Kullanıcı Odaklı Arayüz', summary: "Arayüzü son kullanıcıya daha fazla hitap edecek şekilde geliştirdim. Bu noktada, parametreler işlevsel hale gelmiş ve hesaplanan skorların doğruluk oranı fikir verebilecek seviyeye ulaşmıştı.", imageUrls: ['/projects/lokaskor/v2-1.png', '/projects/lokaskor/v2-2.png']},
       { version: 'V1', title: 'Konseptin Kanıtlanması ve Backend Doğrulaması', summary: "Projenin temel skorlama mantığının ve harita görselleştirmesinin test edildiği ilk prototip. Amaç, backend tarafını kendini kanıtlayana kadar izlemek ve admin panelinden optimal parametreleri ayarlamaktı.", imageUrls: ['/projects/lokaskor/v1-1.png', '/projects/lokaskor/v1-2.png', '/projects/lokaskor/v1-3.png', '/projects/lokaskor/v1-4.png']}
     ]
@@ -70,7 +70,7 @@ export const projectsData: Project[] = [
       '/projects/not-bildirim-otomasyonu/carousel-5.jpg',
       '/projects/not-bildirim-otomasyonu/carousel-6.jpg'
     ],
-    purpose: "İlk olarak kendime üniversitenin obs sistemine 4 dakika bir giriş yapacak bir otomasyon oluşturdum.Her girişte id selector ile not tablosunu çekmeye çalıştım ama sanırım güvenlikten dolayı dinamik id'ler tanımlandığı için bu yöntem başarısız oldu.Onun yerine not tablosunun sayfasına yine otomasyonla gelip, ekran görüntüsü aldırıp, onu görüntü işleme kütüphanesiyle tabloya ayırdım.Her not tablosundaki veriyi json formatında sakladım.Her kontrolde eski json ile yenisini karşılaştırıp farkları(yeni not girişlerini) bildirim olarak almayı amaçladım.Bu aşamada telegram botlarını kullandım ve bildirimleri onun aracılığıyla aldım.Talep olunca sonraki sınav dönemine kadar herkesin kullanabileceği bir telegram botu ve telegram kullanmayanlar için e-posta aboneliğini yaptım.Üst sınıf olup benim derslerimi alanlar da faydalanabilsin diye her abonelik kaydında ders seçimi ekledim.En büyük engel captcha-robot musun? tesleri oldu.Bunun için önce maliyetsiz olduğu için açık kaynaklı,derin öğrenme destekli modeller kullandım ama başarı oranı %60'ı geçemedi.Onun yerie 2-captcha hizmetini alarak cüzi bir miktar ile %99'a kadar doğruluk oranı yakaladım.Özetle SADECE BENİM ALDIĞIM DERSLER için otomasyon kullanarak bir not bildirim sistemi oluşturdum.",
+    purpose: "İlk olarak kendime üniversitenin obs sistemine 4 dakika bir giriş yapacak bir otomasyon oluşturdum.Her girişte id selector ile not tablosunu çekmeye çalıştım ama sanırım güvenlikten dolayı dinamik id&apos;ler tanımlandığı için bu yöntem başarısız oldu.Onun yerine not tablosunun sayfasına yine otomasyonla gelip, ekran görüntüsü aldırıp, onu görüntü işleme kütüphanesiyle tabloya ayırdım.Her not tablosundaki veriyi json formatında sakladım.Her kontrolde eski json ile yenisini karşılaştırıp farkları(yeni not girişlerini) bildirim olarak almayı amaçladım.Bu aşamada telegram botlarını kullandım ve bildirimleri onun aracılığıyla aldım.Talep olunca sonraki sınav dönemine kadar herkesin kullanabileceği bir telegram botu ve telegram kullanmayanlar için e-posta aboneliğini yaptım.Üst sınıf olup benim derslerimi alanlar da faydalanabilsin diye her abonelik kaydında ders seçimi ekledim.En büyük engel captcha-robot musun? tesleri oldu.Bunun için önce maliyetsiz olduğu için açık kaynaklı,derin öğrenme destekli modeller kullandım ama başarı oranı %60&apos;ı geçemedi.Onun yerie 2-captcha hizmetini alarak cüzi bir miktar ile %99'a kadar doğruluk oranı yakaladım.Özetle SADECE BENİM ALDIĞIM DERSLER için otomasyon kullanarak bir not bildirim sistemi oluşturdum.",
     subscriberCount: '+30',
     techStack: [
       { name: 'HTML', category: 'Frontend' }, { name: 'CSS', category: 'Frontend' }, { name: 'JavaScript', category: 'Frontend' }, { name: 'Jinja2', category: 'Frontend' },
