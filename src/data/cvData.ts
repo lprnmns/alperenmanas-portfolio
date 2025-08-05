@@ -6,8 +6,8 @@ export const aboutMe = {
 };
 
 export const skills = {
-  "Programlama Dilleri": ["Python (Temel)", "C# (Orta)", "SQL (Temel)"],
-  "Alan Bilgisi": ["Yazılım", "Programlama", "Vibe Coding (Context & Prompt Engineering)"],
+  "Programlama Ve Veritabanı Dilleri": ["Python (Temel)", "C# (Orta)", "SQL (Temel)"],
+  "Alan Bilgisi": ["Yazılım-Programlama", "Vibe Coding (Context & Prompt Engineering)"],
   "İlgi Alanları": ["LLM", "Algoritmalar", "Finansal Piyasalar"]
 };
 
