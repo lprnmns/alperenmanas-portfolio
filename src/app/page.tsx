@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { projectsData } from '@/data/projectsData';
 import ProjectCard from '@/components/ProjectCard';
 import { aboutMe, skills, certificates } from '@/data/cvData';
@@ -80,10 +81,11 @@ export default function Home() {
                 {certificates.map((cert, index) => (
                   <div key={index} className="bg-gray-800 p-6 rounded-lg shadow-md flex items-center">
                     <div className="mr-4">
-                      <img
+                      <Image
                         src={cert.imageUrl}
                         alt={`Certificate for ${cert.title}`}
-                        width="200"
+                        width={200}
+                        height={150}
                         className="object-contain h-auto w-full rounded-md"
                       />
                     </div>

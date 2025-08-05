@@ -3,7 +3,7 @@ import ProjectCard from '@/components/ProjectCard';
 import { projectsData } from '@/data/projectsData';
 import { aboutMe, skills, certificates } from '@/data/cvData';
 import Image from 'next/image';
-import Link from 'next/link';
+
 
 export default function Home() {
   return (

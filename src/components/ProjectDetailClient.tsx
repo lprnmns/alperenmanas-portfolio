@@ -91,7 +91,7 @@ const ProjectDetailClient: React.FC<ProjectDetailClientProps> = ({ project }) =>
             <div>
               <h4 className="font-bold text-white">Güncel Durum & Tavsiyeler</h4>
               <p className="mt-1 text-gray-300">
-                Şu an için pilot bölge Yenimahalle/Ankara&apos;dır. "Yeni Fırsatları Keşfet" modu henüz tamamlanmadı. En stabil sonuçlar için Yenimahalle bölgesinden, "Eczane" işletme türü için Karşılaştırma Modunu seçiniz.
+                Şu an için pilot bölge Yenimahalle/Ankara&apos;dır. &quot;Yeni Fırsatları Keşfet&quot; modu henüz tamamlanmadı. En stabil sonuçlar için Yenimahalle bölgesinden, &quot;Eczane&quot; işletme türü için Karşılaştırma Modunu seçiniz.
               </p>
             </div>
           </div>
