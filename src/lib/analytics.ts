@@ -19,6 +19,21 @@ export interface CustomEvent {
   value?: number;
 }
 
+// Vercel Analytics configuration interface
+export interface VercelAnalyticsConfig {
+  enabled: boolean;
+  debug?: boolean;
+}
+
+// Combined analytics configuration
+export interface AnalyticsConfig {
+  googleAnalytics: {
+    enabled: boolean;
+    measurementId: string;
+  };
+  vercelAnalytics: VercelAnalyticsConfig;
+}
+
 // Global type declarations for gtag
 export type GtagCommand = 'config' | 'event' | 'js' | 'set';
 export type GtagConfigParams = {
@@ -181,4 +196,77 @@ export const waitForAnalytics = (timeout = 5000): Promise<boolean> => {
       }
     }, 100);
   });
+};
+
+// Vercel Analytics utility functions
+
+/**
+ * Check if Vercel Analytics should be loaded based on environment
+ * Follows the same pattern as Google Analytics for consistency
+ * @returns boolean indicating if Vercel Analytics should be loaded
+ */
+export const shouldLoadVercelAnalytics = (): boolean => {
+  // Load in production by default
+  if (IS_PRODUCTION) {
+    return true;
+  }
+  
+  // In development, respect debug flag - load unless explicitly disabled
+  if (IS_DEVELOPMENT) {
+    return process.env.NEXT_PUBLIC_ANALYTICS_DEBUG !== 'false';
+  }
+  
+  // For other environments (test, etc.), don't load analytics
+  return false;
+};
+
+/**
+ * Check if Vercel Analytics is enabled and should be active
+ * @returns boolean indicating if Vercel Analytics is enabled
+ */
+export const isVercelAnalyticsEnabled = (): boolean => {
+  // In development, analytics can be disabled by setting NEXT_PUBLIC_ANALYTICS_DEBUG=false
+  if (IS_DEVELOPMENT && process.env.NEXT_PUBLIC_ANALYTICS_DEBUG === 'false') {
+    return false;
+  }
+
+  // Vercel Analytics works automatically when deployed to Vercel
+  // In development, it should work if the package is installed
+  return shouldLoadVercelAnalytics();
+};
+
+/**
+ * Get Vercel Analytics configuration
+ * @returns VercelAnalyticsConfig object with current settings
+ */
+export const getVercelAnalyticsConfig = (): VercelAnalyticsConfig => {
+  return {
+    enabled: isVercelAnalyticsEnabled(),
+    debug: ANALYTICS_DEBUG,
+  };
+};
+
+/**
+ * Get combined analytics configuration for both Google Analytics and Vercel Analytics
+ * @returns AnalyticsConfig object with settings for both analytics providers
+ */
+export const getAnalyticsConfig = (): AnalyticsConfig => {
+  return {
+    googleAnalytics: {
+      enabled: isAnalyticsEnabled(),
+      measurementId: GA_MEASUREMENT_ID,
+    },
+    vercelAnalytics: getVercelAnalyticsConfig(),
+  };
+};
+
+/**
+ * Log debug information for Vercel Analytics in development mode
+ * @param message - Debug message to log
+ * @param data - Optional data to log
+ */
+export const debugLogVercel = (message: string, data?: unknown): void => {
+  if (ANALYTICS_DEBUG) {
+    console.log(`[Vercel Analytics Debug] ${message}`, data || '');
+  }
 };
