@@ -11,9 +11,6 @@ const nextConfig = {
     return config;
   },
   
-  // Exclude test directories from build
-  pageExtensions: ['tsx', 'ts', 'jsx', 'js'].map(ext => `!(__tests__|**/*.test|**/*.spec).${ext}`),
-  
   eslint: {
     // Ignore test files during build
     ignoreDuringBuilds: false,
