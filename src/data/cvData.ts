@@ -21,5 +21,10 @@ export const certificates = [
     title: "BTK-Veri Tabanına Giriş",
     issuer: "BTK Akademi",
     imageUrl: "/sertifikalar/btk-veri-tabanina-giris.png"
+  },
+  {
+    title: "BTK-Uygulamalarla SQL Öğreniyorum",
+    issuer: "BTK Akademi",
+    imageUrl: "/sertifikalar/btk-uygulamalarla-SQL.png"
   }
 ];
