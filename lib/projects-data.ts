@@ -1,4 +1,4 @@
-export type ProjectTechGroups = {
+﻿export type ProjectTechGroups = {
   frontend: string[];
   backend: string[];
   database: string[];
@@ -32,7 +32,7 @@ export const projectsData: Record<string, ProjectData> = {
     shortDescription:
       "Gerçek zamanlı whale cüzdan takibiyle OKX üzerinde otomatik copy trading sunan kurumsal platform.",
     fullDescription:
-      "Yatırımcıların büyük-balina ETH cüzdanlarını izleyip tespit edilen pozisyonları kendi hesaplarına kopyalamalarını sağlayan, sıfırdan uçtan uca geliştirilen copy trading altyapısı.",
+      "Whale (balina) Ethereum cüzdanlarını anlık olarak izleyip yeni pozisyonları yakalayan ve bu işlemleri OKX hesaplarına otomatik olarak kopyalayan uçtan uca geliştirilmiş copy trading altyapısı.",
     coverImage: "/projects/zenith-trader/cover.png",
     carouselImages: [
       "/projects/zenith-trader/carousel-1.png",
@@ -41,7 +41,7 @@ export const projectsData: Record<string, ProjectData> = {
       "/projects/zenith-trader/carousel-4.png",
     ],
     gradient: "from-blue-500 to-cyan-500",
-    demoUrl: "https://zenithtrader.alperenmanas.app",
+    demoUrl: "http://zenthtrader.alperenmanas.app",
     githubUrl: "https://github.com/lprnmns/zenith-trader",
     tags: ["React", "Vite", "TypeScript", "Express", "Prisma", "PostgreSQL", "Redis", "Docker"],
     technologies: {
@@ -63,7 +63,7 @@ export const projectsData: Record<string, ProjectData> = {
     shortDescription:
       "KOBİ'ler ve girişimciler için yapay zeka destekli, veri-odaklı lokasyon analizi ve skorlama platformu.",
     fullDescription:
-      "Yeni bir işletme açmak isteyen kullanıcıların, rekabet analizi, demografik yapı, yaya trafiği ve erişilebilirlik gibi kritik metrikleri kullanarak potansiyel konumlar arasından en yüksek başarı potansiyeline sahip olanı bilimsel verilerle seçmesini sağlar.",
+      "Rekabet, demografi, yaya trafiği ve erişilebilirlik gibi metrikleri karşılaştırarak yeni bir işletme için en doğru lokasyonu bilimsel verilerle öneren yapay zeka destekli platform.",
     coverImage: "/projects/lokaskor/cover.png",
     carouselImages: [
       "/projects/lokaskor/carousel-1.png",
@@ -95,7 +95,7 @@ export const projectsData: Record<string, ProjectData> = {
     shortDescription:
       "Kırıkkale Üniversitesi OBS not verilerini düzenli aralıklarla tarayıp yeni girişleri Telegram ve e-posta ile bildiren otomasyon sistemi.",
     fullDescription:
-      "OBS hareketlerini otomatik kontrol ederek yeni not girişlerini tespit eden, ekran görüntüsünü OCR ile ayrıştırıp JSON karşılaştırmasıyla farkları bulan ve Telegram botu ile 30'dan fazla kullanıcıya bildirim gönderen kişisel otomasyon.",
+      "OBS'ye belirli aralıklarla girerek ekran görüntülerini OCR ile ayrıştıran, JSON karşılaştırmasıyla yeni not girişlerini tespit eden ve Telegram botu ile 30'dan fazla kullanıcıya bildirim gönderen kişisel otomasyon.",
     coverImage: "/projects/not-bildirim-otomasyonu/cover.png",
     carouselImages: [
       "/projects/not-bildirim-otomasyonu/carousel-1.png",
@@ -151,3 +151,4 @@ export const projectsData: Record<string, ProjectData> = {
 };
 
 export const projectList = Object.values(projectsData);
+export const projectSlugs = Object.keys(projectsData);
