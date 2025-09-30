@@ -3,8 +3,7 @@
 import { motion, useInView, Variants } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useRef } from 'react';
-import type { MouseEvent } from 'react';
+import { useRef, type MouseEvent } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
 import { projectList } from '@/lib/projects-data';
 
@@ -89,7 +88,7 @@ export default function Projects() {
                 tabIndex={0}
               >
                 <div className="relative overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-800/60 backdrop-blur-sm transition-all duration-300 group-hover:border-slate-600">
-                  <div className={`absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-20 bg-gradient-to-br ${project.gradient}`} />
+                  <div className={`pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-20 bg-gradient-to-br ${project.gradient}`} />
 
                   <div className="relative aspect-video overflow-hidden bg-slate-900">
                     <Image
@@ -99,7 +98,7 @@ export default function Projects() {
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/40 to-transparent" />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/40 to-transparent" />
                   </div>
 
                   <div className="p-6">
@@ -127,6 +126,7 @@ export default function Projects() {
 
                     <div className="flex gap-3">
                       <motion.button
+                        type="button"
                         whileHover={hasDemo ? { scale: 1.05 } : {}}
                         whileTap={hasDemo ? { scale: 0.95 } : {}}
                         disabled={!hasDemo}
@@ -142,6 +142,7 @@ export default function Projects() {
                       </motion.button>
 
                       <motion.button
+                        type="button"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={(event) => {
@@ -155,10 +156,12 @@ export default function Projects() {
                       </motion.button>
 
                       <motion.button
+                        type="button"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={(event) => {
                           event.stopPropagation();
+                          event.nativeEvent.stopImmediatePropagation?.();
                           handleNavigate(project.id);
                         }}
                         className="rounded-lg border border-slate-600/50 bg-slate-800/60 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-700"
@@ -169,7 +172,7 @@ export default function Projects() {
                   </div>
 
                   <motion.div
-                    className="absolute right-4 top-4 opacity-0 transition-opacity group-hover:opacity-100"
+                    className="pointer-events-none absolute right-4 top-4 opacity-0 transition-opacity group-hover:opacity-100"
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
                   >
