@@ -21,6 +21,42 @@ export interface Project {
 
 export const projectsData: Project[] = [
   {
+    slug: 'zenith-trader',
+    title: 'Zenith Trader',
+    shortDescription: 'Gerçek zamanlı whale cüzdan takibiyle OKX üzerinde otomatik copy trading sunan kurumsal platform.',
+    coverImageUrl: '/projects/zenith-trader/cover.png',
+    liveUrl: 'https://zenithtrader.alperenmanas.app',
+    githubUrl: 'https://github.com/lprnmns/zenith-trader',
+    carouselImages: [
+      '/projects/zenith-trader/carousel-1.png',
+      '/projects/zenith-trader/carousel-2.png',
+      '/projects/zenith-trader/carousel-3.png',
+      '/projects/zenith-trader/carousel-4.png'
+    ],
+    purpose: 'Yatırımcıların büyük-balina ETH cüzdanlarını izleyip tespit edilen pozisyonları kendi hesaplarına kopyalamalarını sağlamak.',
+    techStack: [
+      { name: 'React', category: 'Frontend' },
+      { name: 'TypeScript', category: 'Frontend' },
+      { name: 'Tailwind CSS', category: 'Frontend' },
+      { name: 'Vite', category: 'Frontend' },
+      { name: 'Node.js', category: 'Backend' },
+      { name: 'Express', category: 'Backend' },
+      { name: 'Prisma', category: 'Backend' },
+      { name: 'Zod', category: 'Backend' },
+      { name: 'PostgreSQL', category: 'Database' },
+      { name: 'Redis', category: 'Database' },
+      { name: 'Docker', category: 'AI & Tools' },
+      { name: 'Playwright', category: 'AI & Tools' }
+    ],
+    apis: [
+      { name: 'Zerion API', description: 'Whale ETH cüzdanlarından zincir üstü hareketleri almak için.' },
+      { name: 'OKX Exchange API', description: 'Tespit edilen sinyalleri OKX hesaplarında otomatik işlem olarak yürütmek için.' },
+      { name: 'Google OAuth API', description: 'Kurumsal kullanıcı kimlik doğrulaması ve güvenli oturum yönetimi için.' },
+      { name: 'Coingecko API', description: 'Fiyat ve piyasa verileri için yedek kaynak.' }
+    ],
+    evolution: []
+  },
+  {
     slug: 'lokaskor-ai-location-analysis',
     title: 'LokaSkor Pro',
     shortDescription: "KOBİ&apos;ler ve girişimciler için yapay zeka destekli, veri-odaklı lokasyon analizi ve skorlama platformu.",
