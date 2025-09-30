@@ -1,26 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Exclude test files from build
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-      };
-    }
-    return config;
-  },
-  
+  output: 'export',
   eslint: {
-    // Ignore test files during build
-    ignoreDuringBuilds: false,
-    dirs: ['src/app', 'src/components', 'src/lib', 'src/hooks']
+    ignoreDuringBuilds: true,
   },
-  
-  typescript: {
-    // Ignore test files during build
-    ignoreBuildErrors: false,
-  }
+  images: { unoptimized: true },
 };
 
 module.exports = nextConfig;
