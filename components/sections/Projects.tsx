@@ -4,6 +4,7 @@ import { motion, useInView, Variants } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useRef } from 'react';
+import type { MouseEvent } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
 import { projectList } from '@/lib/projects-data';
 
@@ -29,6 +30,20 @@ export default function Projects() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const router = useRouter();
+
+  const handleNavigate = (slug: string) => {
+    router.push(`/projects/${slug}`);
+  };
+
+  const handleDemoClick = (event: MouseEvent<HTMLButtonElement>, url?: string) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation?.();
+
+    if (url) {
+      window.open(url, '_blank', 'noopener');
+    }
+  };
 
   return (
     <section id="projects" className="relative py-20 px-4 sm:px-6 lg:px-8">
@@ -64,10 +79,10 @@ export default function Projects() {
                 variants={itemVariants}
                 whileHover={{ y: -10 }}
                 className="group relative cursor-pointer"
-                onClick={() => router.push(`/projects/${project.id}`)}
+                onClick={() => handleNavigate(project.id)}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter') {
-                    router.push(`/projects/${project.id}`);
+                    handleNavigate(project.id);
                   }
                 }}
                 role="button"
@@ -115,11 +130,7 @@ export default function Projects() {
                         whileHover={hasDemo ? { scale: 1.05 } : {}}
                         whileTap={hasDemo ? { scale: 0.95 } : {}}
                         disabled={!hasDemo}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          if (!project.demoUrl) return;
-                          window.open(project.demoUrl, '_blank', 'noopener');
-                        }}
+                        onClick={(event) => handleDemoClick(event, project.demoUrl)}
                         className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                           hasDemo
                             ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-blue-500/40 hover:shadow-lg'
@@ -127,7 +138,7 @@ export default function Projects() {
                         }`}
                       >
                         <ExternalLink size={16} />
-                        Canlı Demo
+                        Canlı Test
                       </motion.button>
 
                       <motion.button
@@ -135,11 +146,24 @@ export default function Projects() {
                         whileTap={{ scale: 0.95 }}
                         onClick={(event) => {
                           event.stopPropagation();
+                          event.nativeEvent.stopImmediatePropagation?.();
                           window.open(project.githubUrl, '_blank', 'noopener');
                         }}
                         className="rounded-lg border border-slate-600/50 bg-slate-700/50 px-4 py-2 text-slate-200 transition hover:bg-slate-700"
                       >
                         <Github size={16} />
+                      </motion.button>
+
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleNavigate(project.id);
+                        }}
+                        className="rounded-lg border border-slate-600/50 bg-slate-800/60 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-700"
+                      >
+                        Detaylar
                       </motion.button>
                     </div>
                   </div>
