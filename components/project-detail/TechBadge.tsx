@@ -1,14 +1,22 @@
 ﻿interface TechBadgeProps {
   name: string;
-  gradient: string;
+  category?: string;
 }
 
-export default function TechBadge({ name, gradient }: TechBadgeProps) {
+const categoryColors: Record<string, string> = {
+  Frontend: 'bg-blue-700',
+  Backend: 'bg-green-700',
+  Database: 'bg-purple-700',
+  "AI & Tools": 'bg-yellow-700',
+};
+
+export default function TechBadge({ name, category }: TechBadgeProps) {
+  const colorClass = category ? categoryColors[category] ?? 'bg-gray-700' : 'bg-gray-700';
+
   return (
-    <span
-      className={`inline-flex items-center rounded-full border border-white/10 bg-gradient-to-r ${gradient} px-3 py-1 text-xs font-medium text-white shadow-sm`}
-    >
+    <span className={`mr-2 mb-2 inline-flex items-center rounded-full ${colorClass} px-3 py-1 text-sm text-gray-300`}>
       {name}
+      {category ? <span className="ml-2 text-xs opacity-75">({category})</span> : null}
     </span>
   );
 }

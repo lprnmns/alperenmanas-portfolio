@@ -1,7 +1,7 @@
 ﻿import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ProjectDetailClient from "@/components/project-detail/ProjectDetailClient";
-import { projectSlugs, projectsData } from "@/lib/projects-data";
+import { projectMap, projectSlugs } from "@/lib/projects-data";
 
 interface ProjectDetailPageProps {
   params: {
@@ -14,7 +14,7 @@ export function generateStaticParams() {
 }
 
 export function generateMetadata({ params }: ProjectDetailPageProps): Metadata {
-  const project = projectsData[params.slug];
+  const project = projectMap[params.slug];
 
   if (!project) {
     return {};
@@ -26,13 +26,13 @@ export function generateMetadata({ params }: ProjectDetailPageProps): Metadata {
     openGraph: {
       title: project.title,
       description: project.shortDescription,
-      images: [project.coverImage, ...project.carouselImages],
+      images: [project.coverImageUrl, ...project.carouselImages],
     },
   };
 }
 
 export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
-  const project = projectsData[params.slug];
+  const project = projectMap[params.slug];
 
   if (!project) {
     notFound();
