@@ -369,6 +369,11 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
     const compressionRatio = (100 - clampedProgress) / 100;
     currentCompressionRef.current = compressionRatio * beamConfig.beamTotalLength * beamConfig.maxCompressionRatio;
     setDisplayProgress(Math.round(clampedProgress));
+
+    // Update geometry when progress changes
+    if (beamNodeRef.current) {
+      updateBeamGeometry();
+    }
   }, [progress]);
 
   useEffect(() => {
@@ -376,7 +381,7 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
     if (!container) return;
 
     const width = container.clientWidth || 720;
-    const height = container.clientHeight || 400;
+    const height = container.clientHeight || 224; // h-56 = 224px
 
     // Scene
     const scene = new THREE.Scene();
@@ -436,6 +441,11 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
     scene.add(beamNode);
     beamNodeRef.current = beamNode;
 
+    // Set initial compression
+    const clampedProgress = Math.max(0, Math.min(100, progress));
+    const compressionRatio = (100 - clampedProgress) / 100;
+    currentCompressionRef.current = compressionRatio * beamConfig.beamTotalLength * beamConfig.maxCompressionRatio;
+
     updateBeamGeometry();
 
     // Animation
@@ -490,7 +500,7 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
   }, []);
 
   return (
-    <div className={`relative h-96 w-full select-none ${className}`} ref={containerRef}>
+    <div className={`relative h-56 w-full select-none ${className}`} ref={containerRef}>
       <div className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-4xl font-light tracking-widest text-slate-300 drop-shadow-md">
         {displayProgress}%
       </div>
