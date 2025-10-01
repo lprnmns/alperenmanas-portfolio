@@ -30,6 +30,23 @@ interface JellyPhysics {
   lastTimestamp: number;
 }
 
+// Beam configuration (constant)
+const beamConfig = {
+  beamTotalLength: 3.85,
+  beamThicknessY: 0.1,
+  beamThicknessZ: 0.5,
+  beamSegmentCount: 80,
+  maxCompressionRatio: 0.8,
+  minLengthRatio: 0.2,
+  bucklingAmplitudeGain: 0.55,
+  flatEndLeft: 0.20,
+  flatEndRight: 0.20,
+  transitionSmoothness: 0.18,
+  wobbleDamping: 2.0,
+  wobbleFrequency: 2.5,
+  lateralWobbleGain: 0.4,
+};
+
 export default function JellyProgressBar({ progress = 0, className = "" }: JellyProgressBarProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const animationRef = useRef<number>();
@@ -46,24 +63,7 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
 
   const [displayProgress, setDisplayProgress] = useState(() => Math.round(Math.max(0, Math.min(100, progress))));
 
-  // Beam configuration
-  const beamConfig = {
-    beamTotalLength: 3.85,
-    beamThicknessY: 0.1,
-    beamThicknessZ: 0.5,
-    beamSegmentCount: 80,
-    maxCompressionRatio: 0.8,
-    minLengthRatio: 0.2,
-    bucklingAmplitudeGain: 0.55,
-    flatEndLeft: 0.20,
-    flatEndRight: 0.20,
-    transitionSmoothness: 0.18,
-    wobbleDamping: 2.0,
-    wobbleFrequency: 2.5,
-    lateralWobbleGain: 0.4,
-  };
-
-  const calculateBeamParameters = (compression: number, physics: JellyPhysics): BeamData => {
+  const calculateBeamParameters = useCallback((compression: number, physics: JellyPhysics): BeamData => {
     const compressedLength = Math.max(
       beamConfig.beamTotalLength - compression,
       beamConfig.beamTotalLength * beamConfig.minLengthRatio
@@ -84,9 +84,9 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
     const midLength = Math.max(0.0001, midEnd - midStart);
 
     return { compressedLength, amplitude, oscillation, startX, endX, midStart, midEnd, midLength };
-  };
+  }, []);
 
-  const calculateBeamDeflection = (x: number, beamData: BeamData) => {
+  const calculateBeamDeflection = useCallback((x: number, beamData: BeamData) => {
     let y = 0, dydx = 0, lateral = 0;
 
     if (x >= beamData.midStart && x <= beamData.midEnd) {
@@ -125,9 +125,9 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
     }
 
     return { y, dydx, lateral };
-  };
+  }, []);
 
-  const createBeamGeometry = (beamData: BeamData): THREE.BufferGeometry => {
+  const createBeamGeometry = useCallback((beamData: BeamData): THREE.BufferGeometry => {
     const positions: number[] = [];
     const colors: number[] = [];
     const indices: number[] = [];
@@ -328,9 +328,9 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
     geometry.computeVertexNormals();
 
     return geometry;
-  };
+  }, [calculateBeamDeflection]);
 
-  const updateBeamGeometry = () => {
+  const updateBeamGeometry = useCallback(() => {
     if (!beamNodeRef.current) return;
 
     // Clear old geometry
@@ -362,7 +362,7 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     beamNodeRef.current.add(mesh);
-  };
+  }, [calculateBeamParameters, createBeamGeometry]);
 
   useEffect(() => {
     const clampedProgress = Math.max(0, Math.min(100, progress));
@@ -374,7 +374,7 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
     if (beamNodeRef.current) {
       updateBeamGeometry();
     }
-  }, [progress]);
+  }, [progress, updateBeamGeometry]);
 
   useEffect(() => {
     const container = containerRef.current;
