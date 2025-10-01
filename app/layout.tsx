@@ -1,12 +1,15 @@
-import './globals.css';
+﻿import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Preloader from '@/components/Preloader';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.alperenmanas.app'),
   title: 'Alperen Manas - Yazılım Geliştirici & AI Mühendisi',
-  description: 'Android işletim sistemi yazılımları ve yapay zeka projeleri ile inovatif çözümler üreten yazılım geliştirici.',
+  description:
+    'Android işletim sistemi yazılımları ve yapay zeka projeleri ile inovatif çözümler üreten yazılım geliştirici.',
   keywords: ['Alperen Manas', 'Yazılım Geliştirici', 'AI Mühendisi', 'Android', 'Python', 'React'],
   authors: [{ name: 'Alperen Manas' }],
   openGraph: {
@@ -23,7 +26,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr" className="dark">
-      <body className={`${inter.className} bg-slate-900`}>{children}</body>
+      <body className={`${inter.className} bg-slate-900`}>
+        <Preloader />
+        {children}
+      </body>
     </html>
   );
 }
