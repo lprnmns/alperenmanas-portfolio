@@ -70,7 +70,9 @@ export default function PreloaderClamp() {
     const tick = (timestamp: number) => {
       const elapsed = timestamp - start;
       const ratio = Math.min(elapsed / LOADER_DURATION, 1);
-      setProgress(Math.round(ratio * 100));
+      const newProgress = Math.round(ratio * 100);
+      console.log('[PreloaderClamp] Setting progress:', newProgress, 'elapsed:', elapsed);
+      setProgress(newProgress);
 
       if (ratio < 1) {
         rafRef.current = requestAnimationFrame(tick);

@@ -369,17 +369,22 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
     const compressionRatio = (100 - clampedProgress) / 100;
     currentCompressionRef.current = compressionRatio * beamConfig.beamTotalLength * beamConfig.maxCompressionRatio;
     setDisplayProgress(Math.round(clampedProgress));
+    console.log('[JellyProgressBar] Progress updated:', clampedProgress, 'Compression:', currentCompressionRef.current);
   }, [progress]);
 
   // Separate effect to update geometry when beamNode is ready
   useEffect(() => {
     if (beamNodeRef.current && currentCompressionRef.current !== undefined) {
+      console.log('[JellyProgressBar] Updating geometry for progress:', progress);
       updateBeamGeometry();
 
       // Move beam to the right as progress increases (visual feedback)
       const clampedProgress = Math.max(0, Math.min(100, progress));
       const offsetX = (clampedProgress / 100) * 1.5 - 0.75; // -0.75 to 0.75 range
       beamNodeRef.current.position.x = offsetX;
+      console.log('[JellyProgressBar] Beam position X:', offsetX, 'Children:', beamNodeRef.current.children.length);
+    } else {
+      console.log('[JellyProgressBar] Skipping geometry update - beamNode:', !!beamNodeRef.current, 'compression:', currentCompressionRef.current);
     }
   }, [progress, updateBeamGeometry]);
 
