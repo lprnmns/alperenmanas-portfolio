@@ -1,7 +1,6 @@
-﻿import './globals.css';
+import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import PreloaderClamp from '@/components/ui/preloader-clamp';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,9 +26,9 @@ export default function RootLayout({
   return (
     <html lang="tr" className="dark">
       <body className={inter.className + ' bg-slate-900'}>
-        <PreloaderClamp />
         {children}
       </body>
     </html>
   );
 }
+

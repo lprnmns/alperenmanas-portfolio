@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
@@ -16,25 +16,23 @@ const FALLBACK_TIMEOUT = 10000;
 const LOADER_DURATION = 6000;
 
 function useSessionFlag(key: string) {
-  const isClient = typeof window !== "undefined";
-
-  const read = () => {
-    if (!isClient) return false;
+  const read = useCallback(() => {
+    if (typeof window === "undefined") return false;
     try {
       return window.sessionStorage.getItem(key) === "true";
     } catch {
       return false;
     }
-  };
+  }, [key]);
 
-  const write = (value: boolean) => {
-    if (!isClient) return;
+  const write = useCallback((value: boolean) => {
+    if (typeof window === "undefined") return;
     try {
       window.sessionStorage.setItem(key, value ? "true" : "false");
     } catch {
       /* ignore */
     }
-  };
+  }, [key]);
 
   return { read, write };
 }
@@ -143,3 +141,4 @@ export default function PreloaderClamp() {
     </AnimatePresence>
   );
 }
+
