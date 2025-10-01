@@ -369,9 +369,11 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
     const compressionRatio = (100 - clampedProgress) / 100;
     currentCompressionRef.current = compressionRatio * beamConfig.beamTotalLength * beamConfig.maxCompressionRatio;
     setDisplayProgress(Math.round(clampedProgress));
+  }, [progress]);
 
-    // Update geometry when progress changes
-    if (beamNodeRef.current) {
+  // Separate effect to update geometry when beamNode is ready
+  useEffect(() => {
+    if (beamNodeRef.current && currentCompressionRef.current !== undefined) {
       updateBeamGeometry();
     }
   }, [progress, updateBeamGeometry]);
@@ -459,11 +461,10 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
       const deltaTime = (timestamp - physics.lastTimestamp) / 1000;
       physics.lastTimestamp = timestamp;
 
-      // Update wobble
+      // Update wobble (only when wobble is active)
       if (physics.wobbleAmplitude > 0.0001) {
         physics.wobbleAmplitude = Math.max(0, physics.wobbleAmplitude * Math.exp(-beamConfig.wobbleDamping * deltaTime));
         physics.wobblePhase += 2 * Math.PI * beamConfig.wobbleFrequency * deltaTime;
-        updateBeamGeometry();
       }
 
       renderer.render(scene, camera);
