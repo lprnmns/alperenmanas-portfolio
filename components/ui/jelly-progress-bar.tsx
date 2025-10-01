@@ -375,6 +375,11 @@ export default function JellyProgressBar({ progress = 0, className = "" }: Jelly
   useEffect(() => {
     if (beamNodeRef.current && currentCompressionRef.current !== undefined) {
       updateBeamGeometry();
+
+      // Move beam to the right as progress increases (visual feedback)
+      const clampedProgress = Math.max(0, Math.min(100, progress));
+      const offsetX = (clampedProgress / 100) * 1.5 - 0.75; // -0.75 to 0.75 range
+      beamNodeRef.current.position.x = offsetX;
     }
   }, [progress, updateBeamGeometry]);
 
