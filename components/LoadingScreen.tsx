@@ -1,4 +1,5 @@
-import clsx from 'clsx';
+﻿import clsx from 'clsx';
+import Image from 'next/image';
 
 type LoadingStage = 'loading' | 'transition' | 'final';
 
@@ -20,11 +21,6 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
     stage === 'loading'
       ? 'top-1/2 left-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2'
       : 'top-6 left-6 h-16 w-16 translate-x-0 translate-y-0 sm:h-20 sm:w-20'
-  );
-
-  const logoTextClasses = clsx(
-    'tracking-[0.5em] lowercase transition-all duration-700 ease-out',
-    stage === 'loading' ? 'text-4xl sm:text-5xl' : 'text-base sm:text-lg tracking-[0.35em]'
   );
 
   const ringClasses = clsx(
@@ -49,11 +45,20 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
           <div className={ringClasses} style={ringStyle} />
           <div
             className={clsx(
-              'absolute inset-[12%] flex items-center justify-center rounded-full bg-slate-950 shadow-[0_0_50px_rgba(56,189,248,0.35)] transition-all duration-700 ease-out',
-              stage !== 'loading' && 'shadow-none'
+              'absolute inset-[12%] overflow-hidden rounded-full border border-slate-900/40 bg-slate-900/20 transition-all duration-700 ease-out',
+              stage === 'loading'
+                ? 'shadow-[0_0_50px_rgba(56,189,248,0.35)]'
+                : 'shadow-none'
             )}
           >
-            <span className={logoTextClasses}>am</span>
+            <Image
+              src="/yeni_loading_logosu.jpeg"
+              alt="Alperen Manas profile photo"
+              fill
+              priority
+              sizes="(max-width: 640px) 160px, (max-width: 1024px) 220px, 224px"
+              className="object-cover"
+            />
           </div>
           {stage === 'loading' && (
             <span className="absolute -bottom-14 text-xs font-medium tracking-[0.35em] text-slate-300">
@@ -65,3 +70,4 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
     </>
   );
 }
+
