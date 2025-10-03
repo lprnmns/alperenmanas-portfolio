@@ -59,7 +59,7 @@ const sectionsVariants: Variants = {
 const heroContainerVariants: Variants = {
   center: { y: 0, scale: 1 },
   pinned: {
-    y: -10,
+    y: 0,
     scale: 0.95,
     transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
   },
@@ -72,6 +72,7 @@ export default function Home() {
   const [showActions, setShowActions] = useState(false);
   const [showSections, setShowSections] = useState(false);
   const [heroPinned, setHeroPinned] = useState(false);
+  const heroContainerRef = useRef<HTMLDivElement | null>(null);
   const aboutSectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -139,11 +140,12 @@ export default function Home() {
   useEffect(() => {
     if (showActions && !heroPinned) {
       const timer = setTimeout(() => {
-        const sectionTop = aboutSectionRef.current?.offsetTop ?? 0;
-        const offset = window.innerHeight * 0.1;
-        const target = Math.max(sectionTop - offset, 0);
-        window.scrollTo({ top: target, behavior: 'smooth' });
         setHeroPinned(true);
+        requestAnimationFrame(() => {
+          const containerTop = heroContainerRef.current?.offsetTop ?? 0;
+          const target = Math.max(containerTop - 16, 0);
+          window.scrollTo({ top: target, behavior: 'smooth' });
+        });
       }, 900);
 
       return () => clearTimeout(timer);
@@ -157,7 +159,7 @@ export default function Home() {
   const heroContainerClass = clsx(
     'relative z-20 mx-auto flex max-w-4xl flex-col items-center text-center transition-all duration-700',
     heroPinned
-      ? 'min-h-[40vh] justify-start gap-6 px-6 pt-16 pb-12 sm:pt-20 sm:pb-14'
+      ? 'min-h-[30vh] justify-start gap-5 px-6 pt-12 pb-10 sm:pt-16 sm:pb-12'
       : 'min-h-[85vh] justify-center gap-10 px-6 pt-24 pb-20 sm:pt-32 sm:pb-24'
   );
 
@@ -173,6 +175,7 @@ export default function Home() {
         <AnimatedBackground />
 
         <motion.div
+          ref={heroContainerRef}
           variants={heroContainerVariants}
           initial="center"
           animate={heroContainerState}
