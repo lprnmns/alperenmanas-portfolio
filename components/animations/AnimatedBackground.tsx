@@ -13,8 +13,10 @@ export default function AnimatedBackground() {
     if (!ctx) return;
 
     const setCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const width = window.innerWidth;
+      const height = Math.max(window.innerHeight, document.documentElement.scrollHeight);
+      canvas.width = width;
+      canvas.height = height;
     };
 
     setCanvasSize();
