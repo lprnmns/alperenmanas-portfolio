@@ -2,22 +2,25 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Mail, GraduationCap, Code, Brain, TrendingUp } from 'lucide-react';
+import { Mail, GraduationCap, Code, Brain, TrendingUp, Boxes, Share2 } from 'lucide-react';
 
 const skills = {
   programming: [
-    { name: 'TypeScript & React', level: 85, color: 'from-blue-500 to-cyan-500' },
-    { name: 'Python', level: 75, color: 'from-purple-500 to-pink-500' },
+    { name: 'TypeScript & React', level: 30, color: 'from-blue-500 to-cyan-500' },
+    { name: 'Python', level: 50, color: 'from-purple-500 to-pink-500' },
     { name: 'SQL', level: 70, color: 'from-orange-500 to-red-500' },
+    { name: 'C♯', level: 75, color: 'from-emerald-500 to-green-500' },
   ],
   domains: [
     { name: 'Yazılım & Programlama', icon: Code },
     { name: 'Vibe Coding (Context & Prompt Engineering)', icon: Brain },
+    { name: 'Docker & Kubernetes', icon: Boxes },
   ],
   interests: [
     { name: 'LLM', icon: Brain },
     { name: 'Algoritmalar', icon: Code },
     { name: 'Finansal Piyasalar', icon: TrendingUp },
+    { name: 'Blockchain', icon: Share2 },
   ],
 };
 
@@ -93,11 +96,8 @@ export default function About() {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="rounded-2xl border border-slate-700/50 bg-gradient-to-br from-slate-800/50 to-slate-900/50 p-8 backdrop-blur-sm"
             >
-              <p className="leading-relaxed text-slate-300">
-                15 yaşından beri bilgisayar ve özellikle Android ekosistemindeki özelleştirmelerle ilgileniyorum. Son
-                yıllarda odağımı, gerçek hayat problemlerini çözeceğine inandığım projeleri hızla hayata geçirmek için
-                yapay zeka araçlarını kullanmaya kaydırdım. Balina yatırımcıların blockchain hareketlerini izleyen
-                finansal otomasyonlar ve üretkenlik araçları geliştirirken, düşük bütçeyle maksimum etkiyi hedefliyorum.
+                            <p className="leading-relaxed text-slate-300">
+                15 yaşımdan beri bilgisayar ve bilişimle ilgileniyorum. Serüvenime Android işletim sistemlerine, port/custom ROM'larla başladım. Bilgisayar mühendisliği okumaya başlamam ve yapay zekânın yükselişi ile son yıllarda odağımı, gerçek hayat problemlerini çözeceğine inandığım projeleri hızla hayata geçirmek için yapay zeka araçlarını kullanmaya kaydırdım. Günde yaklaşık 4-5 saat bilgisayar başında çeşitli, her hafta çıkan AI araçlarını projelerimde deneyerek geçiriyorum. Kendi algoritma bilgim ile yapay zekânın geniş kodlama bilgisini birleştirip vibe coding yaklaşımıyla kurumsal seviyede full stack uygulamalar geliştiriyorum. Hobi olarak finans (kripto para, hisse vb...) ve blockchain'e ilgim var.
               </p>
             </motion.div>
           </motion.div>
