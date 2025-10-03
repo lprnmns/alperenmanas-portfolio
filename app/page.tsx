@@ -72,9 +72,19 @@ export default function Home() {
         <AnimatedBackground />
         <Navigation />
         <Hero />
-        <Projects />
-        <About />
-        <Certificates />
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            <div className="lg:col-span-5 space-y-12">
+              <About />
+              <Certificates />
+            </div>
+
+            <div className="lg:col-span-7">
+              <Projects />
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

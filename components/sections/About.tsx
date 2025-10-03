@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
@@ -26,8 +26,8 @@ export default function About() {
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   return (
-    <section id="about" className="relative py-20 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <section id="about" className="relative py-12">
+      <div className="w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -40,7 +40,7 @@ export default function About() {
           </h2>
         </motion.div>
 
-        <div className="grid gap-12 lg:grid-cols-2">
+        <div className="space-y-6">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -103,8 +103,8 @@ export default function About() {
 
           <motion.div
             ref={ref}
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className="space-y-6"

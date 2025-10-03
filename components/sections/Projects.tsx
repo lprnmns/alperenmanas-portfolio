@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { motion, useInView, Variants } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -45,8 +45,8 @@ export default function Projects() {
   };
 
   return (
-    <section id="projects" className="relative py-20 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <section id="projects" className="relative py-12">
+      <div className="w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -67,7 +67,7 @@ export default function Projects() {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+          className="grid grid-cols-1 gap-8"
         >
           {projectList.map((project) => {
             const hasDemo = Boolean(project.demoUrl);

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
@@ -31,8 +31,8 @@ export default function Certificates() {
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   return (
-    <section id="certificates" className="relative py-20 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <section id="certificates" className="relative py-12">
+      <div className="w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -53,7 +53,7 @@ export default function Certificates() {
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6 }}
-          className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          className="grid gap-6 grid-cols-1"
         >
           {certificates.map((cert, index) => (
             <motion.div
