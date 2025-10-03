@@ -1,33 +1,13 @@
-'use client';
+﻿'use client';
 
-import { motion, useInView, Variants } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useRef, type MouseEvent } from 'react';
+import { type MouseEvent } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
 import { projectList } from '@/lib/projects-data';
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-  },
-};
-
 export default function Projects() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.05 });
   const router = useRouter();
 
   const handleNavigate = (slug: string) => {
@@ -62,20 +42,17 @@ export default function Projects() {
           </p>
         </motion.div>
 
-        <motion.div
-          ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 gap-8"
-        >
-          {projectList.map((project) => {
+        <div className="grid grid-cols-1 gap-8">
+          {projectList.map((project, index) => {
             const hasDemo = Boolean(project.demoUrl);
 
             return (
               <motion.div
                 key={project.id}
-                variants={itemVariants}
+                initial={{ opacity: 0, y: 60 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6, ease: 'easeOut', delay: index * 0.08 }}
                 whileHover={{ y: -10 }}
                 className="group relative cursor-pointer"
                 onClick={() => handleNavigate(project.id)}
@@ -184,7 +161,7 @@ export default function Projects() {
               </motion.div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
