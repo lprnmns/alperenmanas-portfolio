@@ -121,21 +121,25 @@ export default function Home() {
             initial="hidden"
             animate={headingState}
             variants={chipListVariants}
-            className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold uppercase tracking-[0.35em] text-slate-200/70"
+            className="flex flex-wrap items-center justify-center gap-4"
           >
             <motion.a
               variants={chipItemVariants}
-              href="#about"
-              className="rounded-full border border-slate-700/40 bg-slate-900/40 px-5 py-2 transition-colors duration-300 hover:border-sky-400/70 hover:text-sky-300"
+              href="https://github.com/lprnmns"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-slate-700/40 bg-slate-900/40 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-200/70 transition-colors duration-300 hover:border-sky-400/70 hover:text-sky-300"
             >
-              Hakkımda
+              GitHub
             </motion.a>
             <motion.a
               variants={chipItemVariants}
-              href="#projects"
-              className="rounded-full border border-slate-700/40 bg-slate-900/40 px-5 py-2 transition-colors duration-300 hover:border-sky-400/70 hover:text-sky-300"
+              href="https://www.linkedin.com/in/alperen-manas-a92aa2378/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-slate-700/40 bg-slate-900/40 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-200/70 transition-colors duration-300 hover:border-sky-400/70 hover:text-sky-300"
             >
-              Projelerim
+              LinkedIn
             </motion.a>
           </motion.div>
         </div>
