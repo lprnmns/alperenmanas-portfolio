@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { motion, type Variants } from 'framer-motion';
-import { Github, Linkedin } from 'lucide-react';
+import { Github, Linkedin, ChevronDown } from 'lucide-react';
 
 import LoadingScreen from '@/components/LoadingScreen';
 import AnimatedBackground from '@/components/animations/AnimatedBackground';
@@ -139,7 +139,7 @@ export default function Home() {
       >
         <AnimatedBackground />
 
-        <div className="relative z-20 mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center gap-10 px-6 py-24 text-center sm:py-32">
+        <div className="relative z-20 mx-auto flex min-h-[85vh] max-w-4xl flex-col items-center justify-center gap-10 px-6 pt-24 pb-20 text-center sm:pt-32 sm:pb-24">
           <motion.h1
             initial="hidden"
             animate={headingState}
@@ -176,13 +176,22 @@ export default function Home() {
               <span>LinkedIn</span>
             </motion.a>
           </motion.div>
-        </div>
 
+          <motion.div
+            initial="hidden"
+            animate={actionsState}
+            variants={actionsVariants}
+            className="pointer-events-none absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-400/80"
+            aria-hidden="true"
+          >
+            <ChevronDown className="h-8 w-8 animate-bounce" strokeWidth={1.5} />
+          </motion.div>
+        </div>
         <motion.section
           initial="hidden"
           animate={sectionsState}
           variants={sectionsVariants}
-          className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8"
+          className="mx-auto mt-10 max-w-7xl px-4 pb-12 sm:px-6 lg:px-8"
         >
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="space-y-12 lg:col-span-5">
