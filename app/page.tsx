@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 
 import LoadingScreen from '@/components/LoadingScreen';
 import AnimatedBackground from '@/components/animations/AnimatedBackground';
@@ -13,17 +13,17 @@ import Certificates from '@/components/sections/Certificates';
 
 type LoadingStage = 'loading' | 'transition' | 'final';
 
-const headingVariants = {
+const headingVariants: Variants = {
   hidden: { opacity: 0, y: 24, scale: 0.95 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
   },
 };
 
-const chipListVariants = {
+const chipListVariants: Variants = {
   hidden: { opacity: 0, y: 16 },
   visible: {
     opacity: 1,
@@ -38,7 +38,7 @@ const chipListVariants = {
   },
 };
 
-const chipItemVariants = {
+const chipItemVariants: Variants = {
   hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
