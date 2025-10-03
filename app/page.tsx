@@ -6,7 +6,6 @@ import { motion, type Variants } from 'framer-motion';
 
 import LoadingScreen from '@/components/LoadingScreen';
 import AnimatedBackground from '@/components/animations/AnimatedBackground';
-import Navigation from '@/components/sections/Navigation';
 import Projects from '@/components/sections/Projects';
 import About from '@/components/sections/About';
 import Certificates from '@/components/sections/Certificates';
@@ -106,8 +105,6 @@ export default function Home() {
         )}
       >
         <AnimatedBackground />
-        <Navigation />
-
         <div className="relative z-20 mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 pt-24 pb-12 text-center sm:pt-28">
           <motion.h1
             initial="hidden"
