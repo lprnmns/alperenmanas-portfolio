@@ -1,8 +1,9 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { motion, type Variants } from 'framer-motion';
+import Image from 'next/image';
 import { Github, Linkedin, ChevronDown } from 'lucide-react';
 
 import LoadingScreen from '@/components/LoadingScreen';
@@ -72,6 +73,7 @@ export default function Home() {
   const [showActions, setShowActions] = useState(false);
   const [showSections, setShowSections] = useState(false);
   const [heroPinned, setHeroPinned] = useState(false);
+  const [showContribs, setShowContribs] = useState(false);
   const heroContainerRef = useRef<HTMLDivElement | null>(null);
   const aboutSectionRef = useRef<HTMLElement | null>(null);
 
@@ -135,12 +137,14 @@ export default function Home() {
     setShowActions(false);
     setShowSections(false);
     setHeroPinned(false);
+    setShowContribs(false);
   }, [stage]);
 
   useEffect(() => {
     if (showActions && !heroPinned) {
       const timer = setTimeout(() => {
         setHeroPinned(true);
+        setShowContribs(true);
         requestAnimationFrame(() => {
           const containerTop = heroContainerRef.current?.offsetTop ?? 0;
           const target = Math.max(containerTop - 16, 0);
@@ -156,11 +160,17 @@ export default function Home() {
   const headingState = showHeading ? 'visible' : 'hidden';
   const actionsState = showActions ? 'visible' : 'hidden';
   const sectionsState = showSections ? 'visible' : 'hidden';
+
   const heroContainerClass = clsx(
-    'relative z-20 mx-auto flex max-w-4xl flex-col items-center text-center transition-all duration-700',
+    'relative z-20 mx-auto flex max-w-6xl flex-col items-center text-center transition-all duration-700',
     heroPinned
-      ? 'min-h-[30vh] justify-start gap-5 px-6 pt-12 pb-10 sm:pt-16 sm:pb-12'
-      : 'min-h-[85vh] justify-center gap-10 px-6 pt-24 pb-20 sm:pt-32 sm:pb-24'
+      ? 'min-h-[30vh] justify-start gap-8 px-6 pt-12 pb-10 sm:pt-16 sm:pb-12 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:text-left'
+      : 'min-h-[85vh] justify-center gap-12 px-6 pt-24 pb-20 sm:pt-32 sm:pb-24'
+  );
+
+  const heroStackClass = clsx(
+    'flex w-full flex-col items-center gap-8 text-center transition-all duration-700',
+    heroPinned && 'lg:max-w-xl lg:items-start lg:text-left'
   );
 
   return (
@@ -181,42 +191,77 @@ export default function Home() {
           animate={heroContainerState}
           className={heroContainerClass}
         >
-          <motion.h1
-            initial="hidden"
-            animate={headingState}
-            variants={headingVariants}
-            className="text-4xl font-bold tracking-tight text-white sm:text-6xl md:text-7xl"
-          >
-            Alperen Manas
-          </motion.h1>
+          <div className={heroStackClass}>
+            <motion.h1
+              initial="hidden"
+              animate={headingState}
+              variants={headingVariants}
+              className="text-4xl font-bold tracking-tight text-white sm:text-6xl md:text-7xl"
+            >
+              Alperen Manas
+            </motion.h1>
 
-          <motion.div
-            initial="hidden"
-            animate={actionsState}
-            variants={actionsVariants}
-            className="flex flex-wrap items-center justify-center gap-5"
-          >
-            <motion.a
-              variants={actionItemVariants}
-              href="https://github.com/lprnmns"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white shadow-blue-500/50 transition-shadow duration-300 hover:shadow-lg sm:text-base"
+            <motion.div
+              initial="hidden"
+              animate={actionsState}
+              variants={actionsVariants}
+              className="flex flex-wrap items-center justify-center gap-5"
             >
-              <Github size={20} />
-              <span>GitHub</span>
-            </motion.a>
-            <motion.a
-              variants={actionItemVariants}
-              href="https://www.linkedin.com/in/alperen-manas-a92aa2378/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white shadow-blue-500/50 transition-shadow duration-300 hover:shadow-lg sm:text-base"
+              <motion.a
+                variants={actionItemVariants}
+                href="https://github.com/lprnmns"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white shadow-blue-500/50 transition-shadow duration-300 hover:shadow-lg sm:text-base"
+              >
+                <Github size={20} />
+                <span>GitHub</span>
+              </motion.a>
+              <motion.a
+                variants={actionItemVariants}
+                href="https://www.linkedin.com/in/alperen-manas-a92aa2378/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white shadow-blue-500/50 transition-shadow duration-300 hover:shadow-lg sm:text-base"
+              >
+                <Linkedin size={20} />
+                <span>LinkedIn</span>
+              </motion.a>
+            </motion.div>
+          </div>
+
+          {showContribs && (
+            <motion.div
+              initial={{ opacity: 0, x: 48 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className="mt-12 w-full max-w-2xl rounded-3xl border border-slate-700/50 bg-slate-900/50 p-6 text-left backdrop-blur-md lg:mt-0 lg:max-w-md"
             >
-              <Linkedin size={20} />
-              <span>LinkedIn</span>
-            </motion.a>
-          </motion.div>
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-300">GitHub</span>
+                <a
+                  href="https://github.com/lprnmns"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-medium text-sky-300 transition-colors hover:text-sky-200"
+                >
+                  Profili aç
+                </a>
+              </div>
+              <p className="mt-3 text-base font-medium text-white">Son 12 ay katkılarım</p>
+              <div className="mt-4 overflow-hidden rounded-2xl border border-slate-700/40 bg-slate-950/40 p-3">
+                <Image
+                  src="https://ghchart.rshah.org/1C64F2/lprnmns"
+                  alt="Alperen Manas GitHub contributions"
+                  loading="lazy"
+                  width={600}
+                  height={120}
+                  unoptimized
+                  className="mx-auto w-full max-w-sm opacity-90"
+                />
+              </div>
+            </motion.div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -229,7 +274,8 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        <motion.section ref={aboutSectionRef}
+        <motion.section
+          ref={aboutSectionRef}
           initial="hidden"
           animate={sectionsState}
           variants={sectionsVariants}
