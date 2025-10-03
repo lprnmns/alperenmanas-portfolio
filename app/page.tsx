@@ -59,7 +59,7 @@ const sectionsVariants: Variants = {
 const heroContainerVariants: Variants = {
   center: { y: 0, scale: 1 },
   pinned: {
-    y: -80,
+    y: -40,
     scale: 0.95,
     transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
   },
@@ -139,8 +139,11 @@ export default function Home() {
   useEffect(() => {
     if (showActions && !heroPinned) {
       const timer = setTimeout(() => {
+        const sectionTop = aboutSectionRef.current?.offsetTop ?? 0;
+        const offset = window.innerHeight * 0.35;
+        const target = Math.max(sectionTop - offset, 0);
+        window.scrollTo({ top: target, behavior: 'smooth' });
         setHeroPinned(true);
-        aboutSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 900);
 
       return () => clearTimeout(timer);
