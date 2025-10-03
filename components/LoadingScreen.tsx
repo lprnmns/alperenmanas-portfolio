@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import clsx from 'clsx';
 import Image from 'next/image';
@@ -125,7 +125,7 @@ const previewColumns: PreviewCard[][] = [
   ],
 ];
 
-const columnDurations = [14.7, 17.3];
+const columnDurations = [11, 13];
 
 export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
   const progressValue = Math.round(Math.min(Math.max(progress, 0), 100));
@@ -271,3 +271,4 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
     </>
   );
 }
+
