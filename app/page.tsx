@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { motion, type Variants } from 'framer-motion';
 import { Github, Linkedin, ChevronDown } from 'lucide-react';
@@ -56,12 +56,23 @@ const sectionsVariants: Variants = {
   },
 };
 
+const heroContainerVariants: Variants = {
+  center: { y: 0, scale: 1 },
+  pinned: {
+    y: -80,
+    scale: 0.95,
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
+  },
+};
+
 export default function Home() {
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState<LoadingStage>('loading');
   const [showHeading, setShowHeading] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const [showSections, setShowSections] = useState(false);
+  const [heroPinned, setHeroPinned] = useState(false);
+  const aboutSectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (stage !== 'loading') {
@@ -122,11 +133,30 @@ export default function Home() {
     setShowHeading(false);
     setShowActions(false);
     setShowSections(false);
+    setHeroPinned(false);
   }, [stage]);
 
+  useEffect(() => {
+    if (showActions && !heroPinned) {
+      const timer = setTimeout(() => {
+        setHeroPinned(true);
+        aboutSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 900);
+
+      return () => clearTimeout(timer);
+    }
+  }, [showActions, heroPinned]);
+
+  const heroContainerState = heroPinned ? 'pinned' : 'center';
   const headingState = showHeading ? 'visible' : 'hidden';
   const actionsState = showActions ? 'visible' : 'hidden';
   const sectionsState = showSections ? 'visible' : 'hidden';
+  const heroContainerClass = clsx(
+    'relative z-20 mx-auto flex max-w-4xl flex-col items-center text-center transition-all duration-700',
+    heroPinned
+      ? 'min-h-[40vh] justify-start gap-6 px-6 pt-16 pb-12 sm:pt-20 sm:pb-14'
+      : 'min-h-[85vh] justify-center gap-10 px-6 pt-24 pb-20 sm:pt-32 sm:pb-24'
+  );
 
   return (
     <main className="min-h-screen bg-slate-900 text-white overflow-x-hidden">
@@ -139,7 +169,12 @@ export default function Home() {
       >
         <AnimatedBackground />
 
-        <div className="relative z-20 mx-auto flex min-h-[85vh] max-w-4xl flex-col items-center justify-center gap-10 px-6 pt-24 pb-20 text-center sm:pt-32 sm:pb-24">
+        <motion.div
+          variants={heroContainerVariants}
+          initial="center"
+          animate={heroContainerState}
+          className={heroContainerClass}
+        >
           <motion.h1
             initial="hidden"
             animate={headingState}
@@ -178,16 +213,17 @@ export default function Home() {
           </motion.div>
 
           <motion.div
-            initial="hidden"
-            animate={actionsState}
-            variants={actionsVariants}
+            initial={{ opacity: 0, y: 8 }}
+            animate={heroPinned ? { opacity: 0, y: 16 } : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
             className="pointer-events-none absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-400/80"
             aria-hidden="true"
           >
             <ChevronDown className="h-8 w-8 animate-bounce" strokeWidth={1.5} />
           </motion.div>
-        </div>
-        <motion.section
+        </motion.div>
+
+        <motion.section ref={aboutSectionRef}
           initial="hidden"
           animate={sectionsState}
           variants={sectionsVariants}
