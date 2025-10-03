@@ -118,7 +118,10 @@ export function GithubContributions({ username }: { username: string }) {
       </div>
 
       <div className="mt-4">
-        <div className="grid auto-cols-max grid-flow-col gap-[4px] overflow-x-auto pb-2">
+        <div
+          className="grid gap-[4px]"
+          style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(8px, 1fr))` }}
+        >
           {weeks.map((week, weekIndex) => (
             <div key={weekIndex} className="flex flex-col gap-[4px]">
               {week.map((day, dayIndex) => {
