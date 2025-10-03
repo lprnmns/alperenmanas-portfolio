@@ -38,6 +38,7 @@ export default function About() {
           <h2 className="mb-4 text-4xl font-bold text-transparent md:text-5xl bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">
             Hakkımda
           </h2>
+          <p className="mx-auto max-w-2xl text-lg text-slate-400">Hakkımda genel bilgiler</p>
         </motion.div>
 
         <div className="space-y-6">

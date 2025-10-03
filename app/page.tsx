@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { motion, type Variants } from 'framer-motion';
+import { Github, Linkedin } from 'lucide-react';
 
 import LoadingScreen from '@/components/LoadingScreen';
 import AnimatedBackground from '@/components/animations/AnimatedBackground';
@@ -13,7 +14,7 @@ import Certificates from '@/components/sections/Certificates';
 type LoadingStage = 'loading' | 'transition' | 'final';
 
 const headingVariants: Variants = {
-  hidden: { opacity: 0, y: 24, scale: 0.95 },
+  hidden: { opacity: 0, y: 32, scale: 0.92 },
   visible: {
     opacity: 1,
     y: 0,
@@ -22,13 +23,13 @@ const headingVariants: Variants = {
   },
 };
 
-const chipListVariants: Variants = {
-  hidden: { opacity: 0, y: 16 },
+const actionsVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      delay: 0.2,
+      delay: 0.15,
       duration: 0.45,
       ease: 'easeOut',
       when: 'beforeChildren',
@@ -37,8 +38,8 @@ const chipListVariants: Variants = {
   },
 };
 
-const chipItemVariants: Variants = {
-  hidden: { opacity: 0, y: 12 },
+const actionItemVariants: Variants = {
+  hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
     y: 0,
@@ -46,9 +47,21 @@ const chipItemVariants: Variants = {
   },
 };
 
+const sectionsVariants: Variants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: 'easeOut' },
+  },
+};
+
 export default function Home() {
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState<LoadingStage>('loading');
+  const [showHeading, setShowHeading] = useState(false);
+  const [showActions, setShowActions] = useState(false);
+  const [showSections, setShowSections] = useState(false);
 
   useEffect(() => {
     if (stage !== 'loading') {
@@ -93,7 +106,27 @@ export default function Home() {
     }
   }, [stage]);
 
-  const headingState = stage === 'loading' ? 'hidden' : 'visible';
+  useEffect(() => {
+    if (stage === 'final') {
+      const headingTimer = setTimeout(() => setShowHeading(true), 120);
+      const actionsTimer = setTimeout(() => setShowActions(true), 360);
+      const sectionsTimer = setTimeout(() => setShowSections(true), 660);
+
+      return () => {
+        clearTimeout(headingTimer);
+        clearTimeout(actionsTimer);
+        clearTimeout(sectionsTimer);
+      };
+    }
+
+    setShowHeading(false);
+    setShowActions(false);
+    setShowSections(false);
+  }, [stage]);
+
+  const headingState = showHeading ? 'visible' : 'hidden';
+  const actionsState = showActions ? 'visible' : 'hidden';
+  const sectionsState = showSections ? 'visible' : 'hidden';
 
   return (
     <main className="min-h-screen bg-slate-900 text-white overflow-x-hidden">
@@ -105,54 +138,62 @@ export default function Home() {
         )}
       >
         <AnimatedBackground />
-        <div className="relative z-20 mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 pt-24 pb-12 text-center sm:pt-28">
+
+        <div className="relative z-20 mx-auto flex min-h-[70vh] max-w-4xl flex-col items-center justify-center gap-8 px-4 pt-32 pb-28 text-center sm:pt-40 sm:pb-36">
           <motion.h1
             initial="hidden"
             animate={headingState}
             variants={headingVariants}
-            className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl"
+            className="text-4xl font-bold tracking-tight text-white sm:text-6xl md:text-7xl"
           >
             Alperen Manas
           </motion.h1>
+
           <motion.div
             initial="hidden"
-            animate={headingState}
-            variants={chipListVariants}
-            className="flex flex-wrap items-center justify-center gap-4"
+            animate={actionsState}
+            variants={actionsVariants}
+            className="flex flex-wrap items-center justify-center gap-5"
           >
             <motion.a
-              variants={chipItemVariants}
+              variants={actionItemVariants}
               href="https://github.com/lprnmns"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 font-medium text-white shadow-blue-500/50 transition-shadow duration-300 hover:shadow-lg"
+              className="flex items-center gap-3 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white shadow-blue-500/50 transition-shadow duration-300 hover:shadow-lg sm:text-base"
             >
-              GitHub
+              <Github size={20} />
+              <span>GitHub</span>
             </motion.a>
             <motion.a
-              variants={chipItemVariants}
+              variants={actionItemVariants}
               href="https://www.linkedin.com/in/alperen-manas-a92aa2378/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 font-medium text-white shadow-blue-500/50 transition-shadow duration-300 hover:shadow-lg"
+              className="flex items-center gap-3 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-6 py-3 text-sm font-medium text-white shadow-blue-500/50 transition-shadow duration-300 hover:shadow-lg sm:text-base"
             >
-              LinkedIn
+              <Linkedin size={20} />
+              <span>LinkedIn</span>
             </motion.a>
           </motion.div>
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-8">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
+        <motion.section
+          initial="hidden"
+          animate={sectionsState}
+          variants={sectionsVariants}
+          className="mx-auto mt-20 max-w-7xl px-4 pb-12 sm:px-6 lg:px-8"
+        >
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="space-y-12 lg:col-span-5">
               <About />
               <Certificates />
             </div>
-
             <div className="lg:col-span-7">
               <Projects />
             </div>
           </div>
-        </div>
+        </motion.section>
       </div>
     </main>
   );

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import clsx from 'clsx';
 import Image from 'next/image';
@@ -139,7 +139,7 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
     'fixed z-50 flex items-center justify-center text-white font-semibold transition-all duration-700 ease-out',
     stage === 'loading'
       ? 'top-1/2 left-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2'
-      : 'top-8 left-8 h-24 w-24 translate-x-0 translate-y-0 sm:h-28 sm:w-28'
+      : 'top-8 left-8 h-48 w-48 translate-x-0 translate-y-0 sm:h-56 sm:w-56'
   );
 
   const ringClasses = clsx(
@@ -271,4 +271,3 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
     </>
   );
 }
-
