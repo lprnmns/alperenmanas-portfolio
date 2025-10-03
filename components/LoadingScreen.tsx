@@ -25,118 +25,107 @@ const previewColumns: PreviewCard[][] = [
   [
     {
       id: 'project-zenith',
-      label: 'Projeler',
+      label: 'Projects',
       title: 'Zenith Trader',
       description:
-        'Whale cüzdan hareketlerini izleyip OKX üzerinde otomatik işlem açan kurumsal platform.',
+        'Institutional copy-trading platform that mirrors whale wallets on OKX in real time.',
       tags: ['Next.js', 'Realtime', 'Fintech'],
       image: '/projects/zenith-trader/cover.png',
       accent: 'from-blue-500/70 via-cyan-400/20 to-transparent',
     },
     {
       id: 'project-lokaskor',
-      label: 'Projeler',
+      label: 'Projects',
       title: 'LokaSkor Pro',
       description:
-        'Yapay zeka destekli lokasyon skorlamasıyla doğru yatırımı seçmeye yardımcı SaaS ürünü.',
+        'AI-assisted location scoring SaaS that helps entrepreneurs find high-potential venues.',
       tags: ['AI', 'SaaS', 'GIS'],
       image: '/projects/lokaskor/cover.png',
       accent: 'from-emerald-500/70 via-teal-400/20 to-transparent',
     },
     {
       id: 'project-not-bildirim',
-      label: 'Projeler',
-      title: 'Not Bildirim Otomasyonu',
+      label: 'Projects',
+      title: 'Grade Notification Automation',
       description:
-        'OBS sisteminde yeni notları OCR ve Telegram botu ile anlık haber veren otomasyon.',
+        'Automation that scrapes university grades with OCR and alerts via Telegram bot instantly.',
       tags: ['Automation', 'Python'],
       image: '/projects/not-bildirim-otomasyonu/carousel-2.png',
       accent: 'from-purple-500/70 via-pink-400/20 to-transparent',
     },
     {
-      id: 'project-iran-monitor',
-      label: 'Projeler',
-      title: 'İran Hava Sahası Monitör',
-      description:
-        'Jeopolitik kriz anında yardım uçuşlarını harita üzerinde gerçek zamanlı izleyen hobi projesi.',
-      tags: ['Leaflet', 'Real-time'],
-      image: '/projects/iran-havasahasi-monitor/cover.png',
-      accent: 'from-amber-500/70 via-orange-400/20 to-transparent',
-    },
-  ],
-  [
-    {
       id: 'about-vision',
-      label: 'Hakkımda',
-      title: 'Ürüne odaklı tasarım & geliştirme',
+      label: 'About',
+      title: 'Product-focused design & development',
       description:
-        'Karmaşık iş problemlerini kullanıcı dostu deneyimlere dönüştürürken performans ve ölçeklenebilirliği birlikte düşünüyorum.',
+        'Transforming complex business problems into intuitive experiences with performance in mind.',
       tags: ['Full-stack', 'UI/UX'],
       accent: 'from-sky-500/60 via-blue-400/10 to-transparent',
     },
     {
       id: 'about-stack',
-      label: 'Teknolojiler',
-      title: 'Tip güvenli modern stack',
+      label: 'Stack',
+      title: 'Type-safe modern toolkit',
       description:
-        'TypeScript, React, Next.js ve Node.js ekosisteminde üretim ortamına hazır çözümler inşa ediyorum.',
+        'Shipping production-ready solutions with TypeScript, React, Next.js and Node.js.',
       tags: ['TypeScript', 'Node.js', 'PostgreSQL'],
       accent: 'from-cyan-500/50 via-slate-800/30 to-transparent',
-    },
-    {
-      id: 'about-craft',
-      label: 'Üretim',
-      title: 'Sürekli öğrenme ve paylaşım',
-      description:
-        'Yeni teknolojileri deneyip topluluklarda anlatıyorum; doküman, demo ve eğitim içerikleri hazırlıyorum.',
-      tags: ['Mentorluk', 'Topluluk'],
-      accent: 'from-indigo-500/50 via-violet-400/20 to-transparent',
-    },
-    {
-      id: 'about-team',
-      label: 'Çalışma Şekli',
-      title: 'Takım uyumu ve hızlı iterasyon',
-      description:
-        'Ürün ekipleriyle yakın çalışıp hızlı geri bildirim döngüleriyle fikirleri canlıya taşıyorum.',
-      tags: ['Agile', 'Product'],
-      accent: 'from-rose-500/50 via-slate-800/30 to-transparent',
     },
   ],
   [
     {
       id: 'certificate-huawei',
-      label: 'Sertifikalar',
+      label: 'Certificates',
       title: 'Huawei HCIA-AI V3.5',
       description:
-        'Derin öğrenme ve makine öğrenimi temellerini kapsayan kapsamlı eğitim programı.',
+        'Comprehensive training covering deep learning and machine learning fundamentals.',
       tags: ['AI Fundamentals'],
       image: '/sertifikalar/huawei-hcia-ai-v3-5-turkish.png',
       accent: 'from-red-500/70 via-orange-400/20 to-transparent',
     },
     {
       id: 'certificate-btk-sql',
-      label: 'Sertifikalar',
-      title: 'BTK SQL Uygulamaları',
+      label: 'Certificates',
+      title: 'BTK SQL Practices',
       description:
-        'Gerçek veri setleriyle ilişkisel veritabanı tasarımı ve sorgu optimizasyonu.',
+        'Hands-on course for relational database design and query optimisation on real datasets.',
       tags: ['SQL', 'Database'],
       image: '/sertifikalar/btk-uygulamalarla-SQL.png',
       accent: 'from-blue-500/70 via-cyan-400/20 to-transparent',
     },
     {
       id: 'certificate-btk-db',
-      label: 'Sertifikalar',
-      title: 'BTK Veritabanına Giriş',
+      label: 'Certificates',
+      title: 'BTK Intro to Databases',
       description:
-        'Normalize şemalar, veri bütünlüğü ve yönetim süreçlerine odaklı temel eğitim.',
+        'Foundational training on normalised schemas, data integrity and admin workflows.',
       tags: ['Data Modeling'],
       image: '/sertifikalar/btk-veri-tabanina-giris.png',
       accent: 'from-purple-500/70 via-pink-400/20 to-transparent',
     },
+    {
+      id: 'certificate-meta',
+      label: 'Certificates',
+      title: 'Meta Front-End Specialisation',
+      description:
+        'React component architecture, accessibility and performance optimisation best practices.',
+      tags: ['React', 'Accessibility'],
+      image: '/sertifikalar/meta-front-end-specialization.png',
+      accent: 'from-emerald-500/70 via-slate-800/20 to-transparent',
+    },
+    {
+      id: 'about-team',
+      label: 'Workflow',
+      title: 'Collaborative delivery',
+      description:
+        'Partnering with product teams and iterating quickly with tight feedback loops.',
+      tags: ['Agile', 'Product'],
+      accent: 'from-rose-500/50 via-slate-800/30 to-transparent',
+    },
   ],
 ];
 
-const columnDurations = [20, 24, 22];
+const columnDurations = [22, 26];
 
 export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
   const progressValue = Math.round(Math.min(Math.max(progress, 0), 100));
@@ -171,18 +160,15 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
     <>
       <div className={overlayClasses}>
         {stage === 'loading' && (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-4 py-12 sm:px-8 md:px-12">
-            <div className="flex w-full max-w-6xl flex-col items-center gap-8 md:flex-row md:items-stretch md:justify-between">
+          <div className="pointer-events-none absolute inset-0 flex justify-center px-4 py-12 sm:px-8 md:px-24">
+            <div className="flex w-full max-w-6xl flex-col items-center gap-10 md:flex-row md:items-center md:justify-between md:gap-24">
               {previewColumns.map((column, columnIndex) => {
                 const items = [...column, ...column];
 
                 return (
                   <div
                     key={columnIndex}
-                    className={clsx(
-                      'relative flex h-[520px] w-full max-w-[340px] flex-col overflow-hidden rounded-[2.75rem] border border-slate-800/40 bg-slate-900/45 p-6 backdrop-blur-xl shadow-[0_30px_80px_-60px_rgba(15,23,42,0.9)]',
-                      columnIndex === 1 ? 'hidden xl:flex' : 'flex'
-                    )}
+                    className="relative flex h-[520px] w-full max-w-[340px] flex-col overflow-hidden rounded-[2.75rem] border border-slate-800/40 bg-slate-900/45 p-6 backdrop-blur-xl shadow-[0_30px_80px_-60px_rgba(15,23,42,0.9)]"
                   >
                     <motion.div
                       animate={{ y: ['0%', '-50%'] }}
@@ -202,7 +188,7 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
                             <div className="relative mb-5 h-44 overflow-hidden rounded-2xl border border-slate-800/50">
                               <Image
                                 src={item.image}
-                                alt={`${item.title} görseli`}
+                                alt={`${item.title} preview`}
                                 fill
                                 sizes="(max-width: 1024px) 80vw, 340px"
                                 className="object-cover"
