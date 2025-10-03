@@ -128,7 +128,7 @@ export default function Home() {
               href="https://github.com/lprnmns"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full border border-slate-700/40 bg-slate-900/40 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-200/70 transition-colors duration-300 hover:border-sky-400/70 hover:text-sky-300"
+              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 font-medium text-white shadow-blue-500/50 transition-shadow duration-300 hover:shadow-lg"
             >
               GitHub
             </motion.a>
@@ -137,7 +137,7 @@ export default function Home() {
               href="https://www.linkedin.com/in/alperen-manas-a92aa2378/"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full border border-slate-700/40 bg-slate-900/40 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-200/70 transition-colors duration-300 hover:border-sky-400/70 hover:text-sky-300"
+              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 font-medium text-white shadow-blue-500/50 transition-shadow duration-300 hover:shadow-lg"
             >
               LinkedIn
             </motion.a>
