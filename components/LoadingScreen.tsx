@@ -120,7 +120,7 @@ const previewColumns: PreviewCard[][] = [
       description:
         'Partnering with product teams and iterating quickly with tight feedback loops.',
       tags: ['Agile', 'Product'],
-      accent: 'from-rose-500/50 via-slate-800/30 to-transparent',
+      accent: 'from-rose-500/40 via-slate-800/20 to-transparent',
     },
   ],
 ];
@@ -131,7 +131,7 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
   const progressValue = Math.round(Math.min(Math.max(progress, 0), 100));
 
   const overlayClasses = clsx(
-    'fixed inset-0 z-40 overflow-hidden bg-slate-950/88 transition-opacity duration-700',
+    'fixed inset-0 z-40 overflow-hidden bg-slate-950/65 transition-opacity duration-700',
     stage === 'loading' ? 'opacity-100' : 'opacity-0 pointer-events-none'
   );
 
@@ -144,14 +144,14 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
 
   const ringClasses = clsx(
     'absolute inset-0 rounded-full transition-all duration-700 ease-out',
-    stage === 'final' ? 'border border-slate-500/70 bg-slate-900/90' : 'border border-transparent'
+    stage === 'final' ? 'border border-slate-500/60 bg-slate-900/80' : 'border border-transparent'
   );
 
   const ringStyle =
     stage === 'final'
       ? undefined
       : {
-          background: `conic-gradient(#38bdf8 ${progressValue * 3.6}deg, rgba(148, 163, 184, 0.15) ${
+          background: `conic-gradient(#38bdf8 ${progressValue * 3.6}deg, rgba(148, 163, 184, 0.08) ${
             progressValue * 3.6
           }deg)`,
         };
@@ -168,7 +168,7 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
                 return (
                   <div
                     key={columnIndex}
-                    className="relative flex h-[520px] w-full max-w-[340px] flex-col overflow-hidden rounded-[2.75rem] border border-slate-800/40 bg-slate-900/45 p-6 backdrop-blur-xl shadow-[0_30px_80px_-60px_rgba(15,23,42,0.9)]"
+                    className="relative flex h-[500px] w-full max-w-[320px] flex-col overflow-hidden rounded-[2.75rem] border border-slate-800/25 bg-slate-900/20 p-6 backdrop-blur-[18px] shadow-[0_22px_70px_-50px_rgba(15,23,42,0.7)]"
                   >
                     <motion.div
                       animate={{ y: ['0%', '-50%'] }}
@@ -182,21 +182,22 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
                       {items.map((item, itemIndex) => (
                         <article
                           key={`${item.id}-${itemIndex}`}
-                          className="rounded-3xl border border-slate-800/50 bg-slate-900/80 px-7 py-6 shadow-[0_22px_48px_-34px_rgba(15,23,42,0.95)]"
+                          className="rounded-3xl border border-slate-800/25 bg-slate-900/45 px-7 py-6 shadow-[0_18px_46px_-36px_rgba(15,23,42,0.6)]"
                         >
                           {item.image ? (
-                            <div className="relative mb-5 h-44 overflow-hidden rounded-2xl border border-slate-800/50">
+                            <div className="relative mb-5 h-40 overflow-hidden rounded-2xl border border-slate-800/25">
                               <Image
                                 src={item.image}
                                 alt={`${item.title} preview`}
                                 fill
-                                sizes="(max-width: 1024px) 80vw, 340px"
-                                className="object-cover"
+                                sizes="(max-width: 1024px) 70vw, 320px"
+                                className="object-cover opacity-90"
+                                quality={35}
                                 priority={columnIndex === 0 && itemIndex < 2}
                               />
                               <div
                                 className={clsx(
-                                  'absolute inset-0 bg-gradient-to-br opacity-45',
+                                  'absolute inset-0 bg-gradient-to-br opacity-30',
                                   item.accent
                                 )}
                               />
@@ -204,17 +205,17 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
                           ) : (
                             <div
                               className={clsx(
-                                'mb-5 h-36 rounded-2xl border border-slate-800/50 bg-gradient-to-br opacity-80',
+                                'mb-5 h-32 rounded-2xl border border-slate-800/25 bg-gradient-to-br opacity-50',
                                 item.accent
                               )}
                             />
                           )}
 
-                          <span className="text-[11px] uppercase tracking-[0.35em] text-sky-400/90">
+                          <span className="text-[11px] uppercase tracking-[0.32em] text-sky-300/75">
                             {item.label}
                           </span>
-                          <h3 className="mt-3 text-xl font-semibold text-slate-100">{item.title}</h3>
-                          <p className="mt-3 text-sm leading-relaxed text-slate-300/85">
+                          <h3 className="mt-3 text-xl font-semibold text-slate-100/90">{item.title}</h3>
+                          <p className="mt-3 text-sm leading-relaxed text-slate-300/70">
                             {item.description}
                           </p>
                           {item.tags && (
@@ -222,7 +223,7 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
                               {item.tags.map((tag) => (
                                 <span
                                   key={`${item.id}-${tag}`}
-                                  className="rounded-full border border-slate-700/50 bg-slate-800/60 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-slate-300/80"
+                                  className="rounded-full border border-slate-700/30 bg-slate-800/30 px-3 py-1 text-[11px] uppercase tracking-[0.28em] text-slate-300/65"
                                 >
                                   {tag}
                                 </span>
@@ -244,9 +245,9 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
           <div className={ringClasses} style={ringStyle} />
           <div
             className={clsx(
-              'absolute inset-[10%] overflow-hidden rounded-full border border-slate-900/50 bg-slate-900/30 transition-all duration-700 ease-out',
+              'absolute inset-[10%] overflow-hidden rounded-full border border-slate-900/40 bg-slate-900/20 transition-all duration-700 ease-out',
               stage === 'loading'
-                ? 'shadow-[0_0_70px_rgba(56,189,248,0.35)]'
+                ? 'shadow-[0_0_60px_rgba(56,189,248,0.28)]'
                 : 'shadow-none'
             )}
           >
@@ -255,12 +256,13 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
               alt="Alperen Manas profile photo"
               fill
               priority
-              sizes="(max-width: 640px) 260px, (max-width: 1024px) 320px, 320px"
+              quality={50}
+              sizes="(max-width: 640px) 240px, (max-width: 1024px) 320px, 320px"
               className="object-cover"
             />
           </div>
           {stage === 'loading' && (
-            <span className="absolute -bottom-16 text-sm font-medium tracking-[0.4em] text-slate-200">
+            <span className="absolute -bottom-16 text-sm font-medium tracking-[0.4em] text-slate-100/70">
               {progressValue}%
             </span>
           )}
