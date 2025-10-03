@@ -88,7 +88,7 @@ const previewColumns: PreviewCard[][] = [
       label: 'Üretim',
       title: 'Sürekli öğrenme ve paylaşım',
       description:
-        'Yeni teknolojileri deneyip topluluklarda anlatıyorum; döküman, demo ve eğitim içerikleri hazırlıyorum.',
+        'Yeni teknolojileri deneyip topluluklarda anlatıyorum; doküman, demo ve eğitim içerikleri hazırlıyorum.',
       tags: ['Mentorluk', 'Topluluk'],
       accent: 'from-indigo-500/50 via-violet-400/20 to-transparent',
     },
@@ -136,6 +136,7 @@ const previewColumns: PreviewCard[][] = [
   ],
 ];
 
+const columnDurations = [20, 24, 22];
 
 export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
   const progressValue = Math.round(Math.min(Math.max(progress, 0), 100));
@@ -170,87 +171,84 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
     <>
       <div className={overlayClasses}>
         {stage === 'loading' && (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden px-4">
-            <div className="relative h-full w-full max-w-2xl">
-              <motion.div
-                animate={{ y: ['-100%', '200%'] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 30,
-                  ease: 'linear',
-                }}
-                className="flex flex-col gap-6 py-6"
-              >
-                {[...previewColumns.flat(), ...previewColumns.flat()].map((item, itemIndex) => {
-                  const scrollProgress = itemIndex / (previewColumns.flat().length * 2);
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-4 py-12 sm:px-8 md:px-12">
+            <div className="flex w-full max-w-6xl flex-col items-center gap-8 md:flex-row md:items-stretch md:justify-between">
+              {previewColumns.map((column, columnIndex) => {
+                const items = [...column, ...column];
 
-                  return (
-                    <motion.article
-                      key={`${item.id}-${itemIndex}`}
-                      style={{
-                        opacity: 0,
-                      }}
-                      animate={{
-                        opacity: [0, 1, 1, 0],
-                      }}
+                return (
+                  <div
+                    key={columnIndex}
+                    className={clsx(
+                      'relative flex h-[520px] w-full max-w-[340px] flex-col overflow-hidden rounded-[2.75rem] border border-slate-800/40 bg-slate-900/45 p-6 backdrop-blur-xl shadow-[0_30px_80px_-60px_rgba(15,23,42,0.9)]',
+                      columnIndex === 1 ? 'hidden xl:flex' : 'flex'
+                    )}
+                  >
+                    <motion.div
+                      animate={{ y: ['0%', '-50%'] }}
                       transition={{
                         repeat: Infinity,
-                        duration: 30,
+                        duration: columnDurations[columnIndex % columnDurations.length],
                         ease: 'linear',
-                        delay: scrollProgress * 30,
-                        times: [0, 0.1, 0.9, 1],
                       }}
-                      className="w-full rounded-3xl border border-slate-800/50 bg-slate-900/80 px-7 py-6 shadow-[0_18px_42px_-32px_rgba(15,23,42,0.9)]"
+                      className="flex flex-col gap-6 pb-6"
                     >
-                      {item.image ? (
-                        <div className="relative mb-5 h-48 overflow-hidden rounded-2xl border border-slate-800/50">
-                          <Image
-                            src={item.image}
-                            alt={`${item.title} görseli`}
-                            fill
-                            sizes="(max-width: 1024px) 90vw, 768px"
-                            className="object-cover"
-                            priority={itemIndex < 4}
-                          />
-                          <div
-                            className={clsx(
-                              'absolute inset-0 bg-gradient-to-br opacity-40',
-                              item.accent
-                            )}
-                          />
-                        </div>
-                      ) : (
-                        <div
-                          className={clsx(
-                            'mb-5 h-40 rounded-2xl border border-slate-800/50 bg-gradient-to-br opacity-80',
-                            item.accent
+                      {items.map((item, itemIndex) => (
+                        <article
+                          key={`${item.id}-${itemIndex}`}
+                          className="rounded-3xl border border-slate-800/50 bg-slate-900/80 px-7 py-6 shadow-[0_22px_48px_-34px_rgba(15,23,42,0.95)]"
+                        >
+                          {item.image ? (
+                            <div className="relative mb-5 h-44 overflow-hidden rounded-2xl border border-slate-800/50">
+                              <Image
+                                src={item.image}
+                                alt={`${item.title} görseli`}
+                                fill
+                                sizes="(max-width: 1024px) 80vw, 340px"
+                                className="object-cover"
+                                priority={columnIndex === 0 && itemIndex < 2}
+                              />
+                              <div
+                                className={clsx(
+                                  'absolute inset-0 bg-gradient-to-br opacity-45',
+                                  item.accent
+                                )}
+                              />
+                            </div>
+                          ) : (
+                            <div
+                              className={clsx(
+                                'mb-5 h-36 rounded-2xl border border-slate-800/50 bg-gradient-to-br opacity-80',
+                                item.accent
+                              )}
+                            />
                           )}
-                        />
-                      )}
 
-                      <span className="text-[11px] uppercase tracking-[0.35em] text-sky-400/90">
-                        {item.label}
-                      </span>
-                      <h3 className="mt-3 text-xl font-semibold text-slate-100">{item.title}</h3>
-                      <p className="mt-3 text-sm leading-relaxed text-slate-300/85">
-                        {item.description}
-                      </p>
-                      {item.tags && (
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {item.tags.map((tag) => (
-                            <span
-                              key={`${item.id}-${tag}`}
-                              className="rounded-full border border-slate-700/50 bg-slate-800/60 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-slate-300/80"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </motion.article>
-                  );
-                })}
-              </motion.div>
+                          <span className="text-[11px] uppercase tracking-[0.35em] text-sky-400/90">
+                            {item.label}
+                          </span>
+                          <h3 className="mt-3 text-xl font-semibold text-slate-100">{item.title}</h3>
+                          <p className="mt-3 text-sm leading-relaxed text-slate-300/85">
+                            {item.description}
+                          </p>
+                          {item.tags && (
+                            <div className="mt-4 flex flex-wrap gap-2">
+                              {item.tags.map((tag) => (
+                                <span
+                                  key={`${item.id}-${tag}`}
+                                  className="rounded-full border border-slate-700/50 bg-slate-800/60 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-slate-300/80"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </article>
+                      ))}
+                    </motion.div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
