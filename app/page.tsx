@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { motion, type Variants } from 'framer-motion';
-import Image from 'next/image';
 import { Github, Linkedin, ChevronDown } from 'lucide-react';
 
+import { GithubContributions } from '@/components/ui/GithubContributions';
 import LoadingScreen from '@/components/LoadingScreen';
 import AnimatedBackground from '@/components/animations/AnimatedBackground';
 import Projects from '@/components/sections/Projects';
@@ -235,31 +235,9 @@ export default function Home() {
               initial={{ opacity: 0, x: 48 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
-              className="mt-12 w-full max-w-2xl rounded-3xl border border-slate-700/50 bg-slate-900/50 p-6 text-left backdrop-blur-md lg:mt-0 lg:max-w-md"
+              className="mt-12 w-full max-w-2xl lg:mt-0 lg:max-w-md"
             >
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-300">GitHub</span>
-                <a
-                  href="https://github.com/lprnmns"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs font-medium text-sky-300 transition-colors hover:text-sky-200"
-                >
-                  Profili aç
-                </a>
-              </div>
-              <p className="mt-3 text-base font-medium text-white">Son 12 ay katkılarım</p>
-              <div className="mt-4 overflow-hidden rounded-2xl border border-slate-700/40 bg-slate-950/40 p-3">
-                <Image
-                  src="https://ghchart.rshah.org/1C64F2/lprnmns"
-                  alt="Alperen Manas GitHub contributions"
-                  loading="lazy"
-                  width={600}
-                  height={120}
-                  unoptimized
-                  className="mx-auto w-full max-w-sm opacity-90"
-                />
-              </div>
+              <GithubContributions username="lprnmns" />
             </motion.div>
           )}
 
