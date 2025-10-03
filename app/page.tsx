@@ -37,7 +37,7 @@ export default function Home() {
 
         return nextValue;
       });
-    }, 45);
+    }, 40);
 
     return () => {
       clearInterval(timer);
@@ -54,7 +54,7 @@ export default function Home() {
     if (stage === 'transition') {
       const timeout = setTimeout(() => {
         setStage('final');
-      }, 1100);
+      }, 900);
 
       return () => clearTimeout(timeout);
     }

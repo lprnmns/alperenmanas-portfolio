@@ -125,7 +125,7 @@ const previewColumns: PreviewCard[][] = [
   ],
 ];
 
-const columnDurations = [22, 26];
+const columnDurations = [14.7, 17.3];
 
 export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
   const progressValue = Math.round(Math.min(Math.max(progress, 0), 100));
