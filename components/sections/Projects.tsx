@@ -27,7 +27,7 @@ const itemVariants: Variants = {
 
 export default function Projects() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const isInView = useInView(ref, { once: true, amount: 0.05 });
   const router = useRouter();
 
   const handleNavigate = (slug: string) => {

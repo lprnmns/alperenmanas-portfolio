@@ -139,7 +139,7 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
     'fixed z-50 flex items-center justify-center text-white font-semibold transition-all duration-700 ease-out',
     stage === 'loading'
       ? 'top-1/2 left-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2'
-      : 'top-8 left-8 h-48 w-48 translate-x-0 translate-y-0 sm:h-56 sm:w-56'
+      : 'top-8 left-8 h-40 w-40 translate-x-0 translate-y-0 sm:h-44 sm:w-44'
   );
 
   const ringClasses = clsx(
@@ -271,3 +271,5 @@ export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
     </>
   );
 }
+
+
