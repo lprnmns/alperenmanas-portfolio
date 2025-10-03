@@ -139,7 +139,7 @@ export default function Home() {
       >
         <AnimatedBackground />
 
-        <div className="relative z-20 mx-auto flex min-h-[70vh] max-w-4xl flex-col items-center justify-center gap-8 px-4 pt-32 pb-28 text-center sm:pt-40 sm:pb-36">
+        <div className="relative z-20 mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center gap-10 px-6 py-24 text-center sm:py-32">
           <motion.h1
             initial="hidden"
             animate={headingState}
@@ -182,7 +182,7 @@ export default function Home() {
           initial="hidden"
           animate={sectionsState}
           variants={sectionsVariants}
-          className="mx-auto mt-20 max-w-7xl px-4 pb-12 sm:px-6 lg:px-8"
+          className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8"
         >
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="space-y-12 lg:col-span-5">
