@@ -1,7 +1,8 @@
-﻿import { Metadata } from "next";
-import { notFound } from "next/navigation";
-import ProjectDetailClient from "@/components/project-detail/ProjectDetailClient";
-import { projectMap, projectSlugs } from "@/lib/projects-data";
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+
+import ProjectDetailClient from '@/components/project-detail/ProjectDetailClient';
+import { getProject, projectSlugs } from '@/lib/projects-data';
 
 interface ProjectDetailPageProps {
   params: {
@@ -14,14 +15,14 @@ export function generateStaticParams() {
 }
 
 export function generateMetadata({ params }: ProjectDetailPageProps): Metadata {
-  const project = projectMap[params.slug];
+  const project = getProject('en', params.slug);
 
   if (!project) {
     return {};
   }
 
   return {
-    title: `${project.title} · Projeler · Alperen Manas`,
+    title: `${project.title} – Projects – Alperen Manas`,
     description: project.shortDescription,
     openGraph: {
       title: project.title,
@@ -32,11 +33,13 @@ export function generateMetadata({ params }: ProjectDetailPageProps): Metadata {
 }
 
 export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
-  const project = projectMap[params.slug];
+  const projectDefault = getProject('en', params.slug);
 
-  if (!project) {
+  if (!projectDefault) {
     notFound();
   }
 
-  return <ProjectDetailClient project={project} />;
+  const projectLocalized = getProject('tr', params.slug);
+
+  return <ProjectDetailClient projectDefault={projectDefault} projectLocalized={projectLocalized} />;
 }

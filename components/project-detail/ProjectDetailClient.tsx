@@ -1,21 +1,37 @@
-﻿"use client";
+'use client';
 
-import { useState } from "react";
-import { Info } from "lucide-react";
-import ImageCarousel from "@/components/project-detail/ImageCarousel";
-import EvolutionAccordion from "@/components/project-detail/EvolutionAccordion";
-import TechBadge from "@/components/project-detail/TechBadge";
-import type { Project } from "@/lib/projects-data";
+import { useEffect, useMemo, useState } from 'react';
+import { Info } from 'lucide-react';
+
+import { useLanguage } from '@/components/providers/LanguageProvider';
+import ImageCarousel from '@/components/project-detail/ImageCarousel';
+import EvolutionAccordion from '@/components/project-detail/EvolutionAccordion';
+import TechBadge from '@/components/project-detail/TechBadge';
+import type { Project } from '@/lib/projects-data';
 
 interface ProjectDetailClientProps {
-  project: Project;
+  projectDefault: Project;
+  projectLocalized?: Project;
 }
 
-export default function ProjectDetailClient({ project }: ProjectDetailClientProps) {
+export default function ProjectDetailClient({ projectDefault, projectLocalized }: ProjectDetailClientProps) {
+  const { language, dictionary } = useLanguage();
+  const project = useMemo(() => {
+    if (language === 'tr' && projectLocalized) {
+      return projectLocalized;
+    }
+    return projectDefault;
+  }, [language, projectDefault, projectLocalized]);
+
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [openEvolution, setOpenEvolution] = useState(
-    project.evolution && project.evolution.length > 0 ? project.evolution[0].version : ""
+    project.evolution.length > 0 ? project.evolution[0].version : ''
   );
+
+  useEffect(() => {
+    setCarouselIndex(0);
+    setOpenEvolution(project.evolution.length > 0 ? project.evolution[0].version : '');
+  }, [project]);
 
   const handleNext = () => {
     setCarouselIndex((prevIndex) =>
@@ -29,13 +45,15 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
     );
   };
 
-  const groupedTechStack = project.techStack.reduce<Record<string, string[]>>((acc, tech) => {
-    if (!acc[tech.category]) {
-      acc[tech.category] = [];
-    }
-    acc[tech.category].push(tech.name);
-    return acc;
-  }, {});
+  const groupedTechStack = useMemo(() => {
+    return project.techStack.reduce<Record<string, string[]>>((acc, tech) => {
+      if (!acc[tech.category]) {
+        acc[tech.category] = [];
+      }
+      acc[tech.category].push(tech.name);
+      return acc;
+    }, {});
+  }, [project.techStack]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -49,7 +67,7 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
               rel="noopener noreferrer"
               className="rounded-lg bg-blue-600 px-6 py-3 text-white transition-colors hover:bg-blue-700"
             >
-              Projeyi Canlı Gör
+              {dictionary.projectDetail.viewLive}
             </a>
           )}
           <a
@@ -58,7 +76,7 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
             rel="noopener noreferrer"
             className="rounded-lg bg-gray-700 px-6 py-3 text-white transition-colors hover:bg-gray-600"
           >
-            GitHub&apos;da İncele
+            {dictionary.projectDetail.viewGithub}
           </a>
         </div>
       </div>
@@ -72,47 +90,50 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
         />
       </div>
 
-      <div className="mb-12">
-        <h2 className="mb-4 text-2xl font-semibold text-white">Projenin Amacı</h2>
+      <div className="mb-12 space-y-4">
+        <h2 className="text-2xl font-semibold text-white">{dictionary.projectDetail.purposeHeading}</h2>
         <p className="text-gray-300">{project.purpose}</p>
-        {project.slug === 'lokaskor-ai-location-analysis' && (
+        {project.notice && (
           <div className="mt-6 flex items-start space-x-4 rounded-lg border-l-4 border-blue-500 bg-gray-800 p-4">
             <div className="flex-shrink-0">
               <Info className="h-6 w-6 text-blue-400" />
             </div>
             <div>
-              <h4 className="font-bold text-white">Güncel Durum &amp; Tavsiyeler</h4>
-              <p className="mt-1 text-gray-300">
-                Şu an için pilot bölge Yenimahalle/Ankara&apos;dır. &quot;Yeni Fırsatları Keşfet&quot; modu henüz tamamlanmadı. En
-                stabil sonuçlar için Yenimahalle bölgesinden, &quot;Eczane&quot; işletme türü için Karşılaştırma Modunu seçiniz.
-              </p>
+              <h4 className="font-bold text-white">{dictionary.projectDetail.statusHeading}</h4>
+              <p className="mt-1 text-gray-300">{project.notice}</p>
             </div>
           </div>
         )}
         {project.subscriberCount && (
-          <p className="mt-4 text-blue-400">Aktif Abone: {project.subscriberCount}</p>
+          <p className="text-blue-400">
+            {dictionary.projectDetail.subscriberLabel}: {project.subscriberCount}
+          </p>
         )}
       </div>
 
       <div className="mb-12">
-        <h2 className="mb-6 text-2xl font-semibold text-white">Teknolojiler ve API’ler</h2>
+        <h2 className="mb-6 text-2xl font-semibold text-white">{dictionary.projectDetail.techHeading}</h2>
 
         <div className="mb-8">
-          <h3 className="mb-4 text-xl font-semibold text-white">Teknoloji Yığını</h3>
-          {Object.entries(groupedTechStack).map(([category, techs]) => (
-            <div key={category} className="mb-4">
-              <h4 className="mb-2 text-lg font-medium text-gray-300">{category}</h4>
-              <div className="flex flex-wrap">
-                {techs.map((tech) => (
-                  <TechBadge key={`${category}-${tech}`} name={tech} category={category} />
-                ))}
+          <h3 className="mb-4 text-xl font-semibold text-white">{dictionary.projectDetail.techStackHeading}</h3>
+          {Object.entries(groupedTechStack).map(([category, techs]) => {
+            const categoryLabel =
+              dictionary.projectDetail.categoryLabels[category as keyof typeof dictionary.projectDetail.categoryLabels] ?? category;
+            return (
+              <div key={category} className="mb-4">
+                <h4 className="mb-2 text-lg font-medium text-gray-300">{categoryLabel}</h4>
+                <div className="flex flex-wrap">
+                  {techs.map((tech) => (
+                    <TechBadge key={`${category}-${tech}`} name={tech} category={category} />
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div>
-          <h3 className="mb-4 text-xl font-semibold text-white">Kullanılan API’ler</h3>
+          <h3 className="mb-4 text-xl font-semibold text-white">{dictionary.projectDetail.apisHeading}</h3>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {project.apis.map((api) => (
               <div key={api.name} className="rounded-lg bg-gray-800 p-4">
@@ -126,7 +147,7 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
 
       {project.evolution.length > 0 && (
         <div>
-          <h2 className="mb-8 text-3xl font-bold text-white">Neydi, Ne Oldu? (Projenin Evrimi)</h2>
+          <h2 className="mb-8 text-3xl font-bold text-white">{dictionary.projectDetail.evolutionHeading}</h2>
           {project.evolution.map((item) => (
             <EvolutionAccordion
               key={item.version}
@@ -143,4 +164,3 @@ export default function ProjectDetailClient({ project }: ProjectDetailClientProp
     </div>
   );
 }
-

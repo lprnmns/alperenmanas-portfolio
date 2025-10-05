@@ -8,6 +8,7 @@ import { Github, Linkedin, ChevronDown } from 'lucide-react';
 import { GithubContributions } from '@/components/ui/GithubContributions';
 import LoadingScreen from '@/components/LoadingScreen';
 import AnimatedBackground from '@/components/animations/AnimatedBackground';
+import Navigation from '@/components/sections/Navigation';
 import Projects from '@/components/sections/Projects';
 import About from '@/components/sections/About';
 import Certificates from '@/components/sections/Certificates';
@@ -176,6 +177,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-slate-900 text-white overflow-x-hidden">
       <LoadingScreen progress={progress} stage={stage} />
+      <Navigation />
       <div
         className={clsx(
           'relative z-10 transition-all duration-700 ease-out',

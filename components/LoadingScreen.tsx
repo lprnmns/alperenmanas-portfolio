@@ -3,6 +3,10 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { useMemo } from 'react';
+
+import { useLanguage } from '@/components/providers/LanguageProvider';
+import { getLoadingPreviewColumns } from '@/lib/content/loading-preview';
 
 type LoadingStage = 'loading' | 'transition' | 'final';
 
@@ -11,123 +15,12 @@ type LoadingScreenProps = {
   stage: LoadingStage;
 };
 
-type PreviewCard = {
-  id: string;
-  label: string;
-  title: string;
-  description: string;
-  tags?: string[];
-  image?: string;
-  accent?: string;
-};
-
-const previewColumns: PreviewCard[][] = [
-  [
-    {
-      id: 'project-zenith',
-      label: 'Projects',
-      title: 'Zenith Trader',
-      description:
-        'Institutional copy-trading platform that mirrors whale wallets on OKX in real time.',
-      tags: ['Next.js', 'Realtime', 'Fintech'],
-      image: '/projects/zenith-trader/cover.png',
-      accent: 'from-blue-500/70 via-cyan-400/20 to-transparent',
-    },
-    {
-      id: 'project-lokaskor',
-      label: 'Projects',
-      title: 'LokaSkor Pro',
-      description:
-        'AI-assisted location scoring SaaS that helps entrepreneurs find high-potential venues.',
-      tags: ['AI', 'SaaS', 'GIS'],
-      image: '/projects/lokaskor/cover.png',
-      accent: 'from-emerald-500/70 via-teal-400/20 to-transparent',
-    },
-    {
-      id: 'project-not-bildirim',
-      label: 'Projects',
-      title: 'Grade Notification Automation',
-      description:
-        'Automation that scrapes university grades with OCR and alerts via Telegram bot instantly.',
-      tags: ['Automation', 'Python'],
-      image: '/projects/not-bildirim-otomasyonu/carousel-2.png',
-      accent: 'from-purple-500/70 via-pink-400/20 to-transparent',
-    },
-    {
-      id: 'about-vision',
-      label: 'About',
-      title: 'Product-focused design & development',
-      description:
-        'Transforming complex business problems into intuitive experiences with performance in mind.',
-      tags: ['Full-stack', 'UI/UX'],
-      accent: 'from-sky-500/60 via-blue-400/10 to-transparent',
-    },
-    {
-      id: 'about-stack',
-      label: 'Stack',
-      title: 'Type-safe modern toolkit',
-      description:
-        'Shipping production-ready solutions with TypeScript, React, Next.js and Node.js.',
-      tags: ['TypeScript', 'Node.js', 'PostgreSQL'],
-      accent: 'from-cyan-500/50 via-slate-800/30 to-transparent',
-    },
-  ],
-  [
-    {
-      id: 'certificate-huawei',
-      label: 'Certificates',
-      title: 'Huawei HCIA-AI V3.5',
-      description:
-        'Comprehensive training covering deep learning and machine learning fundamentals.',
-      tags: ['AI Fundamentals'],
-      image: '/sertifikalar/huawei-hcia-ai-v3-5-turkish.png',
-      accent: 'from-red-500/70 via-orange-400/20 to-transparent',
-    },
-    {
-      id: 'certificate-btk-sql',
-      label: 'Certificates',
-      title: 'BTK SQL Practices',
-      description:
-        'Hands-on course for relational database design and query optimisation on real datasets.',
-      tags: ['SQL', 'Database'],
-      image: '/sertifikalar/btk-uygulamalarla-SQL.png',
-      accent: 'from-blue-500/70 via-cyan-400/20 to-transparent',
-    },
-    {
-      id: 'certificate-btk-db',
-      label: 'Certificates',
-      title: 'BTK Intro to Databases',
-      description:
-        'Foundational training on normalised schemas, data integrity and admin workflows.',
-      tags: ['Data Modeling'],
-      image: '/sertifikalar/btk-veri-tabanina-giris.png',
-      accent: 'from-purple-500/70 via-pink-400/20 to-transparent',
-    },
-    {
-      id: 'certificate-meta',
-      label: 'Certificates',
-      title: 'Meta Front-End Specialisation',
-      description:
-        'React component architecture, accessibility and performance optimisation best practices.',
-      tags: ['React', 'Accessibility'],
-      image: '/sertifikalar/meta-front-end-specialization.png',
-      accent: 'from-emerald-500/70 via-slate-800/20 to-transparent',
-    },
-    {
-      id: 'about-team',
-      label: 'Workflow',
-      title: 'Collaborative delivery',
-      description:
-        'Partnering with product teams and iterating quickly with tight feedback loops.',
-      tags: ['Agile', 'Product'],
-      accent: 'from-rose-500/40 via-slate-800/20 to-transparent',
-    },
-  ],
-];
-
 const columnDurations = [11, 13];
 
+
 export default function LoadingScreen({ progress, stage }: LoadingScreenProps) {
+  const { language } = useLanguage();
+  const previewColumns = useMemo(() => getLoadingPreviewColumns(language), [language]);
   const progressValue = Math.round(Math.min(Math.max(progress, 0), 100));
 
   const overlayClasses = clsx(

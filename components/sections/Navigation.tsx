@@ -1,13 +1,16 @@
-﻿'use client';
+'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, Menu, X } from 'lucide-react';
 import Link from 'next/link';
 
+import { useLanguage } from '@/components/providers/LanguageProvider';
+
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { language, toggleLanguage, dictionary } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,11 +21,29 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { name: 'Projeler', href: '#projects' },
-    { name: 'Hakkımda', href: '#about' },
-    { name: 'Sertifikalar', href: '#certificates' },
-  ];
+  const navItems = useMemo(() => [
+    { name: dictionary.navigation.projects, href: '#projects' },
+    { name: dictionary.navigation.about, href: '#about' },
+    { name: dictionary.navigation.certificates, href: '#certificates' },
+  ], [dictionary.navigation]);
+
+  const languageLabel = language.toUpperCase();
+  const languageButtonTitle =
+    language === 'en'
+      ? `Switch to ${dictionary.navigation.turkish}`
+      : `Switch to ${dictionary.navigation.english}`;
+
+  const renderLanguageButton = (className: string) => (
+    <button
+      type="button"
+      onClick={toggleLanguage}
+      className={className}
+      aria-label={dictionary.languageToggle.srLabel}
+      title={languageButtonTitle}
+    >
+      {languageLabel}
+    </button>
+  );
 
   return (
     <>
@@ -47,7 +68,7 @@ export default function Navigation() {
             </motion.div>
           </Link>
 
-          <div className="hidden items-center space-x-8 md:flex">
+          <div className="hidden items-center space-x-6 md:flex">
             {navItems.map((item) => (
               <Link key={item.name} href={item.href}>
                 <motion.div
@@ -66,6 +87,8 @@ export default function Navigation() {
               </Link>
             ))}
 
+            {renderLanguageButton('rounded-lg border border-slate-700/60 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-200 transition hover:bg-slate-800/80 focus:outline-none focus:ring-2 focus:ring-blue-500/60')}
+
             <motion.a
               href="https://github.com/lprnmns"
               target="_blank"
@@ -75,14 +98,15 @@ export default function Navigation() {
               className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 font-medium text-white shadow-blue-500/50 transition-shadow hover:shadow-lg"
             >
               <Github size={20} />
-              GitHub
+              {dictionary.navigation.github}
             </motion.a>
           </div>
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="text-white md:hidden"
-            aria-label="Menüyü aç"
+            aria-label={mobileMenuOpen ? dictionary.navigation.closeMenu : dictionary.navigation.openMenu}
+            type="button"
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -113,6 +137,10 @@ export default function Navigation() {
                 </motion.a>
               ))}
 
+              <div className="flex items-center gap-3">
+                {renderLanguageButton('flex-1 rounded-lg border border-slate-700/60 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-slate-200 transition hover:bg-slate-800/80 focus:outline-none focus:ring-2 focus:ring-blue-500/60')}
+              </div>
+
               <motion.a
                 href="https://github.com/lprnmns"
                 target="_blank"
@@ -123,7 +151,7 @@ export default function Navigation() {
                 className="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 font-medium text-white"
               >
                 <Github size={20} />
-                GitHub
+                {dictionary.navigation.github}
               </motion.a>
             </div>
           </motion.div>

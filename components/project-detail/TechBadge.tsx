@@ -16,7 +16,6 @@ export default function TechBadge({ name, category }: TechBadgeProps) {
   return (
     <span className={`mr-2 mb-2 inline-flex items-center rounded-full ${colorClass} px-3 py-1 text-sm text-gray-300`}>
       {name}
-      {category ? <span className="ml-2 text-xs opacity-75">({category})</span> : null}
     </span>
   );
 }

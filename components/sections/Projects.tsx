@@ -1,14 +1,20 @@
-﻿'use client';
+'use client';
 
 import { motion } from 'framer-motion';
+import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { type MouseEvent } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
-import { projectList } from '@/lib/projects-data';
+
+import { useLanguage } from '@/components/providers/LanguageProvider';
+import { formatTranslation } from '@/lib/i18n';
+import { getProjectList } from '@/lib/projects-data';
 
 export default function Projects() {
   const router = useRouter();
+  const { language, dictionary } = useLanguage();
+  const projects = useMemo(() => getProjectList(language), [language]);
 
   const handleNavigate = (slug: string) => {
     router.push(`/projects/${slug}`);
@@ -35,16 +41,17 @@ export default function Projects() {
           className="mb-16 text-center"
         >
           <h2 className="mb-4 text-4xl font-bold text-transparent md:text-5xl bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">
-            Projelerim
+            {dictionary.projectsSection.heading}
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-slate-400">
-            Gerçek iş problemlerine odaklanan, modern teknolojilerle geliştirdiğim projeler
+            {dictionary.projectsSection.subheading}
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 gap-8">
-          {projectList.map((project, index) => {
+          {projects.map((project, index) => {
             const hasDemo = Boolean(project.demoUrl);
+            const coverAlt = formatTranslation(dictionary.projectsSection.coverAlt, { title: project.title });
 
             return (
               <motion.div
@@ -70,7 +77,7 @@ export default function Projects() {
                   <div className="relative aspect-video overflow-hidden bg-slate-900">
                     <Image
                       src={project.coverImage}
-                      alt={`${project.title} kapak görseli`}
+                      alt={coverAlt}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -115,7 +122,7 @@ export default function Projects() {
                         }`}
                       >
                         <ExternalLink size={16} />
-                        Canlı Test
+                        {dictionary.projectsSection.liveDemo}
                       </motion.button>
 
                       <motion.button
@@ -143,7 +150,7 @@ export default function Projects() {
                         }}
                         className="rounded-lg border border-slate-600/50 bg-slate-800/60 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-700"
                       >
-                        Detaylar
+                        {dictionary.projectsSection.details}
                       </motion.button>
                     </div>
                   </div>
