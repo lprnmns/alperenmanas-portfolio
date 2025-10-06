@@ -2,13 +2,13 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-import { DEFAULT_LANGUAGE, availableLanguages, getDictionary, type BaseDictionary, type Language } from '@/lib/i18n';
+import { DEFAULT_LANGUAGE, availableLanguages, getDictionary, type Dictionary, type Language } from '@/lib/i18n';
 
 type LanguageContextValue = {
   language: Language;
   setLanguage: (language: Language) => void;
   toggleLanguage: () => void;
-  dictionary: BaseDictionary;
+  dictionary: Dictionary;
 };
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
