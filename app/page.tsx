@@ -227,7 +227,7 @@ export default function Home() {
                       className="rounded-full border border-slate-700/60 bg-slate-900/80 p-2 text-slate-400 transition hover:text-white"
                       aria-label={announcement.close}
                     >
-                      <X size={16} />
+                      <X size={24} />
                     </button>
                   </div>
 
