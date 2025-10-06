@@ -39,7 +39,7 @@ const aboutContent: Record<Language, AboutContent> = {
     },
     programmingHeading: 'Programming Languages',
     programmingSkills: [
-      { name: 'C++', level: 75, color: 'from-emerald-500 to-green-500' },
+      { name: 'C#', level: 75, color: 'from-emerald-500 to-green-500' },
       { name: 'Python', level: 50, color: 'from-purple-500 to-pink-500' },
       { name: 'TypeScript & React', level: 30, color: 'from-blue-500 to-cyan-500' },
     ],
@@ -72,7 +72,7 @@ const aboutContent: Record<Language, AboutContent> = {
     },
     programmingHeading: 'Programlama Dilleri',
     programmingSkills: [
-      { name: 'C++', level: 75, color: 'from-emerald-500 to-green-500' },
+      { name: 'C#', level: 75, color: 'from-emerald-500 to-green-500' },
       { name: 'Python', level: 50, color: 'from-purple-500 to-pink-500' },
       { name: 'TypeScript & React', level: 30, color: 'from-blue-500 to-cyan-500' },
     ],
