@@ -71,6 +71,15 @@ type SectionEvolution = {
   imageAlt: string;
 };
 
+type AnnouncementCopy = {
+  title: string;
+  subtitle: string;
+  description: string;
+  date: string;
+  close: string;
+  imageAlt: string;
+};
+
 export type Dictionary = {
   navigation: SectionNavigation;
   languageToggle: SectionLanguageToggle;
@@ -79,6 +88,7 @@ export type Dictionary = {
   projectDetail: SectionProjectDetail;
   githubContributions: SectionGithubContributions;
   evolution: SectionEvolution;
+  announcement: AnnouncementCopy;
 };
 
 const baseCategoryLabels: CategoryLabels = {
@@ -144,6 +154,15 @@ const dictionaries: Record<Language, Dictionary> = {
     evolution: {
       imageAlt: '{version} screenshot {index}',
     },
+    announcement: {
+      title: 'Monad Blitz Hackathon – 1st Place',
+      subtitle: 'Layer-1 Monad ecosystem sprint',
+      description:
+        'Won first place at the Monad Blitz hackathon alongside the community pushing the EVM-compatible Monad chain.',
+      date: '10.04.2025',
+      close: 'Dismiss',
+      imageAlt: 'Alperen Manas holding the Monad Blitz first-place plaque',
+    },
   },
   tr: {
     navigation: {
@@ -204,6 +223,15 @@ const dictionaries: Record<Language, Dictionary> = {
     },
     evolution: {
       imageAlt: '{version} ekran görüntüsü {index}',
+    },
+    announcement: {
+      title: 'Monad Blitz Hackathonu – 1.lik',
+      subtitle: 'EVM uyumlu Monad L1 ekosistemi sprinti',
+      description:
+        'Monad ekibiyle düzenlenen Monad Blitz hackathonunda birinciliği aldık ve projeyi vitrine çıkardık.',
+      date: '10.04.2025',
+      close: 'Kapat',
+      imageAlt: 'Alperen Manas Monad Blitz birincilik plaketi ile',
     },
   },
 };

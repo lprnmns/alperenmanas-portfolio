@@ -2,11 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
-import { motion, type Variants } from 'framer-motion';
-import { Github, Linkedin, ChevronDown } from 'lucide-react';
+import { AnimatePresence, motion, type Variants } from 'framer-motion';
+import { Github, Linkedin, ChevronDown, X } from 'lucide-react';
+import Image from 'next/image';
 
 import { GithubContributions } from '@/components/ui/GithubContributions';
 import LoadingScreen from '@/components/LoadingScreen';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 import AnimatedBackground from '@/components/animations/AnimatedBackground';
 import Navigation from '@/components/sections/Navigation';
 import Projects from '@/components/sections/Projects';
@@ -75,8 +77,11 @@ export default function Home() {
   const [showSections, setShowSections] = useState(false);
   const [heroPinned, setHeroPinned] = useState(false);
   const [showContribs, setShowContribs] = useState(false);
+  const [announcementVisible, setAnnouncementVisible] = useState(false);
+  const [announcementDismissed, setAnnouncementDismissed] = useState(false);
   const heroContainerRef = useRef<HTMLDivElement | null>(null);
   const aboutSectionRef = useRef<HTMLElement | null>(null);
+  const { dictionary } = useLanguage();
 
   useEffect(() => {
     if (stage !== 'loading') {
@@ -157,10 +162,22 @@ export default function Home() {
     }
   }, [showActions, heroPinned]);
 
+  useEffect(() => {
+    if (heroPinned && !announcementDismissed) {
+      setAnnouncementVisible(true);
+    }
+  }, [heroPinned, announcementDismissed]);
+
   const heroContainerState = heroPinned ? 'pinned' : 'center';
   const headingState = showHeading ? 'visible' : 'hidden';
   const actionsState = showActions ? 'visible' : 'hidden';
   const sectionsState = showSections ? 'visible' : 'hidden';
+  const announcement = dictionary.announcement;
+
+  const handleAnnouncementClose = () => {
+    setAnnouncementVisible(false);
+    setAnnouncementDismissed(true);
+  };
 
   const heroContainerClass = clsx(
     'relative z-20 mx-auto flex max-w-6xl flex-col items-center text-center transition-all duration-700',
@@ -185,6 +202,64 @@ export default function Home() {
         )}
       >
         <AnimatedBackground />
+
+        <AnimatePresence>
+          {announcementVisible && (
+            <motion.div
+              initial={{ opacity: 0, y: -16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              className="fixed top-6 right-6 z-30 w-full max-w-[380px]"
+            >
+              <div className="relative overflow-hidden rounded-2xl border border-slate-700/70 bg-slate-900/95 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/15 via-cyan-500/10 to-transparent" />
+                <div className="relative flex flex-col gap-5 p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Monad Blitz</p>
+                      <h3 className="mt-2 text-xl font-semibold text-white">{announcement.title}</h3>
+                      <p className="mt-1 text-sm font-medium text-slate-300">{announcement.subtitle}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleAnnouncementClose}
+                      className="rounded-full border border-slate-700/60 bg-slate-900/80 p-2 text-slate-400 transition hover:text-white"
+                      aria-label={announcement.close}
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+
+                  <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-slate-950/60">
+                    <Image
+                      src="/achievements/monad-blitz-first-prize.jpg"
+                      alt={announcement.imageAlt}
+                      width={320}
+                      height={420}
+                      className="h-auto w-full object-cover"
+                      priority
+                    />
+                    <span className="absolute top-3 left-3 rounded-full bg-blue-500/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">{announcement.date}</span>
+                  </div>
+
+                  <p className="text-sm leading-relaxed text-slate-300">{announcement.description}</p>
+
+                  <div className="flex items-center justify-between text-xs text-slate-400">
+                    <span>Layer-1 · Hackathon Winner</span>
+                    <button
+                      type="button"
+                      onClick={handleAnnouncementClose}
+                      className="font-medium text-cyan-300 transition hover:text-cyan-200"
+                    >
+                      {announcement.close}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <motion.div
           ref={heroContainerRef}
