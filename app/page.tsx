@@ -203,7 +203,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="fixed bottom-4 left-4 right-4 z-50"
+                  className="fixed inset-x-0 bottom-4 z-50 px-4"
                 >
                   <div
                     role="button"
@@ -215,18 +215,18 @@ export default function Home() {
                         handleExpandAnnouncement();
                       }
                     }}
-                    className="relative flex w-full items-center gap-3 overflow-hidden rounded-xl border border-slate-700/70 bg-slate-900/95 px-4 py-3 text-left shadow-xl transition hover:border-slate-600"
+                    className="relative mx-auto flex w-full max-w-[520px] items-center gap-3 overflow-hidden rounded-xl border border-slate-700/70 bg-slate-900/95 px-4 py-3 text-left shadow-xl transition hover:border-slate-600"
                   >
                     <span className="rounded-md bg-red-500 px-2 py-1 text-[10px] font-extrabold uppercase tracking-[0.24em] text-white">
                       Breaking
                     </span>
                     <div className="relative flex-1 overflow-hidden">
-                      <p className="ticker-marquee pr-8 text-sm font-medium text-slate-100">
-                        {announcement.title} • {announcement.subtitle}
+                      <p className="pr-4 text-sm font-medium text-slate-100">
+                        Monad Blitz Hackathon 1st 🏆
                       </p>
                     </div>
-                    <span className="text-xs text-cyan-200 underline underline-offset-2">
-                      View
+                    <span className="text-xs font-semibold text-cyan-200 underline underline-offset-2">
+                      More
                     </span>
                     <button
                       type="button"
@@ -248,7 +248,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -16 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="fixed top-4 left-4 right-4 z-50 sm:left-auto sm:right-6 sm:w-full sm:max-w-[380px]"
+                  className="fixed top-16 left-4 right-4 z-50 sm:top-8 sm:left-auto sm:right-6 sm:w-full sm:max-w-[380px]"
                 >
                   <div className="relative overflow-hidden rounded-2xl border border-slate-700/70 bg-slate-900/95 shadow-2xl">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/15 via-cyan-500/10 to-transparent" />
