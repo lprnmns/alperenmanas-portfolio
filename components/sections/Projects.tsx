@@ -48,6 +48,63 @@ export default function Projects() {
           </p>
         </motion.div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="mb-10 overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-800/60 p-6 shadow-xl backdrop-blur-sm"
+        >
+          <div className="mb-4 flex items-center gap-3">
+            <span className="relative inline-flex items-center gap-2 rounded-full bg-red-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-red-200">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
+              </span>
+              Live
+            </span>
+            <p className="text-sm font-semibold text-slate-200">In Progress — Air Defense Prototype</p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="relative overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900/70">
+              <video
+                className="h-full w-full object-cover"
+                src="/defense-prototype/prototype-loop.mp4"
+                poster="/defense-prototype/system-still.jpg"
+                autoPlay
+                loop
+                muted
+                playsInline
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10 to-transparent" />
+            </div>
+
+            <div className="flex flex-col justify-between gap-4 rounded-xl border border-slate-700/60 bg-slate-900/70 p-5">
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-white">TEKNOFEST 2026 — Air Defense Systems</h3>
+                <p className="text-sm text-slate-300">
+                  First prototype for our low-altitude air defense stack. Rapid-response interceptor control, telemetry
+                  visualization, and rules engine tuned for competition constraints.
+                </p>
+              </div>
+              <div className="flex items-center gap-3 rounded-lg border border-slate-700/60 bg-slate-800/60 p-3 text-sm text-slate-200">
+                <Image
+                  src="/defense-prototype/system-still.jpg"
+                  alt="Air defense prototype rendering"
+                  width={96}
+                  height={96}
+                  className="h-16 w-16 rounded-md object-cover"
+                />
+                <div className="space-y-1">
+                  <p className="font-semibold text-white">Prototype v1</p>
+                  <p className="text-xs text-slate-400">Guidance stack + comms layer integrated; live demo loop above.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
         <div className="grid grid-cols-1 gap-8">
           {projects.map((project, index) => {
             const isFirst = index === 0;
