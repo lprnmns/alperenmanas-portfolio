@@ -73,6 +73,7 @@ export default function Home() {
   const [announcementDismissed, setAnnouncementDismissed] = useState(false);
   const [announcementExpanded, setAnnouncementExpanded] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const heroContainerRef = useRef<HTMLDivElement | null>(null);
   const aboutSectionRef = useRef<HTMLElement | null>(null);
   const { dictionary } = useLanguage();
@@ -157,6 +158,10 @@ export default function Home() {
     return () => mediaQuery.removeEventListener("change", updateIsMobile);
   }, []);
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (announcementVisible) {
       setAnnouncementExpanded(!isMobile);
     }
@@ -183,6 +188,124 @@ export default function Home() {
     "flex w-full flex-col items-center gap-8 text-center transition-all duration-700",
     heroPinned && "lg:max-w-xl lg:items-start lg:text-left",
   );
+
+  const announcementContent = (
+    <AnimatePresence>
+      {announcementVisible && (
+        <>
+          {isMobile && !announcementExpanded ? (
+            <motion.div
+              key="announcement-ticker"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="fixed inset-x-0 bottom-4 z-[60] px-4"
+            >
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={handleExpandAnnouncement}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handleExpandAnnouncement();
+                  }
+                }}
+                className="relative mx-auto flex w-full max-w-[520px] items-center gap-3 overflow-hidden rounded-xl border border-slate-700/70 bg-slate-900/95 px-4 py-3 text-left shadow-xl transition hover:border-slate-600"
+              >
+                <span className="rounded-md bg-red-500 px-2 py-1 text-[10px] font-extrabold uppercase tracking-[0.24em] text-white">
+                  Breaking
+                </span>
+                <div className="relative flex-1 overflow-hidden">
+                  <p className="pr-4 text-sm font-medium text-slate-100">
+                    Monad Blitz Hackathon 1st 🏆
+                  </p>
+                </div>
+                <span className="text-xs font-semibold text-cyan-200 underline underline-offset-2">
+                  More
+                </span>
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleAnnouncementClose();
+                  }}
+                  className="rounded-full border border-slate-700/60 bg-slate-800/70 p-1 text-slate-300 transition hover:text-white"
+                  aria-label={announcement.close}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="announcement-card"
+              initial={{ opacity: 0, y: -16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="fixed top-16 left-4 right-4 z-[60] sm:top-8 sm:left-auto sm:right-6 sm:w-full sm:max-w-[380px]"
+            >
+              <div className="relative overflow-hidden rounded-2xl border border-slate-700/70 bg-slate-900/95 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/15 via-cyan-500/10 to-transparent" />
+                <div className="relative flex flex-col gap-5 p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">
+                        Monad Blitz
+                      </p>
+                      <h3 className="mt-2 text-xl font-semibold text-white">
+                        {announcement.title}
+                      </h3>
+                      <p className="mt-1 text-sm font-medium text-slate-300">
+                        {announcement.subtitle}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleAnnouncementClose}
+                      className="rounded-full border border-slate-700/60 bg-slate-900/80 p-2 text-slate-400 transition hover:text-white"
+                      aria-label={announcement.close}
+                    >
+                      <X size={24} />
+                    </button>
+                  </div>
+                  <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-slate-950/60">
+                    <Image
+                      src="/achievements/monad-blitz-first-prize.jpg"
+                      alt={announcement.imageAlt}
+                      width={320}
+                      height={420}
+                      className="h-auto w-full object-cover"
+                      priority
+                    />
+                    <span className="absolute top-3 left-3 rounded-full bg-blue-500/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
+                      {announcement.date}
+                    </span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-slate-300">
+                    {announcement.description}
+                  </p>
+                  <div className="flex items-center justify-between text-xs text-slate-400">
+                    <span>Layer-1 - Hackathon Winner</span>
+                    <button
+                      type="button"
+                      onClick={handleAnnouncementClose}
+                      className="font-medium text-cyan-300 transition hover:text-cyan-200"
+                    >
+                      {announcement.close}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </>
+      )}
+    </AnimatePresence>
+  );
+
   return (
     <main className="min-h-screen bg-slate-900 text-white overflow-x-hidden">
       <LoadingScreen progress={progress} stage={stage} />
@@ -197,122 +320,6 @@ export default function Home() {
         {isMounted
           ? createPortal(announcementContent, document.body)
           : announcementContent}
-        const announcementContent = (
-        <AnimatePresence>
-          {announcementVisible && (
-            <>
-              {isMobile && !announcementExpanded ? (
-                <motion.div
-                  key="announcement-ticker"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="fixed inset-x-0 bottom-4 z-[60] px-4"
-                >
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    onClick={handleExpandAnnouncement}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        handleExpandAnnouncement();
-                      }
-                    }}
-                    className="relative mx-auto flex w-full max-w-[520px] items-center gap-3 overflow-hidden rounded-xl border border-slate-700/70 bg-slate-900/95 px-4 py-3 text-left shadow-xl transition hover:border-slate-600"
-                  >
-                    <span className="rounded-md bg-red-500 px-2 py-1 text-[10px] font-extrabold uppercase tracking-[0.24em] text-white">
-                      Breaking
-                    </span>
-                    <div className="relative flex-1 overflow-hidden">
-                      <p className="pr-4 text-sm font-medium text-slate-100">
-                        Monad Blitz Hackathon 1st ??
-                      </p>
-                    </div>
-                    <span className="text-xs font-semibold text-cyan-200 underline underline-offset-2">
-                      More
-                    </span>
-                    <button
-                      type="button"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        handleAnnouncementClose();
-                      }}
-                      className="rounded-full border border-slate-700/60 bg-slate-800/70 p-1 text-slate-300 transition hover:text-white"
-                      aria-label={announcement.close}
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="announcement-card"
-                  initial={{ opacity: 0, y: -16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -16 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="fixed top-16 left-4 right-4 z-[60] sm:top-8 sm:left-auto sm:right-6 sm:w-full sm:max-w-[380px]"
-                >
-                  <div className="relative overflow-hidden rounded-2xl border border-slate-700/70 bg-slate-900/95 shadow-2xl">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/15 via-cyan-500/10 to-transparent" />
-                    <div className="relative flex flex-col gap-5 p-6">
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">
-                            Monad Blitz
-                          </p>
-                          <h3 className="mt-2 text-xl font-semibold text-white">
-                            {announcement.title}
-                          </h3>
-                          <p className="mt-1 text-sm font-medium text-slate-300">
-                            {announcement.subtitle}
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={handleAnnouncementClose}
-                          className="rounded-full border border-slate-700/60 bg-slate-900/80 p-2 text-slate-400 transition hover:text-white"
-                          aria-label={announcement.close}
-                        >
-                          <X size={24} />
-                        </button>
-                      </div>
-                      <div className="relative overflow-hidden rounded-xl border border-slate-800 bg-slate-950/60">
-                        <Image
-                          src="/achievements/monad-blitz-first-prize.jpg"
-                          alt={announcement.imageAlt}
-                          width={320}
-                          height={420}
-                          className="h-auto w-full object-cover"
-                          priority
-                        />
-                        <span className="absolute top-3 left-3 rounded-full bg-blue-500/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
-                          {announcement.date}
-                        </span>
-                      </div>
-                      <p className="text-sm leading-relaxed text-slate-300">
-                        {announcement.description}
-                      </p>
-                      <div className="flex items-center justify-between text-xs text-slate-400">
-                        <span>Layer-1 - Hackathon Winner</span>
-                        <button
-                          type="button"
-                          onClick={handleAnnouncementClose}
-                          className="font-medium text-cyan-300 transition hover:text-cyan-200"
-                        >
-                          {announcement.close}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </>
-          )}
-        </AnimatePresence>
-        );
         <motion.div
           ref={heroContainerRef}
           variants={heroContainerVariants}
