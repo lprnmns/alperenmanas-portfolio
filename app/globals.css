@@ -21,7 +21,8 @@ html {
 }
 
 @keyframes gradient {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -31,6 +32,20 @@ html {
 
 .animate-gradient {
   animation: gradient 3s ease infinite;
+}
+
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.ticker-marquee {
+  display: inline-block;
+  animation: ticker 14s linear infinite;
 }
 
 @layer base {
