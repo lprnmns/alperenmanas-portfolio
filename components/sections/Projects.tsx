@@ -70,7 +70,7 @@ export default function Projects() {
             <div className="relative overflow-hidden rounded-xl border border-slate-700/60 bg-slate-900/70">
               <video
                 className="h-full w-full object-cover"
-                src="/defense-prototype/prototype-loop.mp4"
+                src="https://files.catbox.moe/0o5m8o.mp4"
                 poster="/defense-prototype/system-still.jpg"
                 autoPlay
                 loop
