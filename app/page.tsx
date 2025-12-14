@@ -392,11 +392,11 @@ export default function Home() {
           className="mx-auto mt-1 max-w-7xl px-4 pb-12 sm:mt-2 sm:px-6 lg:px-8"
         >
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-            <div className="space-y-12 lg:col-span-5">
+            <div className="space-y-12 order-2 lg:order-1 lg:col-span-5">
               <About />
               <Certificates />
             </div>
-            <div className="lg:col-span-7">
+            <div className="order-1 lg:order-2 lg:col-span-7">
               <Projects />
             </div>
           </div>
