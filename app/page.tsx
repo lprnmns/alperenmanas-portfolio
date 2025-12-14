@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { Github, Linkedin, ChevronDown, X } from "lucide-react";
 import Image from "next/image";
+import { createPortal } from "react-dom";
 import { GithubContributions } from "@/components/ui/GithubContributions";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useLanguage } from "@/components/providers/LanguageProvider";
@@ -193,6 +194,10 @@ export default function Home() {
         )}
       >
         <AnimatedBackground />
+        {isMounted
+          ? createPortal(announcementContent, document.body)
+          : announcementContent}
+        const announcementContent = (
         <AnimatePresence>
           {announcementVisible && (
             <>
@@ -203,7 +208,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="fixed inset-x-0 bottom-4 z-50 px-4"
+                  className="fixed inset-x-0 bottom-4 z-[60] px-4"
                 >
                   <div
                     role="button"
@@ -222,7 +227,7 @@ export default function Home() {
                     </span>
                     <div className="relative flex-1 overflow-hidden">
                       <p className="pr-4 text-sm font-medium text-slate-100">
-                        Monad Blitz Hackathon 1st 🏆
+                        Monad Blitz Hackathon 1st ??
                       </p>
                     </div>
                     <span className="text-xs font-semibold text-cyan-200 underline underline-offset-2">
@@ -248,7 +253,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -16 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="fixed top-16 left-4 right-4 z-50 sm:top-8 sm:left-auto sm:right-6 sm:w-full sm:max-w-[380px]"
+                  className="fixed top-16 left-4 right-4 z-[60] sm:top-8 sm:left-auto sm:right-6 sm:w-full sm:max-w-[380px]"
                 >
                   <div className="relative overflow-hidden rounded-2xl border border-slate-700/70 bg-slate-900/95 shadow-2xl">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/15 via-cyan-500/10 to-transparent" />
@@ -307,6 +312,7 @@ export default function Home() {
             </>
           )}
         </AnimatePresence>
+        );
         <motion.div
           ref={heroContainerRef}
           variants={heroContainerVariants}
