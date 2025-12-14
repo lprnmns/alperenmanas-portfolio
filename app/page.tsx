@@ -181,7 +181,7 @@ export default function Home() {
   const heroContainerClass = clsx(
     "relative z-20 mx-auto flex max-w-6xl flex-col items-center text-center transition-all duration-700",
     heroPinned
-      ? "min-h-[24vh] justify-start gap-8 px-6 pt-10 pb-6 sm:pt-14 sm:pb-8 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:text-left"
+      ? "min-h-[20vh] justify-start gap-6 px-6 pt-8 pb-4 sm:pt-12 sm:pb-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left"
       : "min-h-[85vh] justify-center gap-12 px-6 pt-24 pb-20 sm:pt-32 sm:pb-24",
   );
   const heroStackClass = clsx(
@@ -389,7 +389,7 @@ export default function Home() {
           initial="hidden"
           animate={sectionsState}
           variants={sectionsVariants}
-          className="mx-auto mt-4 max-w-7xl px-4 pb-12 sm:mt-6 sm:px-6 lg:px-8"
+          className="mx-auto mt-1 max-w-7xl px-4 pb-12 sm:mt-2 sm:px-6 lg:px-8"
         >
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="space-y-12 lg:col-span-5">
