@@ -50,16 +50,17 @@ export default function Projects() {
 
         <div className="grid grid-cols-1 gap-8">
           {projects.map((project, index) => {
+            const isFirst = index === 0;
             const hasDemo = Boolean(project.demoUrl);
             const coverAlt = formatTranslation(dictionary.projectsSection.coverAlt, { title: project.title });
 
             return (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 0, y: 60 }}
+                initial={isFirst ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6, ease: 'easeOut', delay: index * 0.08 }}
+                viewport={{ once: true, amount: isFirst ? 0.01 : 0.2 }}
+                transition={{ duration: 0.6, ease: 'easeOut', delay: isFirst ? 0 : index * 0.08 }}
                 whileHover={{ y: -10 }}
                 className="group relative cursor-pointer"
                 onClick={() => handleNavigate(project.id)}
