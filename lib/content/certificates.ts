@@ -9,6 +9,15 @@ export interface CertificateItem {
 
 const certificateDefinitions = [
   {
+    image: '/sertifikalar/CODERSPACE-Blockchain-101-bootcamp.png',
+    gradient: 'from-indigo-500 to-purple-500',
+    name: {
+      en: 'CODERSPACE - Blockchain 101 Bootcamp',
+      tr: 'CODERSPACE - Blockchain 101 Bootcamp',
+    },
+    issuer: { en: 'Coderspace', tr: 'Coderspace' },
+  },
+  {
     image: '/sertifikalar/huawei-hcia-ai-v3-5-turkish.png',
     gradient: 'from-red-500 to-orange-500',
     name: {
