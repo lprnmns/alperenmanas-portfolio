@@ -71,7 +71,6 @@ export default function Projects() {
               <video
                 className="h-full w-full object-cover"
                 src="https://files.catbox.moe/0o5m8o.mp4"
-                poster="/defense-prototype/system-still.jpg"
                 autoPlay
                 loop
                 muted
@@ -89,13 +88,6 @@ export default function Projects() {
                 </p>
               </div>
               <div className="flex items-center gap-3 rounded-lg border border-slate-700/60 bg-slate-800/60 p-3 text-sm text-slate-200">
-                <Image
-                  src="/defense-prototype/system-still.jpg"
-                  alt="Air defense prototype rendering"
-                  width={96}
-                  height={96}
-                  className="h-16 w-16 rounded-md object-cover"
-                />
                 <div className="space-y-1">
                   <p className="font-semibold text-white">Prototype v1</p>
                   <p className="text-xs text-slate-400">Guidance stack + comms layer integrated; live demo loop above.</p>
