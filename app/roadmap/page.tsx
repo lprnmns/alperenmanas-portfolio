@@ -8,5 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default function RoadmapPage() {
-  return <RoadmapHiringView />;
+  return (
+    <RoadmapHiringView />
+  );
 }
