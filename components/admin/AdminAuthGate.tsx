@@ -8,7 +8,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { getOwnerUid, getSupabaseBrowserClient, isSupabaseConfigured } from '@/lib/supabase/client';
 
 type AdminAuthGateProps = {
-  children: (args: { user: User; supabase: SupabaseClient; signOut: () => Promise<void> }) => ReactNode;
+  children: (args: { user: User; supabase: SupabaseClient | null; signOut: () => Promise<void> }) => ReactNode;
 };
 
 type AuthState = 'loading' | 'signed_out' | 'forbidden' | 'ready';
@@ -146,7 +146,8 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
 
   const signInWithPassword = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!supabase) {
+    const authClient = supabase;
+    if (supabaseEnabled && !authClient) {
       return;
     }
     setError(null);
@@ -170,7 +171,7 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
     }
 
     try {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
+      const { error: signInError } = await authClient!.auth.signInWithPassword({
         email: STATIC_ADMIN_EMAIL,
         password: STATIC_ADMIN_PASSWORD,
       });
@@ -191,7 +192,7 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
     );
   }
 
-  if (authState === 'signed_out' || !user || !supabase) {
+  if (authState === 'signed_out' || !user || (supabaseEnabled && !supabase)) {
     return (
       <div className="mx-auto w-full max-w-lg rounded-2xl border border-slate-700/60 bg-slate-800/60 p-6">
         <h2 className="text-xl font-semibold text-white">Admin Login</h2>
