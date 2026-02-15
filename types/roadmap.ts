@@ -72,7 +72,7 @@ export type RoadmapItemInsert = Omit<RoadmapItemRow, 'id' | 'created_at' | 'upda
 export type RoadmapItemUpdate = Partial<Omit<RoadmapItemInsert, 'user_id'>>;
 
 export type DailyLogInsert = Omit<DailyLogRow, 'id' | 'created_at' | 'updated_at'>;
-export type DailyLogUpdate = Partial<Omit<DailyLogInsert, 'user_id' | 'roadmap_item_id'>>;
+export type DailyLogUpdate = Partial<Omit<DailyLogInsert, 'user_id'>>;
 
 export type ArtifactInsert = Omit<ArtifactRow, 'id' | 'created_at'>;
 export type ArtifactUpdate = Partial<Omit<ArtifactInsert, 'user_id'>>;
