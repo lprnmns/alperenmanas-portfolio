@@ -5,7 +5,7 @@ import { LogOut, ShieldAlert } from 'lucide-react';
 import type { FormEvent, ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
-import { getOwnerUid, getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { getOwnerUid, getSupabaseBrowserClient, isSupabaseConfigured } from '@/lib/supabase/client';
 
 type AdminAuthGateProps = {
   children: (args: { user: User; supabase: SupabaseClient; signOut: () => Promise<void> }) => ReactNode;
@@ -26,6 +26,14 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
 
   useEffect(() => {
     let mounted = true;
+
+    if (!isSupabaseConfigured()) {
+      setError('Admin backend is not configured in this environment.');
+      setAuthState('signed_out');
+      return () => {
+        mounted = false;
+      };
+    }
 
     try {
       const client = getSupabaseBrowserClient();
@@ -154,17 +162,13 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
           />
           <button
             type="submit"
-            disabled={signingIn}
+            disabled={signingIn || !supabase}
             className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
           >
             {signingIn ? 'Signing in...' : 'Sign In'}
           </button>
           {error && <p className="text-sm text-rose-300">{error}</p>}
-          {!ownerUid && (
-            <p className="text-xs text-amber-300">
-              `NEXT_PUBLIC_OWNER_UID` is missing. Set it to the owner auth user id.
-            </p>
-          )}
+          {!ownerUid && <p className="text-xs text-amber-300">Owner account is not configured.</p>}
         </form>
       </div>
     );
