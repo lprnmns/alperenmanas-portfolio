@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Github, Menu, X } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import { useLanguage } from '@/components/providers/LanguageProvider';
 
@@ -11,6 +12,8 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { language, toggleLanguage, dictionary } = useLanguage();
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,11 +24,27 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = useMemo(() => [
-    { name: dictionary.navigation.projects, href: '#projects' },
-    { name: dictionary.navigation.about, href: '#about' },
-    { name: dictionary.navigation.certificates, href: '#certificates' },
-  ], [dictionary.navigation]);
+  const navItems = useMemo(() => {
+    const sectionItems = [
+      { name: dictionary.navigation.projects, href: '#projects' },
+      { name: dictionary.navigation.about, href: '#about' },
+      { name: dictionary.navigation.certificates, href: '#certificates' },
+    ];
+
+    if (isHomePage) {
+      return [
+        ...sectionItems,
+        { name: dictionary.navigation.roadmap, href: '/roadmap' },
+        { name: dictionary.navigation.admin, href: '/admin' },
+      ];
+    }
+
+    return [
+      { name: dictionary.navigation.home, href: '/' },
+      { name: dictionary.navigation.roadmap, href: '/roadmap' },
+      { name: dictionary.navigation.admin, href: '/admin' },
+    ];
+  }, [dictionary.navigation, isHomePage]);
 
   const languageLabel = language.toUpperCase();
   const languageButtonTitle =
@@ -124,17 +143,20 @@ export default function Navigation() {
           >
             <div className="mt-16 flex flex-col space-y-6 p-6">
               {navItems.map((item, index) => (
-                <motion.a
+                <Link
                   key={item.name}
                   href={item.href}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-lg text-slate-300 transition-colors hover:text-white"
                 >
-                  {item.name}
-                </motion.a>
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="text-lg text-slate-300 transition-colors hover:text-white"
+                  >
+                    {item.name}
+                  </motion.div>
+                </Link>
               ))}
 
               <div className="flex items-center gap-3">
