@@ -35,14 +35,12 @@ export default function Navigation() {
       return [
         ...sectionItems,
         { name: dictionary.navigation.roadmap, href: '/roadmap' },
-        { name: dictionary.navigation.admin, href: '/admin' },
       ];
     }
 
     return [
       { name: dictionary.navigation.home, href: '/' },
       { name: dictionary.navigation.roadmap, href: '/roadmap' },
-      { name: dictionary.navigation.admin, href: '/admin' },
     ];
   }, [dictionary.navigation, isHomePage]);
 

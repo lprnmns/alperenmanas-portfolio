@@ -2,7 +2,7 @@
 
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { LogOut, ShieldAlert } from 'lucide-react';
-import type { ReactNode } from 'react';
+import type { FormEvent, ReactNode } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 
 import { getOwnerUid, getSupabaseBrowserClient } from '@/lib/supabase/client';
@@ -15,8 +15,9 @@ type AuthState = 'loading' | 'signed_out' | 'forbidden' | 'ready';
 
 export default function AdminAuthGate({ children }: AdminAuthGateProps) {
   const [authState, setAuthState] = useState<AuthState>('loading');
-  const [email, setEmail] = useState('');
-  const [authMessage, setAuthMessage] = useState<string | null>(null);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [signingIn, setSigningIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -99,25 +100,26 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
     setUser(null);
   };
 
-  const signInWithMagicLink = async () => {
+  const signInWithPassword = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (!supabase) {
       return;
     }
-    setAuthMessage(null);
     setError(null);
+    setSigningIn(true);
 
-    const redirectTo = `${window.location.origin}/admin`;
-    const { error: signInError } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: redirectTo },
-    });
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: username.trim(),
+        password,
+      });
 
-    if (signInError) {
-      setError(signInError.message);
-      return;
+      if (signInError) {
+        setError(signInError.message);
+      }
+    } finally {
+      setSigningIn(false);
     }
-
-    setAuthMessage('Magic link sent. Open your email and continue with the same browser.');
   };
 
   if (authState === 'loading') {
@@ -132,31 +134,38 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
     return (
       <div className="mx-auto w-full max-w-lg rounded-2xl border border-slate-700/60 bg-slate-800/60 p-6">
         <h2 className="text-xl font-semibold text-white">Admin Login</h2>
-        <p className="mt-2 text-sm text-slate-300">Sign in with the owner account to manage roadmap updates.</p>
-        <div className="mt-4 space-y-3">
+        <p className="mt-2 text-sm text-slate-300">Enter username and password to manage roadmap updates.</p>
+        <form onSubmit={signInWithPassword} className="mt-4 space-y-3">
           <input
-            type="email"
+            type="text"
             required
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="owner@example.com"
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+            placeholder="username (owner email)"
+            className="h-10 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 text-sm text-slate-100 outline-none transition focus:border-cyan-400"
+          />
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder="password"
             className="h-10 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 text-sm text-slate-100 outline-none transition focus:border-cyan-400"
           />
           <button
-            type="button"
-            onClick={() => void signInWithMagicLink()}
+            type="submit"
+            disabled={signingIn}
             className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
           >
-            Send Magic Link
+            {signingIn ? 'Signing in...' : 'Sign In'}
           </button>
-          {authMessage && <p className="text-sm text-emerald-300">{authMessage}</p>}
           {error && <p className="text-sm text-rose-300">{error}</p>}
           {!ownerUid && (
             <p className="text-xs text-amber-300">
               `NEXT_PUBLIC_OWNER_UID` is missing. Set it to the owner auth user id.
             </p>
           )}
-        </div>
+        </form>
       </div>
     );
   }
