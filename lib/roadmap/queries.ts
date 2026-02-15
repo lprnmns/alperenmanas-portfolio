@@ -1,4 +1,4 @@
-import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { getSupabaseBrowserClient, isSupabaseConfigured } from '@/lib/supabase/client';
 import { mapRoadmapItems, toPhaseList } from '@/lib/roadmap/mappers';
 import type {
   AdminRoadmapDataSet,
@@ -109,6 +109,13 @@ async function fetchArtifacts(roadmapItemIds: string[], includePrivate: boolean)
 }
 
 export async function fetchPublicRoadmap(filters: RoadmapFilters = {}): Promise<RoadmapDataSet> {
+  if (!isSupabaseConfigured()) {
+    return {
+      items: [],
+      phases: [],
+    };
+  }
+
   const roadmapRows = await fetchPublicRoadmapRows(filters);
   const roadmapIds = roadmapRows.map((item) => item.id);
   const [dailyLogs, artifacts] = await Promise.all([
@@ -124,6 +131,13 @@ export async function fetchPublicRoadmap(filters: RoadmapFilters = {}): Promise<
 }
 
 export async function fetchAdminRoadmap(ownerUserId: string): Promise<AdminRoadmapDataSet> {
+  if (!isSupabaseConfigured()) {
+    return {
+      items: [],
+      tags: [],
+    };
+  }
+
   const supabase = getSupabaseBrowserClient();
   const roadmapRows = await fetchAdminRoadmapRows(ownerUserId);
   const roadmapIds = roadmapRows.map((item) => item.id);

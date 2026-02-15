@@ -78,9 +78,8 @@ export default function RoadmapHiringView() {
     try {
       const payload = await fetchPublicRoadmap(filters);
       setData(payload);
-    } catch (caughtError) {
-      const message = caughtError instanceof Error ? caughtError.message : 'Failed to load roadmap data.';
-      setError(message);
+    } catch {
+      setError('Roadmap data could not be loaded right now.');
     } finally {
       setLoading(false);
     }

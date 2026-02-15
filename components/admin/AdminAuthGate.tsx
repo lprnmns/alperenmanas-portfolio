@@ -12,10 +12,13 @@ type AdminAuthGateProps = {
 };
 
 type AuthState = 'loading' | 'signed_out' | 'forbidden' | 'ready';
+const STATIC_ADMIN_USERNAME = 'lprnmns';
+const STATIC_ADMIN_PASSWORD = 'Ankara';
+const STATIC_ADMIN_EMAIL = 'manasalperen@gmail.com';
 
 export default function AdminAuthGate({ children }: AdminAuthGateProps) {
   const [authState, setAuthState] = useState<AuthState>('loading');
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState(STATIC_ADMIN_USERNAME);
   const [password, setPassword] = useState('');
   const [signingIn, setSigningIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -116,10 +119,16 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
     setError(null);
     setSigningIn(true);
 
+    if (username.trim() !== STATIC_ADMIN_USERNAME || password !== STATIC_ADMIN_PASSWORD) {
+      setError('Invalid username or password.');
+      setSigningIn(false);
+      return;
+    }
+
     try {
       const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: username.trim(),
-        password,
+        email: STATIC_ADMIN_EMAIL,
+        password: STATIC_ADMIN_PASSWORD,
       });
 
       if (signInError) {
@@ -149,7 +158,7 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
             required
             value={username}
             onChange={(event) => setUsername(event.target.value)}
-            placeholder="username (owner email)"
+            placeholder="username"
             className="h-10 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 text-sm text-slate-100 outline-none transition focus:border-cyan-400"
           />
           <input
