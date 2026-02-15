@@ -1,4 +1,20 @@
 import { getSupabaseBrowserClient, isSupabaseConfigured } from '@/lib/supabase/client';
+import {
+  createArtifactLocal,
+  createDailyLogLocal,
+  createRoadmapItemLocal,
+  createTagLocal,
+  deleteArtifactLocal,
+  deleteDailyLogLocal,
+  deleteRoadmapItemLocal,
+  deleteTagLocal,
+  fetchAdminRoadmapLocal,
+  fetchPublicRoadmapLocal,
+  updateArtifactLocal,
+  updateDailyLogLocal,
+  updateRoadmapItemLocal,
+  updateTagLocal,
+} from '@/lib/roadmap/local-store';
 import { mapRoadmapItems, toPhaseList } from '@/lib/roadmap/mappers';
 import type {
   AdminRoadmapDataSet,
@@ -110,10 +126,7 @@ async function fetchArtifacts(roadmapItemIds: string[], includePrivate: boolean)
 
 export async function fetchPublicRoadmap(filters: RoadmapFilters = {}): Promise<RoadmapDataSet> {
   if (!isSupabaseConfigured()) {
-    return {
-      items: [],
-      phases: [],
-    };
+    return fetchPublicRoadmapLocal(filters);
   }
 
   const roadmapRows = await fetchPublicRoadmapRows(filters);
@@ -132,10 +145,7 @@ export async function fetchPublicRoadmap(filters: RoadmapFilters = {}): Promise<
 
 export async function fetchAdminRoadmap(ownerUserId: string): Promise<AdminRoadmapDataSet> {
   if (!isSupabaseConfigured()) {
-    return {
-      items: [],
-      tags: [],
-    };
+    return fetchAdminRoadmapLocal(ownerUserId);
   }
 
   const supabase = getSupabaseBrowserClient();
@@ -157,6 +167,10 @@ export async function fetchAdminRoadmap(ownerUserId: string): Promise<AdminRoadm
 }
 
 export async function createRoadmapItem(payload: RoadmapItemInsert): Promise<RoadmapItemRow> {
+  if (!isSupabaseConfigured()) {
+    return createRoadmapItemLocal(payload);
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase
     .from('roadmap_items')
@@ -169,6 +183,10 @@ export async function createRoadmapItem(payload: RoadmapItemInsert): Promise<Roa
 }
 
 export async function updateRoadmapItem(id: string, payload: RoadmapItemUpdate): Promise<RoadmapItemRow> {
+  if (!isSupabaseConfigured()) {
+    return updateRoadmapItemLocal(id, payload);
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase
     .from('roadmap_items')
@@ -182,12 +200,21 @@ export async function updateRoadmapItem(id: string, payload: RoadmapItemUpdate):
 }
 
 export async function deleteRoadmapItem(id: string): Promise<void> {
+  if (!isSupabaseConfigured()) {
+    deleteRoadmapItemLocal(id);
+    return;
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { error } = await supabase.from('roadmap_items').delete().eq('id', id);
   ensureSuccess(error, 'Failed to delete roadmap item');
 }
 
 export async function createDailyLog(payload: DailyLogInsert): Promise<DailyLogRow> {
+  if (!isSupabaseConfigured()) {
+    return createDailyLogLocal(payload);
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.from('daily_logs').insert(payload).select('*').single();
   ensureSuccess(error, 'Failed to create daily log');
@@ -195,6 +222,10 @@ export async function createDailyLog(payload: DailyLogInsert): Promise<DailyLogR
 }
 
 export async function updateDailyLog(id: string, payload: DailyLogUpdate): Promise<DailyLogRow> {
+  if (!isSupabaseConfigured()) {
+    return updateDailyLogLocal(id, payload);
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase
     .from('daily_logs')
@@ -208,12 +239,21 @@ export async function updateDailyLog(id: string, payload: DailyLogUpdate): Promi
 }
 
 export async function deleteDailyLog(id: string): Promise<void> {
+  if (!isSupabaseConfigured()) {
+    deleteDailyLogLocal(id);
+    return;
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { error } = await supabase.from('daily_logs').delete().eq('id', id);
   ensureSuccess(error, 'Failed to delete daily log');
 }
 
 export async function createArtifact(payload: ArtifactInsert): Promise<ArtifactRow> {
+  if (!isSupabaseConfigured()) {
+    return createArtifactLocal(payload);
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.from('artifacts').insert(payload).select('*').single();
   ensureSuccess(error, 'Failed to create artifact');
@@ -221,6 +261,10 @@ export async function createArtifact(payload: ArtifactInsert): Promise<ArtifactR
 }
 
 export async function updateArtifact(id: string, payload: ArtifactUpdate): Promise<ArtifactRow> {
+  if (!isSupabaseConfigured()) {
+    return updateArtifactLocal(id, payload);
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase
     .from('artifacts')
@@ -234,12 +278,21 @@ export async function updateArtifact(id: string, payload: ArtifactUpdate): Promi
 }
 
 export async function deleteArtifact(id: string): Promise<void> {
+  if (!isSupabaseConfigured()) {
+    deleteArtifactLocal(id);
+    return;
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { error } = await supabase.from('artifacts').delete().eq('id', id);
   ensureSuccess(error, 'Failed to delete artifact');
 }
 
 export async function createTag(payload: TagInsert): Promise<TagRow> {
+  if (!isSupabaseConfigured()) {
+    return createTagLocal(payload);
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.from('tags').insert(payload).select('*').single();
   ensureSuccess(error, 'Failed to create tag');
@@ -247,6 +300,10 @@ export async function createTag(payload: TagInsert): Promise<TagRow> {
 }
 
 export async function updateTag(id: string, payload: TagUpdate): Promise<TagRow> {
+  if (!isSupabaseConfigured()) {
+    return updateTagLocal(id, payload);
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { data, error } = await supabase.from('tags').update(payload).eq('id', id).select('*').single();
   ensureSuccess(error, 'Failed to update tag');
@@ -254,6 +311,11 @@ export async function updateTag(id: string, payload: TagUpdate): Promise<TagRow>
 }
 
 export async function deleteTag(id: string): Promise<void> {
+  if (!isSupabaseConfigured()) {
+    deleteTagLocal(id);
+    return;
+  }
+
   const supabase = getSupabaseBrowserClient();
   const { error } = await supabase.from('tags').delete().eq('id', id);
   ensureSuccess(error, 'Failed to delete tag');

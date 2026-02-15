@@ -3,7 +3,7 @@
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { LogOut, ShieldAlert } from 'lucide-react';
 import type { FormEvent, ReactNode } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { getOwnerUid, getSupabaseBrowserClient, isSupabaseConfigured } from '@/lib/supabase/client';
 
@@ -15,6 +15,7 @@ type AuthState = 'loading' | 'signed_out' | 'forbidden' | 'ready';
 const STATIC_ADMIN_USERNAME = 'lprnmns';
 const STATIC_ADMIN_PASSWORD = 'Ankara';
 const STATIC_ADMIN_EMAIL = 'manasalperen@gmail.com';
+const LOCAL_AUTH_KEY = 'am_admin_local_session';
 
 export default function AdminAuthGate({ children }: AdminAuthGateProps) {
   const [authState, setAuthState] = useState<AuthState>('loading');
@@ -26,13 +27,34 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
   const [error, setError] = useState<string | null>(null);
 
   const ownerUid = useMemo(() => getOwnerUid(), []);
+  const supabaseEnabled = useMemo(() => isSupabaseConfigured(), []);
+
+  const buildLocalUser = useCallback((): User => {
+    const fallbackId = ownerUid ?? 'local-owner';
+    return {
+      id: fallbackId,
+      aud: 'authenticated',
+      role: 'authenticated',
+      email: STATIC_ADMIN_EMAIL,
+      app_metadata: {},
+      user_metadata: { username: STATIC_ADMIN_USERNAME },
+      identities: [],
+      created_at: new Date(0).toISOString(),
+      updated_at: new Date(0).toISOString(),
+    } as unknown as User;
+  }, [ownerUid]);
 
   useEffect(() => {
     let mounted = true;
 
-    if (!isSupabaseConfigured()) {
-      setError('Admin backend is not configured in this environment.');
-      setAuthState('signed_out');
+    if (!supabaseEnabled) {
+      setSupabase(null);
+      if (typeof window !== 'undefined' && window.sessionStorage.getItem(LOCAL_AUTH_KEY) === '1') {
+        setUser(buildLocalUser());
+        setAuthState('ready');
+      } else {
+        setAuthState('signed_out');
+      }
       return () => {
         mounted = false;
       };
@@ -100,15 +122,26 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
         mounted = false;
       };
     }
-  }, [ownerUid]);
+  }, [buildLocalUser, ownerUid, supabaseEnabled]);
 
   const signOut = async () => {
+    if (!supabaseEnabled) {
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.removeItem(LOCAL_AUTH_KEY);
+      }
+      setAuthState('signed_out');
+      setUser(null);
+      setPassword('');
+      return;
+    }
+
     if (!supabase) {
       return;
     }
     await supabase.auth.signOut();
     setAuthState('signed_out');
     setUser(null);
+    setPassword('');
   };
 
   const signInWithPassword = async (event: FormEvent<HTMLFormElement>) => {
@@ -122,6 +155,17 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
     if (username.trim() !== STATIC_ADMIN_USERNAME || password !== STATIC_ADMIN_PASSWORD) {
       setError('Invalid username or password.');
       setSigningIn(false);
+      return;
+    }
+
+    if (!supabaseEnabled) {
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.setItem(LOCAL_AUTH_KEY, '1');
+      }
+      setUser(buildLocalUser());
+      setAuthState('ready');
+      setSigningIn(false);
+      setPassword('');
       return;
     }
 
@@ -171,13 +215,13 @@ export default function AdminAuthGate({ children }: AdminAuthGateProps) {
           />
           <button
             type="submit"
-            disabled={signingIn || !supabase}
+            disabled={signingIn || (supabaseEnabled && !supabase)}
             className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90"
           >
             {signingIn ? 'Signing in...' : 'Sign In'}
           </button>
           {error && <p className="text-sm text-rose-300">{error}</p>}
-          {!ownerUid && <p className="text-xs text-amber-300">Owner account is not configured.</p>}
+          {supabaseEnabled && !ownerUid && <p className="text-xs text-amber-300">Owner account is not configured.</p>}
         </form>
       </div>
     );
