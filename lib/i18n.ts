@@ -11,9 +11,12 @@ export const availableLanguages = [
 type CategoryLabels = Record<TechCategory, string>;
 
 type SectionNavigation = {
+  home: string;
   projects: string;
   about: string;
   certificates: string;
+  roadmap: string;
+  admin: string;
   github: string;
   openMenu: string;
   closeMenu: string;
@@ -101,9 +104,12 @@ const baseCategoryLabels: CategoryLabels = {
 const dictionaries: Record<Language, Dictionary> = {
   en: {
     navigation: {
+      home: 'Home',
       projects: 'Projects',
       about: 'About',
       certificates: 'Certificates',
+      roadmap: 'Roadmap',
+      admin: 'Admin',
       github: 'GitHub',
       openMenu: 'Open menu',
       closeMenu: 'Close menu',
@@ -166,9 +172,12 @@ const dictionaries: Record<Language, Dictionary> = {
   },
   tr: {
     navigation: {
+      home: 'Ana Sayfa',
       projects: 'Projeler',
       about: 'Hakkımda',
       certificates: 'Sertifikalar',
+      roadmap: 'Yol Haritasi',
+      admin: 'Yonetim',
       github: 'GitHub',
       openMenu: 'Menüyü aç',
       closeMenu: 'Menüyü kapat',
@@ -251,3 +260,5 @@ export function formatTranslation(
     return `{${key}}`;
   });
 }
+
+
