@@ -4,7 +4,7 @@ import RoadmapHiringView from '@/components/roadmap/RoadmapHiringView';
 
 export const metadata: Metadata = {
   title: 'Roadmap - Alperen Manas',
-  description: 'Interactive roadmap with hiring view, timeline, artifacts, and weekly deep dive.',
+  description: 'Plan and execution roadmap with curriculum tracking, timeline, artifacts, and weekly deep dive.',
 };
 
 export default function RoadmapPage() {
