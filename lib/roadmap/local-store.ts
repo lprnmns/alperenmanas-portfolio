@@ -26,10 +26,65 @@ type LocalRoadmapDb = {
   tags: TagRow[];
 };
 
-const EMPTY_DB: LocalRoadmapDb = {
-  roadmap_items: [],
-  daily_logs: [],
-  artifacts: [],
+const SEEDED_OWNER_ID = 'local-owner';
+const SEEDED_CREATED_AT = '2026-02-16T10:30:00.000Z';
+const SEEDED_UPDATED_AT = '2026-02-16T10:35:00.000Z';
+const SEEDED_ROADMAP_ITEM_ID = 'seed-week1-tooling-baseline';
+const SEEDED_DAILY_LOG_ID = 'seed-w1d1-shell-basics';
+
+const SEEDED_DB: LocalRoadmapDb = {
+  roadmap_items: [
+    {
+      id: SEEDED_ROADMAP_ITEM_ID,
+      user_id: SEEDED_OWNER_ID,
+      title: 'Week 1 - Tooling Baseline',
+      summary: 'Shell basics and toolbox repo setup completed for Day 1.',
+      phase: 'Month 1 Curriculum',
+      status: 'in_progress',
+      planned_hours: 9,
+      actual_hours: 1.5,
+      start_date: '2026-02-16',
+      end_date: '2026-02-22',
+      is_public: true,
+      sort_order: 10,
+      created_at: SEEDED_CREATED_AT,
+      updated_at: SEEDED_UPDATED_AT,
+    },
+  ],
+  daily_logs: [
+    {
+      id: SEEDED_DAILY_LOG_ID,
+      roadmap_item_id: SEEDED_ROADMAP_ITEM_ID,
+      user_id: SEEDED_OWNER_ID,
+      log_date: '2026-02-16',
+      title: 'W1D1 - Shell basics + toolbox repo',
+      notes: [
+        '- Created toolbox/ with scripts/ and notes/ folders.',
+        '- Added CLI cheatsheet for ls, grep, find, cat, and pipe examples.',
+        '- Added executable helper script and toolbox README with usage commands.',
+      ].join('\n'),
+      status: 'done',
+      planned_hours: 1.5,
+      actual_hours: 1.5,
+      is_public: true,
+      created_at: SEEDED_CREATED_AT,
+      updated_at: SEEDED_UPDATED_AT,
+    },
+  ],
+  artifacts: [
+    {
+      id: 'seed-artifact-w1d1-ai-eng-studies',
+      roadmap_item_id: SEEDED_ROADMAP_ITEM_ID,
+      daily_log_id: SEEDED_DAILY_LOG_ID,
+      user_id: SEEDED_OWNER_ID,
+      type: 'repo',
+      title: 'W1D1 Artifact - ai-eng-studies',
+      url: 'https://github.com/lprnmns/ai-eng-studies',
+      is_public: true,
+      sort_order: 10,
+      created_at: SEEDED_UPDATED_AT,
+    },
+  ],
   tags: [],
 };
 
@@ -53,26 +108,38 @@ function cloneDb(db: LocalRoadmapDb): LocalRoadmapDb {
   };
 }
 
+function isDbEmpty(db: LocalRoadmapDb): boolean {
+  return db.roadmap_items.length === 0 && db.daily_logs.length === 0 && db.artifacts.length === 0 && db.tags.length === 0;
+}
+
+function getSeededDb(): LocalRoadmapDb {
+  return cloneDb(SEEDED_DB);
+}
+
 function readDb(): LocalRoadmapDb {
   if (typeof window === 'undefined') {
-    return cloneDb(EMPTY_DB);
+    return getSeededDb();
   }
 
   const raw = window.localStorage.getItem(STORAGE_KEY);
   if (!raw) {
-    return cloneDb(EMPTY_DB);
+    return getSeededDb();
   }
 
   try {
     const parsed = JSON.parse(raw) as Partial<LocalRoadmapDb>;
-    return {
+    const normalized: LocalRoadmapDb = {
       roadmap_items: parsed.roadmap_items ?? [],
       daily_logs: parsed.daily_logs ?? [],
       artifacts: parsed.artifacts ?? [],
       tags: parsed.tags ?? [],
     };
+    if (isDbEmpty(normalized)) {
+      return getSeededDb();
+    }
+    return normalized;
   } catch {
-    return cloneDb(EMPTY_DB);
+    return getSeededDb();
   }
 }
 

@@ -20,11 +20,18 @@ export const MONTH1: CurriculumDay[] = [
       { title: "Missing Semester - The Shell", url: "https://missing.csail.mit.edu/2020/course-shell/" }
     ],
     build: [
-      "Create toolbox repo structure: scripts/, notes/",
-      "Write cheat-sheet: ls/grep/find/cat/pipes",
-      "Add README: how to run scripts"
+      "Create toolbox/ structure with scripts/ and notes/",
+      "Write cli-cheatsheet.md for ls, grep, find, cat, and pipe with one-line purpose + example",
+      "Add one script in toolbox/scripts (count_lines.sh or find_todos.sh) with strict bash flags",
+      "Make script executable and run once to verify output",
+      "Write toolbox/README.md with run commands and cheatsheet link"
     ],
-    dod: ["1 meaningful commit", "README exists", "cheat-sheet added"]
+    dod: [
+      "1 meaningful commit exists",
+      "toolbox/README.md exists and is clear",
+      "cli-cheatsheet.md added with 5 commands",
+      "script runs successfully"
+    ]
   },
   {
     key: "W1D2", week: 1, day: 2, focus: "Tooling", timeboxHours: 1.5,
