@@ -10,14 +10,15 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '@/components/ui/drawer';
-import type { CurriculumDayTemplate } from '@/types/curriculum';
+import { getCurriculumSuggestedDate } from '@/lib/curriculum/month1-utils';
+import type { CurriculumDay } from '@/types/curriculum';
 
 type CurriculumDayDrawerProps = {
-  day: CurriculumDayTemplate | null;
+  day: CurriculumDay | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   isCompleted: boolean;
-  onCreateDailyLog?: (day: CurriculumDayTemplate) => Promise<void>;
+  onCreateDailyLog?: (day: CurriculumDay) => Promise<void>;
   creating?: boolean;
 };
 
@@ -50,12 +51,12 @@ export default function CurriculumDayDrawer({
         <DrawerHeader className="border-b border-slate-700/80">
           {day ? (
             <>
-              <p className="text-xs uppercase tracking-[0.18em] text-cyan-200">{day.id}</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-cyan-200">{day.key}</p>
               <DrawerTitle className="text-2xl text-white">{day.title}</DrawerTitle>
               <DrawerDescription className="space-y-1 text-slate-300">
                 <span className="block">{day.focus}</span>
                 <span className="block">
-                  Target date: {day.suggestedDate} - Planned {day.plannedHours.toFixed(1)}h
+                  Target date: {getCurriculumSuggestedDate(day)} - Planned {day.timeboxHours.toFixed(1)}h
                 </span>
               </DrawerDescription>
             </>
@@ -69,15 +70,10 @@ export default function CurriculumDayDrawer({
 
           {day && (
             <>
-              <section className="rounded-2xl border border-cyan-400/20 bg-cyan-400/5 p-4">
-                <p className="text-xs uppercase tracking-[0.16em] text-cyan-200">Summary</p>
-                <p className="mt-2 text-sm text-slate-100">{day.summary}</p>
-              </section>
-
               <section className="space-y-2">
                 <p className="text-xs uppercase tracking-[0.16em] text-slate-400">Video Links</p>
                 <div className="grid gap-2 md:grid-cols-2">
-                  {day.videoLinks.map((link) => (
+                  {day.video.map((link) => (
                     <a
                       key={link.url}
                       href={link.url}
@@ -85,15 +81,20 @@ export default function CurriculumDayDrawer({
                       rel="noopener noreferrer"
                       className="rounded-xl border border-slate-700/70 bg-slate-950/70 p-3 text-sm text-cyan-200 transition hover:border-cyan-300/60 hover:text-cyan-100"
                     >
-                      {link.label}
+                      <span className="font-semibold">{link.title}</span>
+                      {link.notes && <span className="mt-1 block text-xs text-slate-300">{link.notes}</span>}
                     </a>
                   ))}
+                  {day.video.length === 0 && (
+                    <p className="rounded-xl border border-slate-700/70 bg-slate-950/70 p-3 text-sm text-slate-300">
+                      No video resource for this day.
+                    </p>
+                  )}
                 </div>
               </section>
 
-              <Section title="Build Steps" items={day.buildSteps} />
-              <Section title="Definition of Done" items={day.definitionOfDone} />
-              <Section title="Artifact Targets" items={day.artifactTargets} />
+              <Section title="Build Steps" items={day.build} />
+              <Section title="Definition of Done" items={day.dod} />
             </>
           )}
         </div>

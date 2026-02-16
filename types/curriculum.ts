@@ -1,22 +1,6 @@
-export interface CurriculumResourceLink {
-  label: string;
-  url: string;
-}
+import type { CurriculumDay } from '@/content/curriculum/month1';
 
-export interface CurriculumDayTemplate {
-  id: string;
-  week: number;
-  day: number;
-  suggestedDate: string;
-  title: string;
-  focus: string;
-  summary: string;
-  plannedHours: number;
-  videoLinks: CurriculumResourceLink[];
-  buildSteps: string[];
-  definitionOfDone: string[];
-  artifactTargets: string[];
-}
+export type { CurriculumDay };
 
 export interface CurriculumWeekMilestone {
   week: number;
@@ -27,7 +11,7 @@ export interface CurriculumWeekMilestone {
 export interface CurriculumWeekGroup {
   week: number;
   title: string;
-  days: CurriculumDayTemplate[];
+  days: CurriculumDay[];
 }
 
 export interface CurriculumProgress {

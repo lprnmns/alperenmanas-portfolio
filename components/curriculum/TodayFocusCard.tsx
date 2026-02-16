@@ -3,12 +3,12 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, Compass, Sparkles } from 'lucide-react';
 
-import type { CurriculumDayTemplate, CurriculumProgress } from '@/types/curriculum';
+import type { CurriculumDay, CurriculumProgress } from '@/types/curriculum';
 
 type TodayFocusCardProps = {
   heading: string;
   progress: CurriculumProgress;
-  nextDay: CurriculumDayTemplate | null;
+  nextDay: CurriculumDay | null;
   ctaLabel?: string;
   onCta?: () => void;
 };
@@ -67,7 +67,7 @@ export default function TodayFocusCard({
                 Today Focus
               </p>
               <p className="mt-1 text-sm font-medium text-white">
-                {nextDay.id} - {nextDay.title}
+                {nextDay.key} - {nextDay.title}
               </p>
               <p className="text-xs text-slate-300">{nextDay.focus}</p>
             </div>

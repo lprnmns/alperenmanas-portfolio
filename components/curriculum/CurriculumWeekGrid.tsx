@@ -3,24 +3,24 @@
 import { motion } from 'framer-motion';
 import { Check, CircleDot, Play } from 'lucide-react';
 
-import type { CurriculumDayTemplate, CurriculumWeekGroup } from '@/types/curriculum';
+import type { CurriculumDay, CurriculumWeekGroup } from '@/types/curriculum';
 
 type CurriculumWeekGridProps = {
   weeks: CurriculumWeekGroup[];
   completedDayIds: Set<string>;
-  onSelectDay: (day: CurriculumDayTemplate) => void;
+  onSelectDay: (day: CurriculumDay) => void;
   selectedDayId?: string | null;
 };
 
 function getDayState(
-  day: CurriculumDayTemplate,
+  day: CurriculumDay,
   completedDayIds: Set<string>,
   selectedDayId: string | null | undefined,
 ): 'completed' | 'active' | 'pending' {
-  if (completedDayIds.has(day.id)) {
+  if (completedDayIds.has(day.key)) {
     return 'completed';
   }
-  if (selectedDayId === day.id) {
+  if (selectedDayId === day.key) {
     return 'active';
   }
   return 'pending';
@@ -68,7 +68,7 @@ export default function CurriculumWeekGrid({
               <h3 className="mt-1 text-sm font-semibold text-white">{week.title}</h3>
             </div>
             <span className="rounded-full border border-slate-600 px-2 py-1 text-[11px] text-slate-300">
-              {week.days.filter((day) => completedDayIds.has(day.id)).length}/{week.days.length} done
+              {week.days.filter((day) => completedDayIds.has(day.key)).length}/{week.days.length} done
             </span>
           </div>
 
@@ -78,13 +78,13 @@ export default function CurriculumWeekGrid({
               return (
                 <button
                   type="button"
-                  key={day.id}
+                  key={day.key}
                   onClick={() => onSelectDay(day)}
                   className={`rounded-xl border p-3 text-left transition ${getDayClassName(state)}`}
                 >
                   <p className="inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.16em]">
                     <DayIcon state={state} />
-                    {day.id}
+                    {day.key}
                   </p>
                   <p className="mt-1 text-sm font-semibold leading-tight">{day.title}</p>
                   <p className="mt-1 text-xs opacity-80">{day.focus}</p>

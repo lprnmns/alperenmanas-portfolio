@@ -1,19 +1,57 @@
-import { MONTH1, MONTH1_WEEK_MILESTONES } from '@/content/curriculum/month1';
+import { MONTH1, type CurriculumDay } from '@/content/curriculum/month1';
 import type {
-  CurriculumDayTemplate,
   CurriculumProgress,
   CurriculumWeekGroup,
+  CurriculumWeekMilestone,
 } from '@/types/curriculum';
 import type { DailyLogRow, RoadmapItem, RoadmapItemInsert, RoadmapStatus } from '@/types/roadmap';
 
 const CURRICULUM_PREFIX_PATTERN = /\bW([1-4])D([1-6])\b/i;
 
+export const MONTH1_WEEK_MILESTONES: CurriculumWeekMilestone[] = [
+  {
+    week: 1,
+    title: 'Week 1 - Tooling Baseline',
+    summary: 'Shell, git fundamentals, debugging habits, and linear algebra warmup.',
+  },
+  {
+    week: 2,
+    title: 'Week 2 - Python Engineering',
+    summary: 'OOP, typing, testing, and clean refactor discipline in Python.',
+  },
+  {
+    week: 3,
+    title: 'Week 3 - Data and SQL Foundations',
+    summary: 'Pandas workflows, SQL practice, and EDA-driven insight writing.',
+  },
+  {
+    week: 4,
+    title: 'Week 4 - Titanic Mini Project',
+    summary: 'End-to-end mini project with feature engineering and final report.',
+  },
+];
+
+function toIsoDate(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
+function getCurriculumBaseDate(): Date {
+  return new Date(Date.UTC(2026, 0, 5));
+}
+
 export function toCurriculumDayId(week: number, day: number): string {
   return `W${week}D${day}`;
 }
 
-export function groupByWeek(days: CurriculumDayTemplate[] = MONTH1): CurriculumWeekGroup[] {
-  const weekMap = new Map<number, CurriculumDayTemplate[]>();
+export function getCurriculumSuggestedDate(day: CurriculumDay): string {
+  const base = getCurriculumBaseDate();
+  const offset = (day.week - 1) * 7 + (day.day - 1);
+  base.setUTCDate(base.getUTCDate() + offset);
+  return toIsoDate(base);
+}
+
+export function groupByWeek(days: CurriculumDay[] = MONTH1): CurriculumWeekGroup[] {
+  const weekMap = new Map<number, CurriculumDay[]>();
 
   for (const day of days) {
     const values = weekMap.get(day.week) ?? [];
@@ -58,12 +96,12 @@ export function detectCompletedDayIds(logs: DailyLogRow[]): Set<string> {
 }
 
 export function computeProgress(
-  days: CurriculumDayTemplate[],
+  days: CurriculumDay[],
   completedDayIds: Set<string>,
 ): CurriculumProgress {
   const totalDays = days.length;
   const completedDays = days.reduce(
-    (count, day) => count + (completedDayIds.has(day.id) ? 1 : 0),
+    (count, day) => count + (completedDayIds.has(day.key) ? 1 : 0),
     0,
   );
   const percent = totalDays > 0 ? Math.round((completedDays / totalDays) * 100) : 0;
@@ -76,46 +114,51 @@ export function computeProgress(
 }
 
 export function getNextIncompleteDay(
-  days: CurriculumDayTemplate[],
+  days: CurriculumDay[],
   completedDayIds: Set<string>,
-): CurriculumDayTemplate | null {
+): CurriculumDay | null {
   for (const day of days) {
-    if (!completedDayIds.has(day.id)) {
+    if (!completedDayIds.has(day.key)) {
       return day;
     }
   }
   return null;
 }
 
-export function buildTemplateDailyLog(day: CurriculumDayTemplate): {
+export function buildTemplateDailyLog(day: CurriculumDay): {
   title: string;
   notes: string;
   plannedHours: number;
 } {
-  const links = day.videoLinks.map((link) => `- ${link.label}: ${link.url}`);
-  const buildSteps = day.buildSteps.map((step, index) => `${index + 1}. ${step}`);
-  const definitionOfDone = day.definitionOfDone.map((item, index) => `${index + 1}. ${item}`);
+  const videoLinks = day.video.length > 0
+    ? day.video.map((entry) => {
+      if (entry.notes) {
+        return `- ${entry.title}: ${entry.url} (${entry.notes})`;
+      }
+      return `- ${entry.title}: ${entry.url}`;
+    })
+    : ['- No video assigned for this day.'];
+  const buildSteps = day.build.map((step, index) => `${index + 1}. ${step}`);
+  const definitionOfDone = day.dod.map((item, index) => `${index + 1}. ${item}`);
 
   const notes = [
     `Focus: ${day.focus}`,
-    `Summary: ${day.summary}`,
+    `Timebox: ${day.timeboxHours.toFixed(1)}h`,
     '',
     'Video Links:',
-    ...links,
+    ...videoLinks,
     '',
     'Build Steps:',
     ...buildSteps,
     '',
     'Definition of Done:',
     ...definitionOfDone,
-    '',
-    `Artifact Targets: ${day.artifactTargets.join(', ')}`,
   ].join('\n');
 
   return {
-    title: `${day.id} — ${day.title}`,
+    title: `${day.key} - ${day.title}`,
     notes,
-    plannedHours: day.plannedHours,
+    plannedHours: day.timeboxHours,
   };
 }
 
@@ -136,10 +179,14 @@ export function getWeekMilestoneInsert(
     throw new Error(`Week milestone not found: ${week}`);
   }
 
-  const days = MONTH1.filter((day) => day.week === week);
-  const startDate = days[0]?.suggestedDate ?? new Date().toISOString().slice(0, 10);
-  const endDate = days[days.length - 1]?.suggestedDate ?? startDate;
-  const plannedHours = days.reduce((sum, day) => sum + day.plannedHours, 0);
+  const weekDays = MONTH1
+    .filter((day) => day.week === week)
+    .sort((left, right) => left.day - right.day);
+  const startDate = weekDays[0] ? getCurriculumSuggestedDate(weekDays[0]) : toIsoDate(new Date());
+  const endDate = weekDays[weekDays.length - 1]
+    ? getCurriculumSuggestedDate(weekDays[weekDays.length - 1])
+    : startDate;
+  const plannedHours = weekDays.reduce((sum, day) => sum + day.timeboxHours, 0);
 
   return {
     user_id: userId,
@@ -157,11 +204,10 @@ export function getWeekMilestoneInsert(
 }
 
 export function findWeekMilestone(items: RoadmapItem[], week: number): RoadmapItem | null {
-  const strictPrefix = `Week ${week} —`;
-  const fallbackPrefix = `W${week}`;
+  const prefixes = [`Week ${week} -`, `Week ${week} -`, `W${week}`];
 
   for (const item of items) {
-    if (item.title.startsWith(strictPrefix) || item.title.startsWith(fallbackPrefix)) {
+    if (prefixes.some((prefix) => item.title.startsWith(prefix))) {
       return item;
     }
   }

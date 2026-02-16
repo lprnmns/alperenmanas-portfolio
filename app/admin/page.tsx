@@ -38,7 +38,7 @@ import {
   updateDailyLog,
   updateRoadmapItem,
 } from '@/lib/roadmap/queries';
-import type { CurriculumDayTemplate } from '@/types/curriculum';
+import type { CurriculumDay } from '@/types/curriculum';
 import type { AdminRoadmapDataSet, ArtifactRow, DailyLogRow, RoadmapItem, TagRow } from '@/types/roadmap';
 
 type FlatDailyLog = DailyLogRow & { roadmapTitle: string };
@@ -151,14 +151,14 @@ function AdminWorkspace({ user, signOut }: { user: User; signOut: () => Promise<
     return ids;
   }, [data.items, user.id]);
 
-  const handleCreateCurriculumLog = async (day: CurriculumDayTemplate) => {
-    if (completedDayIds.has(day.id)) {
-      setMessage(`${day.id} already has a daily log.`);
+  const handleCreateCurriculumLog = async (day: CurriculumDay) => {
+    if (completedDayIds.has(day.key)) {
+      setMessage(`${day.key} already has a daily log.`);
       setError(null);
       return;
     }
 
-    setCreatingDayId(day.id);
+    setCreatingDayId(day.key);
     await withFeedback(async () => {
       const weekMilestoneIds = await ensureWeekMilestones();
       const milestoneId = weekMilestoneIds.get(day.week);
@@ -178,7 +178,7 @@ function AdminWorkspace({ user, signOut }: { user: User; signOut: () => Promise<
         actual_hours: template.plannedHours,
         is_public: true,
       });
-    }, `${day.id} daily log created from template.`);
+    }, `${day.key} daily log created from template.`);
     setCreatingDayId(null);
   };
 

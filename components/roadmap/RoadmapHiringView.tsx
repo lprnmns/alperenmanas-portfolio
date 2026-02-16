@@ -24,7 +24,7 @@ import {
 } from '@/lib/curriculum/month1-utils';
 import { fetchPublicRoadmap } from '@/lib/roadmap/queries';
 import { buildWeekGroups } from '@/lib/roadmap/week-utils';
-import type { CurriculumDayTemplate } from '@/types/curriculum';
+import type { CurriculumDay } from '@/types/curriculum';
 import type { RoadmapDataSet, WeekGroup } from '@/types/roadmap';
 
 const DEFAULT_FILTERS: RoadmapFilterValues = {
@@ -84,7 +84,7 @@ export default function RoadmapHiringView() {
   const [error, setError] = useState<string | null>(null);
   const [selectedWeekKey, setSelectedWeekKey] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedCurriculumDay, setSelectedCurriculumDay] = useState<CurriculumDayTemplate | null>(
+  const [selectedCurriculumDay, setSelectedCurriculumDay] = useState<CurriculumDay | null>(
     MONTH1[0] ?? null,
   );
   const [curriculumDrawerOpen, setCurriculumDrawerOpen] = useState(false);
@@ -134,7 +134,7 @@ export default function RoadmapHiringView() {
   const nextDay = useMemo(() => getNextIncompleteDay(MONTH1, completedDayIds), [completedDayIds]);
   const hasExecutionMilestones = data.items.length > 0;
 
-  const openCurriculumDay = (day: CurriculumDayTemplate) => {
+  const openCurriculumDay = (day: CurriculumDay) => {
     setSelectedCurriculumDay(day);
     setCurriculumDrawerOpen(true);
   };
@@ -207,7 +207,7 @@ export default function RoadmapHiringView() {
                 weeks={curriculumWeeks}
                 completedDayIds={completedDayIds}
                 onSelectDay={openCurriculumDay}
-                selectedDayId={selectedCurriculumDay?.id ?? null}
+                selectedDayId={selectedCurriculumDay?.key ?? null}
               />
             </section>
           </TabsContent>
@@ -345,7 +345,7 @@ export default function RoadmapHiringView() {
         day={selectedCurriculumDay}
         open={curriculumDrawerOpen}
         onOpenChange={setCurriculumDrawerOpen}
-        isCompleted={selectedCurriculumDay ? completedDayIds.has(selectedCurriculumDay.id) : false}
+        isCompleted={selectedCurriculumDay ? completedDayIds.has(selectedCurriculumDay.key) : false}
       />
     </main>
   );

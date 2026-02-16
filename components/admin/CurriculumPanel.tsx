@@ -9,13 +9,13 @@ import CurriculumJumpDialog from '@/components/curriculum/CurriculumJumpDialog';
 import TodayFocusCard from '@/components/curriculum/TodayFocusCard';
 import CurriculumWeekGrid from '@/components/curriculum/CurriculumWeekGrid';
 import { groupByWeek } from '@/lib/curriculum/month1-utils';
-import type { CurriculumDayTemplate, CurriculumProgress } from '@/types/curriculum';
+import type { CurriculumDay, CurriculumProgress } from '@/types/curriculum';
 
 type CurriculumPanelProps = {
   progress: CurriculumProgress;
   completedDayIds: Set<string>;
-  nextDay: CurriculumDayTemplate | null;
-  onCreateDailyLog: (day: CurriculumDayTemplate) => Promise<void>;
+  nextDay: CurriculumDay | null;
+  onCreateDailyLog: (day: CurriculumDay) => Promise<void>;
   creatingDayId: string | null;
 };
 
@@ -27,10 +27,10 @@ export default function CurriculumPanel({
   creatingDayId,
 }: CurriculumPanelProps) {
   const weeks = useMemo(() => groupByWeek(MONTH1), []);
-  const [selectedDay, setSelectedDay] = useState<CurriculumDayTemplate | null>(nextDay ?? MONTH1[0] ?? null);
+  const [selectedDay, setSelectedDay] = useState<CurriculumDay | null>(nextDay ?? MONTH1[0] ?? null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const openDay = (day: CurriculumDayTemplate) => {
+  const openDay = (day: CurriculumDay) => {
     setSelectedDay(day);
     setDrawerOpen(true);
   };
@@ -63,7 +63,7 @@ export default function CurriculumPanel({
           </p>
           <p className="mt-2 text-2xl font-semibold text-white">
             {Array.from({ length: 4 }, (_, index) => index + 1).filter((week) =>
-              MONTH1.filter((day) => day.week === week).every((day) => completedDayIds.has(day.id)),
+              MONTH1.filter((day) => day.week === week).every((day) => completedDayIds.has(day.key)),
             ).length}
             /4
           </p>
@@ -96,7 +96,7 @@ export default function CurriculumPanel({
           weeks={weeks}
           completedDayIds={completedDayIds}
           onSelectDay={openDay}
-          selectedDayId={selectedDay?.id ?? null}
+          selectedDayId={selectedDay?.key ?? null}
         />
       </div>
 
@@ -104,8 +104,8 @@ export default function CurriculumPanel({
         day={selectedDay}
         open={drawerOpen}
         onOpenChange={setDrawerOpen}
-        isCompleted={selectedDay ? completedDayIds.has(selectedDay.id) : false}
-        creating={selectedDay ? creatingDayId === selectedDay.id : false}
+        isCompleted={selectedDay ? completedDayIds.has(selectedDay.key) : false}
+        creating={selectedDay ? creatingDayId === selectedDay.key : false}
         onCreateDailyLog={onCreateDailyLog}
       />
     </section>
