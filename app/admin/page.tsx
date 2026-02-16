@@ -6,6 +6,7 @@ import { ArrowLeft, LogOut, RefreshCcw, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import AdminAuthGate from '@/components/admin/AdminAuthGate';
+import CurriculumPanel from '@/components/admin/CurriculumPanel';
 import AdminTable from '@/components/admin/AdminTable';
 import ArtifactForm, {
   type ArtifactDailyLogOption,
@@ -14,6 +15,15 @@ import ArtifactForm, {
 } from '@/components/admin/ArtifactForm';
 import DailyLogForm, { type DailyLogFormValues } from '@/components/admin/DailyLogForm';
 import RoadmapItemForm, { type RoadmapItemFormValues } from '@/components/admin/RoadmapItemForm';
+import {
+  buildTemplateDailyLog,
+  computeProgress,
+  detectCompletedDayIds,
+  findWeekMilestone,
+  getNextIncompleteDay,
+  getWeekMilestoneInsert,
+} from '@/lib/curriculum/month1-utils';
+import { MONTH1 } from '@/content/curriculum/month1';
 import {
   createArtifact,
   createDailyLog,
@@ -28,6 +38,7 @@ import {
   updateDailyLog,
   updateRoadmapItem,
 } from '@/lib/roadmap/queries';
+import type { CurriculumDayTemplate } from '@/types/curriculum';
 import type { AdminRoadmapDataSet, ArtifactRow, DailyLogRow, RoadmapItem, TagRow } from '@/types/roadmap';
 
 type FlatDailyLog = DailyLogRow & { roadmapTitle: string };
@@ -70,11 +81,18 @@ function AdminWorkspace({ user, signOut }: { user: User; signOut: () => Promise<
 
   const [newTagName, setNewTagName] = useState('');
   const [newTagColor, setNewTagColor] = useState('');
+  const [creatingDayId, setCreatingDayId] = useState<string | null>(null);
 
   const flatLogs = useMemo(() => flattenLogs(data.items), [data.items]);
   const flatArtifacts = useMemo(() => flattenArtifacts(data.items), [data.items]);
   const roadmapOptions = useMemo(() => toRoadmapOptions(data.items), [data.items]);
   const dailyLogOptions = useMemo(() => toDailyLogOptions(flatLogs), [flatLogs]);
+  const completedDayIds = useMemo(() => detectCompletedDayIds(flatLogs), [flatLogs]);
+  const curriculumProgress = useMemo(() => computeProgress(MONTH1, completedDayIds), [completedDayIds]);
+  const nextCurriculumDay = useMemo(
+    () => getNextIncompleteDay(MONTH1, completedDayIds),
+    [completedDayIds],
+  );
 
   const refreshData = useCallback(async () => {
     setLoading(true);
@@ -105,6 +123,63 @@ function AdminWorkspace({ user, signOut }: { user: User; signOut: () => Promise<
       const text = caughtError instanceof Error ? caughtError.message : 'Action failed.';
       setError(text);
     }
+  };
+
+  const ensureWeekMilestones = useCallback(async () => {
+    const ids = new Map<number, string>();
+    let nextSortOrder = Math.max(10, ...data.items.map((item) => item.sort_order + 1));
+    const mutableItems = [...data.items];
+
+    for (let week = 1; week <= 4; week += 1) {
+      const existing = findWeekMilestone(mutableItems, week);
+      if (existing) {
+        ids.set(week, existing.id);
+        continue;
+      }
+
+      const created = await createRoadmapItem(getWeekMilestoneInsert(week, user.id, nextSortOrder));
+      nextSortOrder += 1;
+      ids.set(week, created.id);
+      mutableItems.push({
+        ...created,
+        dailyLogs: [],
+        artifacts: [],
+        progressPercent: 0,
+      });
+    }
+
+    return ids;
+  }, [data.items, user.id]);
+
+  const handleCreateCurriculumLog = async (day: CurriculumDayTemplate) => {
+    if (completedDayIds.has(day.id)) {
+      setMessage(`${day.id} already has a daily log.`);
+      setError(null);
+      return;
+    }
+
+    setCreatingDayId(day.id);
+    await withFeedback(async () => {
+      const weekMilestoneIds = await ensureWeekMilestones();
+      const milestoneId = weekMilestoneIds.get(day.week);
+      if (!milestoneId) {
+        throw new Error(`Week ${day.week} milestone is missing.`);
+      }
+
+      const template = buildTemplateDailyLog(day);
+      await createDailyLog({
+        roadmap_item_id: milestoneId,
+        user_id: user.id,
+        log_date: new Date().toISOString().slice(0, 10),
+        title: template.title,
+        notes: template.notes,
+        status: 'done',
+        planned_hours: template.plannedHours,
+        actual_hours: template.plannedHours,
+        is_public: true,
+      });
+    }, `${day.id} daily log created from template.`);
+    setCreatingDayId(null);
   };
 
   const handleRoadmapCreate = async (values: RoadmapItemFormValues) => {
@@ -242,6 +317,16 @@ function AdminWorkspace({ user, signOut }: { user: User; signOut: () => Promise<
         </div>
       )}
 
+      {!loading && (
+        <CurriculumPanel
+          progress={curriculumProgress}
+          completedDayIds={completedDayIds}
+          nextDay={nextCurriculumDay}
+          creatingDayId={creatingDayId}
+          onCreateDailyLog={handleCreateCurriculumLog}
+        />
+      )}
+
       <AdminTable title="Roadmap Items" description="CRUD milestones with status, hours, order, and visibility.">
         <RoadmapItemForm onSubmit={handleRoadmapCreate} submitLabel="Create Milestone" />
         <div className="mt-4 space-y-3">
@@ -251,7 +336,7 @@ function AdminWorkspace({ user, signOut }: { user: User; signOut: () => Promise<
                 <div>
                   <p className="text-sm font-semibold text-slate-100">{item.title}</p>
                   <p className="text-xs text-slate-400">
-                    {item.phase} · {item.status} · {item.start_date} → {item.end_date ?? 'Open'}
+                    {item.phase} - {item.status} - {item.start_date} to {item.end_date ?? 'Open'}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -309,7 +394,7 @@ function AdminWorkspace({ user, signOut }: { user: User; signOut: () => Promise<
                 <div>
                   <p className="text-sm font-semibold text-slate-100">{log.title}</p>
                   <p className="text-xs text-slate-400">
-                    {log.log_date} · {log.roadmapTitle} · {log.status ?? 'no status'}
+                    {log.log_date} - {log.roadmapTitle} - {log.status ?? 'no status'}
                   </p>
                   {log.notes && <p className="mt-1 text-sm text-slate-300">{log.notes}</p>}
                 </div>
@@ -372,7 +457,7 @@ function AdminWorkspace({ user, signOut }: { user: User; signOut: () => Promise<
                 <div>
                   <p className="text-sm font-semibold text-slate-100">{artifact.title}</p>
                   <p className="text-xs text-slate-400">
-                    {artifact.type} · {artifact.roadmapTitle} · {artifact.is_public ? 'public' : 'private'}
+                    {artifact.type} - {artifact.roadmapTitle} - {artifact.is_public ? 'public' : 'private'}
                   </p>
                   <a
                     href={artifact.url}
@@ -464,7 +549,7 @@ function AdminWorkspace({ user, signOut }: { user: User; signOut: () => Promise<
                 className="text-rose-300 transition hover:text-rose-200"
                 aria-label={`Delete tag ${tag.name}`}
               >
-                ×
+                x
               </button>
             </span>
           ))}
@@ -473,7 +558,7 @@ function AdminWorkspace({ user, signOut }: { user: User; signOut: () => Promise<
       </AdminTable>
 
       <p className="text-xs text-slate-500">
-        Owner UID policy applies at Supabase RLS level. Client checks are UI-level convenience.
+        Works in local mode by default. If Supabase is configured, the same UI actions use Supabase tables.
       </p>
     </div>
   );
@@ -493,7 +578,7 @@ export default function AdminPage() {
           </Link>
           <h1 className="text-3xl font-bold text-white md:text-4xl">Roadmap Admin Panel</h1>
           <p className="max-w-3xl text-sm text-slate-300">
-            Daily update workspace for milestones, logs, and artifacts. Designed for static export with client auth and RLS.
+            Daily update workspace for milestones, logs, and artifacts. Runs in local mode by default and can sync to Supabase when configured.
           </p>
         </header>
 
