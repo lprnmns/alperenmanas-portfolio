@@ -306,6 +306,12 @@ export default function Home() {
     </AnimatePresence>
   );
 
+     codex/add-loading-animation-with-logo-j7hum0
+  const contentClasses = clsx(
+    'relative z-10 transition-all duration-700 ease-out',
+    stage === 'final' ? 'opacity-100 blur-0' : 'blur-sm',
+    stage !== 'final' && 'opacity-30 animate-content-flow motion-reduce:animate-none'
+  );
   return (
     <main className="min-h-screen bg-slate-900 text-white overflow-x-hidden">
       <LoadingScreen progress={progress} stage={stage} />
@@ -316,6 +322,7 @@ export default function Home() {
           stage === "final" ? "opacity-100 blur-0" : "opacity-25 blur-sm",
         )}
       >
+        main
         <AnimatedBackground />
         {isMounted
           ? createPortal(announcementContent, document.body)

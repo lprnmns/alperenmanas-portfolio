@@ -79,10 +79,21 @@ const config: Config = {
             height: '0',
           },
         },
+        'content-flow': {
+          '0%, 100%': {
+            transform: 'translateY(0)',
+            opacity: '0.35',
+          },
+          '50%': {
+            transform: 'translateY(-3%)',
+            opacity: '0.15',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'content-flow': 'content-flow 10s ease-in-out infinite',
       },
     },
   },
