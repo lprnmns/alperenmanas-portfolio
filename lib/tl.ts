@@ -81,7 +81,7 @@ const TR: Txt = {
   roles: 'Backend · Full-stack · Yapay Zekâ / LLM · Taşınmaya açığım',
   btnCv: 'CV’yi aç',
   btnMail: 'E-posta gönder',
-  paperA: 'Aralarında Vite, Node.js undici ve three.js’in de bulunduğu ',
+  paperA: 'Aralarında Vite, Node.js undici ve three.js’in de bulunduğu, dünya çapında kullanılan ',
   paperMark: '{repos} projeye {total} kod katkım kabul edildi.',
   paperB: 'Yapay zekâ destekli denetimle hata adayı buluyorum, resmî referansla doğruluyorum, düzeltmeyi hatayı kanıtlayan bir testle gönderiyorum.',
   strip: [
@@ -140,7 +140,7 @@ const EN: Txt = {
   roles: 'Backend · Full-stack · AI / LLM · Open to relocating',
   btnCv: 'Open CV',
   btnMail: 'Send email',
-  paperA: 'Including Vite, Node.js undici and three.js: ',
+  paperA: 'In widely used open-source projects, including Vite, Node.js undici and three.js: ',
   paperMark: '{total} merged contributions in {repos} projects.',
   paperB: 'I find bug candidates with AI-assisted review, confirm them against an official reference, and send each fix with a test that proves the bug.',
   strip: [

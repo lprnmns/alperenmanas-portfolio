@@ -8,6 +8,22 @@ type DemoRes = { ref: boolean; before: boolean; after: boolean } | null; // true
 
 const fill = (t: string, v: Record<string, string | number>) => t.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ''));
 
+// Sayı CSS ile sıfırdan sayarak yükselir (@property); ekran okuyucu gerçek sayıyı okur, JS beklenmez
+function Count({ to }: { to: number }) {
+  return (
+    <>
+      <span className={s.count} style={{ ['--to' as string]: to }} aria-hidden="true" />
+      <span className={s.srOnly}>{to}</span>
+    </>
+  );
+}
+function withCounts(t: string, v: Record<string, number>) {
+  return t.split(/(\{\w+\})/).map((part, i) => {
+    const m = part.match(/^\{(\w+)\}$/);
+    return m && typeof v[m[1]] === 'number' ? <Count key={i} to={v[m[1]]} /> : <span key={i}>{part}</span>;
+  });
+}
+
 function fmtDate(iso: string, lang: Lang) {
   const d = new Date(iso + 'T12:00:00Z');
   return d.toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -175,7 +191,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
             </div>
             <div className={s.paper}>
               <p className={s.paperBig}>
-                {t.paperA}<mark className={s.pen}>{fill(t.paperMark, vars)}</mark>
+                {t.paperA}<mark className={s.pen}>{withCounts(t.paperMark, vars)}</mark>
               </p>
               <p className={s.paperSmall}>{t.paperB}</p>
             </div>
@@ -185,8 +201,9 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
               <a key={c.id} className={s.stripCell} href={`#ev-${c.id}`} onClick={() => pick(c.id)}>
                 {c.img && <img src={c.img} alt="" className={s.stripImg} />}
                 {c.dual && (
-                  <span className={s.dual}>
+                  <span className={s.dualTile}>
                     <img src={IMG.bgts} alt="BGTS logosu" />
+                    <i aria-hidden="true" />
                     <img src={IMG.ptt} alt="PTT logosu" />
                   </span>
                 )}
