@@ -22,7 +22,7 @@ type Project = {
   points?: string[];
   flow?: string[];
   tech: string;
-  image?: { src: string; alt: string };
+  image?: { src: string; alt: string; pos?: string };
   links: { label: string; url: string; kind: 'web' | 'github' }[];
 };
 type Job = { org: string; role: string; date: string; points: string[]; tech?: string; link?: { label: string; url: string } };
@@ -36,10 +36,12 @@ export type Content = {
   available: string;
   name: string;
   role: string;
+  positionsLabel: string;
+  positions: string[];
   intro: string;
   edu: string;
   cta: { cv: string; email: string };
-  photoCaption: string;
+  photos: { src: string; alt: string; caption: string; w: number; h: number }[];
   photoAlt: string;
   proofs: Proof[];
   oss: { title: string; lead: string; deepTitle: string; deep: Deep[]; othersTitle: string; others: Fix[]; all: string };
@@ -91,15 +93,20 @@ export const CONTENT: Record<Lang, Content> = {
     description:
       'Bilgisayar mühendisliği 4. sınıf öğrencisi. 56 açık kaynak projede 150 merge edilmiş PR, hackathon birinciliği, TEKNOFEST 2026 finali. 8 Şubat 2027\'den itibaren İME stajı arıyor.',
     nav: { oss: 'Açık Kaynak', projects: 'Projeler', experience: 'Deneyim', contact: 'İletişim' },
-    langSwitch: { label: 'EN', href: '/en' },
-    available: "İME stajı arıyorum · 8 Şubat 2027'den itibaren 14 hafta · Taşınmaya açığım",
+    langSwitch: { label: 'EN', href: '/en?lang=en' },
+    available: "8 Şubat 2027'den itibaren 14 haftalık İME stajı arıyorum · Taşınmaya açığım",
     name: 'Alperen Manas',
-    role: 'Yazılım Geliştirici · Backend & Yapay Zekâ',
+    role: 'Bilgisayar Mühendisliği 4. sınıf öğrencisi · Yazılım Geliştirici',
+    positionsLabel: 'İlgilendiğim pozisyonlar',
+    positions: ['Backend', 'Full-stack', 'Yapay Zekâ / LLM'],
     intro:
       'Çözümü hemen belli olmayan problemlerle uğraşmayı seviyorum: açık kaynak projelerde hataları testlerle doğrulayıp düzeltiyor, ürünlerimi uçtan uca geliştiriyorum. Yeni teknolojileri öğrenip farklı fikirleri deneyebileceğim ekiplerde çalışmak istiyorum.',
-    edu: 'Kırıkkale Üniversitesi · Bilgisayar Mühendisliği 4. sınıf · GNO 3.21',
+    edu: 'Kırıkkale Üniversitesi · GNO 3.21 · Mezuniyet 2027',
     cta: { cv: "CV'yi indir", email: 'E-posta gönder' },
-    photoCaption: 'Monad Blitz Ankara 2025 · birincilik',
+    photos: [
+      { src: '/img/monad-blitz.webp', alt: 'Alperen Manas, Monad Blitz hackathonunda birincilik ödülüyle', caption: 'Monad Blitz 2025 · Birincilik', w: 600, h: 800 },
+      { src: '/img/teknofest-odul.webp', alt: 'Alperen Manas, TEKNOFEST 2026 En İyi Sistem Tasarımı ödülüyle', caption: 'TEKNOFEST 2026 · En İyi Sistem Tasarımı', w: 480, h: 599 },
+    ],
     photoAlt: 'Alperen Manas, Monad Blitz hackathonunda birincilik ödülüyle',
     proofs: [
       { icon: 'trophy', big: 'Birincilik', title: 'Blockchain Hackathonu', sub: 'Monad Blitz, 2025' },
@@ -167,7 +174,7 @@ export const CONTENT: Record<Lang, Content> = {
           name: 'Klinik Akış AI',
           kicker: 'Klinikler için yapay zekâ randevu asistanı',
           text: "WhatsApp'tan gelen randevu taleplerini yorumlayan, canlı uygunluğu kontrol eden, onay alıp ortak takvime yazan ve belirsiz ya da hassas mesajları personele devreden ürünü geliştirdim.",
-          flow: ['WhatsApp mesajı', 'Talebi yorumla', 'Uygunluğu kontrol et', 'Onay al', 'Takvime yaz'],
+          image: { src: '/img/klinik-panel.webp', alt: 'Klinik Akış: hastanın WhatsApp konuşması ve klinik paneli' },
           tech: 'Python · TypeScript · LLM API\'leri · WhatsApp entegrasyonu · iş akışı otomasyonu',
           links: KLINIK_LINKS,
         },
@@ -178,7 +185,7 @@ export const CONTENT: Record<Lang, Content> = {
           text: 'Görüntü işleme dışındaki yazılımı üstlendim: takip ve atış kontrol algoritması, seri haberleşme, backend, operatör konsolu ve sistem entegrasyonu.',
           points: ['Final: 12 hedefin 11\'i vuruldu', 'Hareketli hedeflerde dost-düşman ayrımıyla 8 hedefin 7\'si vuruldu'],
           tech: 'Python · FastAPI · OpenCV/YOLO · Kalman/PID · C++ (Raspberry Pi Pico 2) · Vue 3 · Three.js',
-          image: { src: '/img/teknofest.webp', alt: 'Operatör konsolu: canlı YOLO tespiti ve 3B dijital ikiz' },
+          image: { src: '/img/teknofest-taret.webp', alt: 'Alperen Manas, TEKNOFEST atış alanında İSTİKLAL taretiyle', pos: 'center 30%' },
           links: TF_LINKS,
         },
       ],
@@ -228,15 +235,20 @@ export const CONTENT: Record<Lang, Content> = {
     description:
       'Final-year Computer Engineering student. 150 merged PRs across 56 open-source projects, hackathon winner, TEKNOFEST 2026 finalist. Looking for a 14-week internship from 8 February 2027.',
     nav: { oss: 'Open Source', projects: 'Projects', experience: 'Experience', contact: 'Contact' },
-    langSwitch: { label: 'TR', href: '/' },
+    langSwitch: { label: 'TR', href: '/?lang=tr' },
     available: 'Looking for a 14-week internship from 8 Feb 2027 · Open to relocating',
     name: 'Alperen Manas',
-    role: 'Software Engineer · Backend & AI',
+    role: 'Final-year Computer Engineering student · Software Engineer',
+    positionsLabel: 'Roles I am looking for',
+    positions: ['Backend', 'Full-stack', 'AI / LLM'],
     intro:
       'I like problems whose solution is not obvious at first. I find and fix bugs in widely used open-source projects, proving each one with a test, and I build my own products end to end. I want to join a team where I can keep learning new technologies and try new ideas.',
-    edu: 'Kırıkkale University · Computer Engineering, final year · GPA 3.21',
+    edu: 'Kırıkkale University · GPA 3.21 · Graduating 2027',
     cta: { cv: 'Download CV', email: 'Send email' },
-    photoCaption: 'Monad Blitz Ankara 2025 · 1st place',
+    photos: [
+      { src: '/img/monad-blitz.webp', alt: 'Alperen Manas holding the first-place prize at Monad Blitz', caption: 'Monad Blitz 2025 · 1st place', w: 600, h: 800 },
+      { src: '/img/teknofest-odul.webp', alt: 'Alperen Manas with the TEKNOFEST 2026 Best System Design award', caption: 'TEKNOFEST 2026 · Best System Design', w: 480, h: 599 },
+    ],
     photoAlt: 'Alperen Manas holding the first-place prize at Monad Blitz',
     proofs: [
       { icon: 'trophy', big: '1st place', title: 'Blockchain hackathon', sub: 'Monad Blitz, 2025' },
@@ -304,7 +316,7 @@ export const CONTENT: Record<Lang, Content> = {
           name: 'Klinik Akış AI',
           kicker: 'AI appointment assistant for clinics',
           text: 'It reads appointment requests arriving on WhatsApp, checks live availability, books after the patient confirms, and hands unclear or sensitive messages to staff.',
-          flow: ['WhatsApp message', 'Understand request', 'Check availability', 'Confirm', 'Book'],
+          image: { src: '/img/klinik-panel.webp', alt: 'Klinik Akış: the patient’s WhatsApp chat and the clinic dashboard' },
           tech: 'Python · TypeScript · LLM APIs · WhatsApp integration · workflow automation',
           links: KLINIK_LINKS,
         },
@@ -315,7 +327,7 @@ export const CONTENT: Record<Lang, Content> = {
           text: 'I owned all the software except computer vision: tracking and fire control, serial communication, backend, operator console and system integration.',
           points: ['Final: 11 of 12 targets hit', 'Moving targets with friend/foe identification: 7 of 8 hit'],
           tech: 'Python · FastAPI · OpenCV/YOLO · Kalman/PID · C++ (Raspberry Pi Pico 2) · Vue 3 · Three.js',
-          image: { src: '/img/teknofest.webp', alt: 'Operator console: live YOLO detection and 3D digital twin' },
+          image: { src: '/img/teknofest-taret.webp', alt: 'Alperen Manas with the İSTİKLAL turret on the TEKNOFEST range', pos: 'center 30%' },
           links: TF_LINKS,
         },
       ],

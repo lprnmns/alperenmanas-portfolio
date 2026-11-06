@@ -41,6 +41,14 @@ export function Site({ lang }: { lang: Lang }) {
             </p>
             <h1>{c.name}</h1>
             <p className="role">{c.role}</p>
+            <p className="positions">
+              <span className="positions-label">{c.positionsLabel}:</span>
+              {c.positions.map((p) => (
+                <span key={p} className="pos">
+                  {p}
+                </span>
+              ))}
+            </p>
             <p className="intro">{c.intro}</p>
             <p className="edu">{c.edu}</p>
             <div className="cta">
@@ -62,13 +70,17 @@ export function Site({ lang }: { lang: Lang }) {
               </a>
             </div>
           </div>
-          <figure className="hero-photo">
-            <img src="/img/monad-blitz.webp" alt={c.photoAlt} width={600} height={800} fetchPriority="high" />
-            <figcaption>
-              <Icon name="trophy" />
-              {c.photoCaption}
-            </figcaption>
-          </figure>
+          <div className="hero-photos">
+            {c.photos.map((ph, i) => (
+              <figure key={ph.src} className={`polaroid p${i + 1}`}>
+                <img src={ph.src} alt={ph.alt} width={ph.w} height={ph.h} fetchPriority={i === 0 ? 'high' : 'auto'} />
+                <figcaption>
+                  <Icon name={i === 0 ? 'trophy' : 'medal'} />
+                  {ph.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </section>
 
         {/* 2. Kanıt şeridi */}
@@ -159,7 +171,15 @@ export function Site({ lang }: { lang: Lang }) {
             {c.projects.items.map((p) => (
               <article key={p.name} className="card project">
                 {p.image ? (
-                  <img className="shot" src={p.image.src} alt={p.image.alt} loading="lazy" width={1200} height={600} />
+                  <img
+                    className="shot"
+                    src={p.image.src}
+                    alt={p.image.alt}
+                    loading="lazy"
+                    width={1200}
+                    height={600}
+                    style={p.image.pos ? { objectPosition: p.image.pos } : undefined}
+                  />
                 ) : p.flow ? (
                   <ol className="flow" aria-label={p.kicker}>
                     {p.flow.map((s, i) => (
