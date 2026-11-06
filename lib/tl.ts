@@ -97,7 +97,7 @@ const TR: Txt = {
   paperMark: '{repos} projeye {total} kod katkım kabul edildi.',
   paperB: 'Yapay zekâ destekli denetimle hata adayı buluyorum, resmî referansla doğruluyorum, düzeltmeyi hatayı kanıtlayan bir testle gönderiyorum.',
   strip: [
-    { id: 'teknofest', img: IMG.t, t: 'TEKNOFEST 2026 finalisti', d: 'En İyi Sistem Tasarımı · 11/12 isabet' },
+    { id: 'teknofest', img: IMG.t, t: 'TEKNOFEST 2026 finalisti', d: 'En İyi Sistem Tasarımı Ödülü' },
     { id: 'monad', img: IMG.m, t: 'Hackathon birinciliği', d: 'Monad Blitz, 2025' },
     { id: 'klinik', img: IMG.k, t: '2 canlı ürün', d: 'Klinik Akış AI · Zenith Trader (100+)' },
     { id: 'bgts', dual: true, t: 'Deneyim', d: '', rows: [{ img: IMG.bgts, t: 'BGTS (BilgeAdam)', d: 'Yapay zekâ stajı' }, { img: IMG.ptt, t: 'PTT Genel Müdürlüğü', d: 'DevOps stajı' }] },
@@ -160,7 +160,7 @@ const EN: Txt = {
   paperMark: '{total} merged contributions in {repos} projects.',
   paperB: 'I find bug candidates with AI-assisted review, confirm them against an official reference, and send each fix with a test that proves the bug.',
   strip: [
-    { id: 'teknofest', img: IMG.t, t: 'TEKNOFEST 2026 finalist', d: 'Best System Design · 11/12 hits' },
+    { id: 'teknofest', img: IMG.t, t: 'TEKNOFEST 2026 finalist', d: 'Best System Design Award' },
     { id: 'monad', img: IMG.m, t: 'Hackathon winner', d: 'Monad Blitz, 2025' },
     { id: 'klinik', img: IMG.k, t: '2 live products', d: 'Klinik Akış AI · Zenith Trader (100+)' },
     { id: 'bgts', dual: true, t: 'Experience', d: '', rows: [{ img: IMG.bgts, t: 'BGTS (BilgeAdam)', d: 'AI internship' }, { img: IMG.ptt, t: 'PTT (Turkish Post)', d: 'DevOps internship' }] },
