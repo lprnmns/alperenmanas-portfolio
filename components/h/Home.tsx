@@ -127,7 +127,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
   const Detail = ({ it, phone }: { it: Item; phone?: boolean }) => (
     <>
       {!phone && <p className={s.pMeta}>{it.date} · {it.tag}</p>}
-      {it.img && <img src={it.img} alt={it.alt ?? ''} className={phone ? s.phoneImg : s.selImg} />}
+      {(it.panelImg ?? it.img) && <img src={it.panelImg ?? it.img} alt={it.alt ?? ''} className={phone ? s.phoneImg : s.selImg} />}
       {!phone && <h2 className={s.pTitle}>{it.title}</h2>}
       <p className={phone ? s.phoneDesc : s.pDesc}>{it.desc}</p>
       {it.demo && (
@@ -297,7 +297,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
                   <div className={s.slides}>
                     {awards.map((a, i) => (
                       <div key={a.id} className={`${s.slide} ${slide === i ? s.slideOn : ''}`} aria-hidden={slide !== i}>
-                        <div className={s.slideImgWrap}><img className={s.slideImg} src={a.img} alt={a.alt ?? ''} /></div>
+                        <div className={s.slideImgWrap}><img className={s.slideImg} src={a.panelImg ?? a.img} alt={a.alt ?? ''} /></div>
                         <div className={s.slideText}>
                           <p className={s.pMeta}>{a.date} · {a.tag}</p>
                           <h2 className={s.pTitle}>{a.title}</h2>
