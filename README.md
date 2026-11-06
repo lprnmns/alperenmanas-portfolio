@@ -1,23 +1,15 @@
-# Alperen Manas Portfolio
+# alperenmanas.app
 
-## Available Routes
-- `/` portfolio homepage
-- `/projects/[slug]` project detail pages
-- `/roadmap` public roadmap hiring view (timeline, progress, deep dive)
-- `/admin` owner-gated roadmap admin panel (Supabase auth + RLS)
+Alperen Manas'ın kişisel sitesi. Tek sayfa, statik (Next.js `output: 'export'`), istemci tarafında JavaScript gerektirmez.
 
-## Local Setup
-1. Install dependencies:
-   - `npm install`
-2. Configure environment:
-   - copy `.env.example` to `.env.local`
-   - set Supabase URL/anon key/owner uid values
-3. Run development server:
-   - `npm run dev`
+- `/` Türkçe · `/en` English
+- İçerik: `lib/content.ts` (iki dil tek dosyada)
+- CV: `public/Alperen_Manas_CV.pdf`
 
-## Supabase Setup
-- Execute `supabase/schema.sql`
-- Execute `supabase/rls.sql`
-- Insert owner user id into `admin_owners`
+```bash
+npm install
+npm run dev
+npm run build   # statik çıktı: out/
+```
 
-See `docs/roadmap-admin-spec.md` for details.
+`main` dalına gönderilen her değişiklik Vercel'de otomatik yayına alınır.
