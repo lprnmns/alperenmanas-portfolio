@@ -24,4 +24,4 @@ export function metaFor(lang: Lang): Metadata {
   };
 }
 
-export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#ffffff' };
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#050a14' };
