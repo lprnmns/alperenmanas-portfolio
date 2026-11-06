@@ -76,6 +76,23 @@ type Txt = {
   footer: string; // {date}
   timelineAria: string;
   panelAria: string;
+  m: {
+    top: string;
+    paperA: string;
+    paperB: string;
+    highlights: string;
+    swipe: string;
+    cards: { id: string; tag: string; t: string; d: string; logo?: 'bgts' | 'ptt' }[];
+    oss: string;
+    stats: { v: string; l: string }[];
+    monthShort: string[];
+    fixes: string;
+    demoBadge: string;
+    showMore: string;
+    exp: string;
+    close: string;
+    contact: string;
+  };
   items: Item[];
 };
 
@@ -117,6 +134,30 @@ const TR: Txt = {
   footer: 'Katkı verisi: GitHub · son güncelleme {date}',
   timelineAria: 'Zaman çizelgesi',
   panelAria: 'Kanıt paneli',
+  m: {
+    top: 'Bilg. Müh. 4. sınıf · Kırıkkale Üni. · GNO 3.21',
+    paperA: 'Vite, Node.js undici ve three.js dahil, dünya çapında kullanılan ',
+    paperB: 'Hata adayını yapay zekâ destekli denetimle buluyor, resmî referansla doğruluyor, testle kanıtlayıp düzeltiyorum.',
+    highlights: 'ÖNE ÇIKANLAR',
+    swipe: 'kaydır →',
+    cards: [
+      { id: 'teknofest', tag: 'ÖDÜL · TAKIMLA', t: 'TEKNOFEST 2026 finalisti', d: 'En İyi Sistem Tasarımı Ödülü' },
+      { id: 'monad', tag: 'ÖDÜL', t: 'Hackathon birinciliği', d: 'Monad Blitz, 2025' },
+      { id: 'klinik', tag: 'CANLI ÜRÜN', t: 'Klinik Akış AI', d: 'WhatsApp’ta yapay zekâ randevu asistanı' },
+      { id: 'zenith', tag: 'CANLI ÜRÜN · 100+ KULLANICI', t: 'Zenith Trader', d: 'Copy-trading platformu' },
+      { id: 'bgts', tag: 'STAJ · 2026', t: 'BGTS (BilgeAdam)', d: 'Yapay zekâ mühendisliği · RAG', logo: 'bgts' },
+      { id: 'ptt', tag: 'STAJ · 2025', t: 'PTT Genel Müdürlüğü', d: 'DevOps · Docker, Linux', logo: 'ptt' },
+    ],
+    oss: 'AÇIK KAYNAK · KABUL EDİLEN KATKILAR',
+    stats: [{ v: '{total}', l: 'kabul edilen katkı' }, { v: '{repos}', l: 'proje' }, { v: '{mer}', l: 'meriyah · ayda 43M indirme' }, { v: '{mj}', l: 'minijinja · Flask’ın yaratıcısının' }],
+    monthShort: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'],
+    fixes: 'SEÇİLMİŞ DÜZELTMELER · DOKUN, DETAYI AÇ',
+    demoBadge: 'CANLI DEMO',
+    showMore: '{n} düzeltme daha göster',
+    exp: 'DENEYİM VE EĞİTİM',
+    close: 'Kapat',
+    contact: 'İletişim',
+  },
   items: [
     { id: 'ime', big: true, group: 'next', date: '8 Şub 2027', tag: 'Sıradaki', title: 'İME stajı: ekibinizde 14 hafta', short: 'Backend, full-stack veya yapay zekâ/LLM. Şehir fark etmez.', desc: '8 Şubat 2027’den itibaren 14 hafta, tam zamanlı. Üretimde çalışan bir sistemde sorumluluk alabileceğim bir ekip arıyorum.', facts: [{ k: 'Başlangıç', v: '8 Şubat 2027' }, { k: 'Süre', v: '14 hafta, tam zamanlı' }], href: LINKS.mail, linkText: 'E-posta gönder' },
     { id: 'klinik', big: true, group: 'next', date: 'Canlıda', tag: 'Ürün', title: 'Klinik Akış AI', short: 'WhatsApp üzerinden çalışan yapay zekâ randevu asistanı.', img: IMG.k, alt: 'Klinik Akış AI: WhatsApp konuşması ve klinik paneli', desc: 'WhatsApp’tan gelen randevu taleplerini yorumlayan, canlı uygunluğu kontrol eden, onay alıp ortak takvime yazan asistan.', bullets: ['Belirsiz veya hassas mesajları personele devreder', 'Python, TypeScript, LLM API’leri, WhatsApp entegrasyonu'], href: 'https://klinikakis.com', linkText: 'klinikakis.com' },
@@ -180,6 +221,30 @@ const EN: Txt = {
   footer: 'Contribution data: GitHub · last updated {date}',
   timelineAria: 'Timeline',
   panelAria: 'Evidence panel',
+  m: {
+    top: 'Comp. Eng., final year · Kırıkkale Univ. · GPA 3.21',
+    paperA: 'Including Vite, Node.js undici and three.js: ',
+    paperB: 'I find bug candidates with AI-assisted review, confirm them against an official reference, and fix them with a test that proves the bug.',
+    highlights: 'HIGHLIGHTS',
+    swipe: 'swipe →',
+    cards: [
+      { id: 'teknofest', tag: 'AWARD · TEAM', t: 'TEKNOFEST 2026 finalist', d: 'Best System Design Award' },
+      { id: 'monad', tag: 'AWARD', t: 'Hackathon winner', d: 'Monad Blitz, 2025' },
+      { id: 'klinik', tag: 'LIVE PRODUCT', t: 'Klinik Akış AI', d: 'AI appointment assistant on WhatsApp' },
+      { id: 'zenith', tag: 'LIVE PRODUCT · 100+ USERS', t: 'Zenith Trader', d: 'Copy-trading platform' },
+      { id: 'bgts', tag: 'INTERNSHIP · 2026', t: 'BGTS (BilgeAdam)', d: 'AI engineering · RAG', logo: 'bgts' },
+      { id: 'ptt', tag: 'INTERNSHIP · 2025', t: 'PTT (Turkish Post)', d: 'DevOps · Docker, Linux', logo: 'ptt' },
+    ],
+    oss: 'OPEN SOURCE · MERGED CONTRIBUTIONS',
+    stats: [{ v: '{total}', l: 'merged contributions' }, { v: '{repos}', l: 'projects' }, { v: '{mer}', l: 'meriyah · 43M downloads/mo' }, { v: '{mj}', l: 'minijinja · by Flask’s creator' }],
+    monthShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    fixes: 'SELECTED FIXES · TAP FOR DETAILS',
+    demoBadge: 'LIVE DEMO',
+    showMore: 'Show {n} more fixes',
+    exp: 'EXPERIENCE AND EDUCATION',
+    close: 'Close',
+    contact: 'Contact',
+  },
   items: [
     { id: 'ime', big: true, group: 'next', date: '8 Feb 2027', tag: 'Next', title: 'Internship: 14 weeks on your team', short: 'Backend, full-stack or AI/LLM. Any city.', desc: 'Full-time for 14 weeks from 8 February 2027. I am looking for a team where I can own part of a system running in production.', facts: [{ k: 'Start', v: '8 February 2027' }, { k: 'Length', v: '14 weeks, full-time' }], href: LINKS.mail, linkText: 'Send email' },
     { id: 'klinik', big: true, group: 'next', date: 'Live', tag: 'Product', title: 'Klinik Akış AI', short: 'AI appointment assistant that works over WhatsApp.', img: IMG.k, alt: 'Klinik Akış AI: WhatsApp chat and clinic dashboard', desc: 'Understands appointment requests from WhatsApp, checks live availability, books after confirmation and writes to the shared calendar.', bullets: ['Hands unclear or sensitive messages to staff', 'Python, TypeScript, LLM APIs, WhatsApp integration'], href: 'https://klinikakis.com', linkText: 'klinikakis.com' },

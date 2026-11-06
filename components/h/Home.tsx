@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { LINKS, TEXT, type Item, type Lang } from '@/lib/tl';
+import { IMG, LINKS, TEXT, type Item, type Lang } from '@/lib/tl';
 import type { Summary } from '@/lib/live';
 import s from './h.module.css';
 
@@ -41,6 +41,8 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
   const [demoCode, setDemoCode] = useState(t.demo.code);
   const [demo, setDemo] = useState<DemoRes>(null);
   const [busy, setBusy] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const [cardIdx, setCardIdx] = useState(0);
 
   const vars = {
     mj: sum.perRepo['mitsuhiko/minijinja'] ?? 17,
@@ -96,6 +98,14 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
     const id = window.setTimeout(() => setSlide((x) => (x + 1) % 2), 5000);
     return () => window.clearTimeout(id);
   }, [slide, sel]);
+
+  // telefonda detay penceresi açıkken arka sayfa kaymasın
+  useEffect(() => {
+    if (!sel || !window.matchMedia('(max-width: 720px)').matches) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [sel]);
 
   // #ev-... bağlantısıyla gelindiyse o kaydı aç; Esc ile ödüllere dön
   useEffect(() => {
@@ -174,7 +184,158 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
 
   return (
     <div className={s.root}>
-      <header className={`${s.head} ${s.hPad}`}>
+      {/* ===== TELEFON DÜZENİ (≤720px) ===== */}
+      <div className={s.mob}>
+        <section className={s.mHead}>
+          <p className={s.mTop}>{t.m.top}</p>
+          <h1 className={s.h1}>
+            <button type="button" className={`${s.name} ${s.mName} ${play ? s.play1 : s.play0}`} onClick={() => setPlay((p) => (p ? 0 : 1))} aria-label={t.nameAria}>
+              ALPEREN MANAS
+            </button>
+          </h1>
+          <p className={s.mSeek}>{t.seek}</p>
+          <p className={s.mRoles}>{t.roles}</p>
+          <div className={s.mPaper}>
+            <p className={s.mPaperBig}>{t.m.paperA}<mark className={s.pen}>{withCounts(t.paperMark, vars)}</mark></p>
+            <p className={s.mPaperSmall}>{t.m.paperB}</p>
+          </div>
+          <div className={s.mHiHead}>
+            <h2>{t.m.highlights} · {cardIdx + 1} / {t.m.cards.length}</h2>
+            <span>{t.m.swipe}</span>
+          </div>
+          <div
+            className={s.mCards}
+            onScroll={(e) => {
+              const el = e.currentTarget;
+              const w = (el.firstElementChild as HTMLElement | null)?.offsetWidth ?? 1;
+              setCardIdx(Math.min(t.m.cards.length - 1, Math.round(el.scrollLeft / (w + 10))));
+            }}
+          >
+            {t.m.cards.map((c) => {
+              const it = items.find((i) => i.id === c.id);
+              const img = it?.panelImg ?? it?.img;
+              return (
+                <button key={c.id} type="button" className={s.mCard} onClick={() => pick(c.id)}>
+                  {c.logo ? (
+                    <span className={s.mLogoTile}><img src={c.logo === 'bgts' ? IMG.bgts : IMG.ptt} alt="" /></span>
+                  ) : (
+                    <img src={img} alt="" className={s.mCardImg} loading="lazy" />
+                  )}
+                  <span className={s.mCardBody}>
+                    <span className={s.mCardTag}>{c.tag}</span>
+                    <span className={s.mCardT}>{c.t}</span>
+                    <span className={s.mCardD}>{c.d}</span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <div className={s.mDots} aria-hidden="true">
+            {t.m.cards.map((c, i) => <span key={c.id} className={i === cardIdx ? s.mDotOn : ''} />)}
+          </div>
+        </section>
+
+        <section className={s.mSec}>
+          <h2 className={s.mLabel}>{t.m.oss}</h2>
+          <div className={s.mStats}>
+            {t.m.stats.map((st) => (
+              <div key={st.l}><b>{fill(st.v, vars)}</b><span>{st.l}</span></div>
+            ))}
+          </div>
+          <div className={s.mBars}>
+            {(() => {
+              const ms = Object.keys(sum.months).sort().reverse();
+              const max = Math.max(...ms.map((m) => sum.months[m]));
+              return ms.map((m) => {
+                const [y, mm] = m.split('-');
+                return (
+                  <div key={m} className={s.mBar}>
+                    <span>{t.m.monthShort[Number(mm) - 1]} {y}</span>
+                    <span className={s.mBarTrack}><i style={{ width: `${Math.max(4, (sum.months[m] / max) * 100)}%` }} /></span>
+                    <b>{sum.months[m]}</b>
+                  </div>
+                );
+              });
+            })()}
+          </div>
+        </section>
+
+        <section className={s.mSec}>
+          <h2 className={s.mLabel}>{t.m.fixes}</h2>
+          {(() => {
+            const prs = items.filter((i) => i.isPr);
+            const order = ['mer671', ...prs.map((p) => p.id).filter((id) => id !== 'mer671')];
+            const list = order.map((id) => prs.find((p) => p.id === id)!).filter(Boolean);
+            const shown = showAll ? list : list.slice(0, 5);
+            return (
+              <>
+                {shown.map((it) => (
+                  <button key={it.id} type="button" className={s.mFix} onClick={() => pick(it.id)}>
+                    <span>
+                      <span className={s.mFixTag}>
+                        {it.date} · {it.tag.split(' · ')[0]}
+                        {it.demo && <em>{t.m.demoBadge}</em>}
+                      </span>
+                      <span className={s.mFixT}>{it.title}</span>
+                    </span>
+                    <span className={s.mChev} aria-hidden="true">›</span>
+                  </button>
+                ))}
+                {!showAll && list.length > 5 && (
+                  <button type="button" className={s.mMore} onClick={() => setShowAll(true)}>{fill(t.m.showMore, { n: list.length - 5 })}</button>
+                )}
+                <p className={s.mAll}><a href={LINKS.allPrs} target="_blank" rel="noopener noreferrer">{fill(t.seeAll, { n: sum.total })}</a></p>
+              </>
+            );
+          })()}
+        </section>
+
+        <section className={s.mSec}>
+          <h2 className={s.mLabel}>{t.m.exp}</h2>
+          {['bgts', 'ptt', 'sic'].map((id) => {
+            const it = items.find((i) => i.id === id)!;
+            return (
+              <button key={id} type="button" className={s.mExp} onClick={() => pick(id)}>
+                {id === 'sic' ? <span className={s.mSq} /> : <img src={id === 'bgts' ? IMG.bgts : IMG.ptt} alt="" />}
+                <span>
+                  <span className={s.mExpT}>{it.title}</span>
+                  <span className={s.mExpW}>{it.date} · {it.tag.replace(/^(Staj|Internship|Eğitim|Education) · /, '')}</span>
+                  {it.short && <span className={s.mExpD}>{it.short}</span>}
+                </span>
+              </button>
+            );
+          })}
+        </section>
+
+        <footer className={s.mFoot}>
+          <a href={LINKS.mail}>{LINKS.email}</a>
+          <span>{fill(t.footer, { date: fmtDate(sum.updated, lang) })}</span>
+          <a href={t.lang.href} className={s.mLang}>{lang === 'tr' ? 'English' : 'Türkçe'}</a>
+        </footer>
+
+        <nav className={s.mBar2} aria-label={t.m.contact}>
+          <a className={s.mCv} href={LINKS.cv} target="_blank" rel="noopener noreferrer">CV</a>
+          <a className={s.mWa} href={`${LINKS.wa}?text=${encodeURIComponent(t.waText)}`} target="_blank" rel="noopener noreferrer">{WA}WhatsApp</a>
+          <a className={s.mIco} href={LINKS.mail} aria-label={t.nav.email}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3.5 6.5 12 13l8.5-6.5" /></svg>
+          </a>
+          <a className={s.mIco} href={LINKS.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">{GH}</a>
+          <a className={s.mIco} href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">{LI}</a>
+        </nav>
+
+        {cur && (
+          <div className={s.mSheetBg} onClick={back}>
+            <section className={s.mSheet} role="dialog" aria-modal="true" aria-label={cur.title} onClick={(e) => e.stopPropagation()}>
+              <span className={s.mGrip} aria-hidden="true" />
+              <button type="button" className={s.mClose} onClick={back} aria-label={t.m.close}>×</button>
+              <div className={s.mSheetIn}><Detail it={cur} /></div>
+            </section>
+          </div>
+        )}
+      </div>
+
+      {/* ===== MASAÜSTÜ / TABLET DÜZENİ ===== */}
+      <header className={`${s.head} ${s.hPad} ${s.desk}`}>
         <div className={s.max}>
           <div className={s.topRow}>
             <span>{t.top}</span>
@@ -236,7 +397,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
         </div>
       </header>
 
-      <main className={`${s.main} ${s.hPad}`}>
+      <main className={`${s.main} ${s.hPad} ${s.desk}`}>
         <div className={s.max}>
           <div className={s.split}>
             <section aria-label={t.timelineAria}>
