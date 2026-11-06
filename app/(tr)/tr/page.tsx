@@ -1,7 +1,7 @@
-import { Bento } from '@/components/b/Bento';
+import { HomePage } from '@/components/h/Page';
 
 export const revalidate = 3600;
 
 export default function Page() {
-  return <Bento lang="tr" />;
+  return <HomePage lang="tr" />;
 }

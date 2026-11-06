@@ -91,7 +91,7 @@ export const CONTENT: Record<Lang, Content> = {
     htmlLang: 'tr',
     title: 'Alperen Manas · Yazılım Geliştirici',
     description:
-      'Bilgisayar mühendisliği 4. sınıf öğrencisi. 56 açık kaynak projede 150 merge edilmiş PR, hackathon birinciliği, TEKNOFEST 2026 finali. 8 Şubat 2027\'den itibaren İME stajı arıyor.',
+      'Bilgisayar mühendisliği 4. sınıf öğrencisi. 56 açık kaynak projede 152 merge edilmiş PR, hackathon birinciliği, TEKNOFEST 2026 finali. 8 Şubat 2027\'den itibaren İME stajı arıyor.',
     nav: { oss: 'Açık Kaynak', projects: 'Projeler', experience: 'Deneyim', contact: 'İletişim' },
     langSwitch: { label: 'EN', href: '/en?lang=en' },
     available: "8 Şubat 2027'den itibaren 14 haftalık İME stajı arıyorum · Taşınmaya açığım",
@@ -233,7 +233,7 @@ export const CONTENT: Record<Lang, Content> = {
     htmlLang: 'en',
     title: 'Alperen Manas · Software Engineer',
     description:
-      'Final-year Computer Engineering student. 150 merged PRs across 56 open-source projects, hackathon winner, TEKNOFEST 2026 finalist. Looking for a 14-week internship from 8 February 2027.',
+      'Final-year Computer Engineering student. 152 merged PRs across 56 open-source projects, hackathon winner, TEKNOFEST 2026 finalist. Looking for a 14-week internship from 8 February 2027.',
     nav: { oss: 'Open Source', projects: 'Projects', experience: 'Experience', contact: 'Contact' },
     langSwitch: { label: 'TR', href: '/?lang=tr' },
     available: 'Looking for a 14-week internship from 8 Feb 2027 · Open to relocating',

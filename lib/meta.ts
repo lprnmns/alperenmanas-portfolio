@@ -17,11 +17,11 @@ export function metaFor(lang: Lang): Metadata {
       siteName: 'Alperen Manas',
       locale: lang === 'tr' ? 'tr_TR' : 'en_US',
       type: 'profile',
-      images: [{ url: '/img/og.jpg', width: 600, height: 800, alt: c.photoAlt }],
+      images: [{ url: '/img/og.jpg', width: 1200, height: 630, alt: c.title }],
     },
-    twitter: { card: 'summary', title: c.title, description: c.description, images: ['/img/og.jpg'] },
+    twitter: { card: 'summary_large_image', title: c.title, description: c.description, images: ['/img/og.jpg'] },
     icons: { icon: '/favicon.svg' },
   };
 }
 
-export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#050a14' };
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#0E0F12' };
