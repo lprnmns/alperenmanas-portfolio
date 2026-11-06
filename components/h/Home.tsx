@@ -1,8 +1,12 @@
 'use client';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { IMG, LINKS, TEXT, type Item, type Lang } from '@/lib/tl';
+import { LINKS, TEXT, type Item, type Lang } from '@/lib/tl';
 import type { Summary } from '@/lib/live';
 import s from './h.module.css';
+
+const GH = <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z" /></svg>;
+const LI = <svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="4" fill="#0A66C2" /><path fill="#fff" d="M7.1 9.5h2.6V18H7.1zM8.4 5.4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zM11.3 9.5h2.5v1.2h.04c.35-.66 1.2-1.36 2.47-1.36 2.64 0 3.13 1.74 3.13 4V18h-2.6v-4.1c0-.98-.02-2.24-1.36-2.24-1.37 0-1.58 1.07-1.58 2.17V18h-2.6z" /></svg>;
+const WA = <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91A9.85 9.85 0 0 0 12.04 2zm5.8 14.03c-.24.68-1.42 1.3-1.95 1.35-.5.05-.97.23-3.27-.68-2.77-1.09-4.52-3.93-4.66-4.11-.13-.18-1.11-1.48-1.11-2.82 0-1.34.7-2 .95-2.27.25-.27.54-.34.72-.34h.52c.17 0 .39-.06.61.47.23.54.77 1.88.84 2.02.07.13.11.29.02.47-.09.18-.13.29-.27.45-.13.16-.28.35-.4.47-.13.13-.27.28-.12.55.16.27.7 1.15 1.5 1.86 1.03.92 1.9 1.2 2.17 1.34.27.13.43.11.59-.07.16-.18.68-.79.86-1.06.18-.27.36-.23.61-.14.25.09 1.58.75 1.85.88.27.14.45.2.52.32.07.11.07.66-.17 1.33z" /></svg>;
 
 type DemoRes = { ref: boolean; before: boolean; after: boolean } | null; // true = kabul etti
 
@@ -85,6 +89,13 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
     setDemo(null);
     if (history.replaceState) history.replaceState(null, '', location.pathname + location.search);
   }, []);
+
+  // ödül slaytı: hiçbir olay seçili değilken 5 sn'de bir döner (CSS/hareket ayarından bağımsız)
+  useEffect(() => {
+    if (sel) return;
+    const id = window.setTimeout(() => setSlide((x) => (x + 1) % 2), 5000);
+    return () => window.clearTimeout(id);
+  }, [slide, sel]);
 
   // #ev-... bağlantısıyla gelindiyse o kaydı aç; Esc ile ödüllere dön
   useEffect(() => {
@@ -187,6 +198,9 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
               <div className={s.btns}>
                 <a className={`${s.btn} ${s.btnWhite}`} href={LINKS.cv} target="_blank" rel="noopener noreferrer">{t.btnCv}</a>
                 <a className={`${s.btn} ${s.btnLine}`} href={LINKS.mail}>{t.btnMail}</a>
+                <a className={`${s.btn} ${s.btnLine} ${s.btnIcon}`} href={LINKS.github} target="_blank" rel="noopener noreferrer">{GH}{t.btnGh}</a>
+                <a className={`${s.btn} ${s.btnLine} ${s.btnIcon}`} href={LINKS.linkedin} target="_blank" rel="noopener noreferrer">{LI}{t.btnLi}</a>
+                <a className={`${s.btn} ${s.btnWa} ${s.btnIcon}`} href={`${LINKS.wa}?text=${encodeURIComponent(t.waText)}`} target="_blank" rel="noopener noreferrer">{WA}{t.btnWa}</a>
               </div>
             </div>
             <div className={s.paper}>
@@ -200,17 +214,22 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
             {t.strip.map((c) => (
               <a key={c.id} className={s.stripCell} href={`#ev-${c.id}`} onClick={() => pick(c.id)}>
                 {c.img && <img src={c.img} alt="" className={s.stripImg} />}
-                {c.dual && (
-                  <span className={s.dualTile}>
-                    <img src={IMG.bgts} alt="BGTS logosu" />
-                    <i aria-hidden="true" />
-                    <img src={IMG.ptt} alt="PTT logosu" />
+                {c.rows ? (
+                  <span className={s.expCell}>
+                    <span className={s.stripT}>{c.t}</span>
+                    {c.rows.map((r) => (
+                      <span key={r.t} className={s.expRow}>
+                        <img src={r.img} alt="" />
+                        <span><b>{r.t}</b><em>{r.d}</em></span>
+                      </span>
+                    ))}
+                  </span>
+                ) : (
+                  <span>
+                    <span className={s.stripT}>{c.t}</span>
+                    <span className={s.stripD}>{c.d}</span>
                   </span>
                 )}
-                <span>
-                  <span className={s.stripT}>{c.t}</span>
-                  <span className={s.stripD}>{c.d}</span>
-                </span>
               </a>
             ))}
           </div>
@@ -294,7 +313,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
                     {t.tabs.map((label, i) => (
                       <button key={label} type="button" className={`${s.tab} ${slide === i ? s.tabOn : ''}`} onClick={() => setSlide(i)} aria-pressed={slide === i}>
                         {label}
-                        <span className={s.track}><span className={`${s.bar} ${slide === i ? s.barRun : ''}`} onAnimationEnd={() => setSlide((x) => (x ? 0 : 1))} /></span>
+                        <span className={s.track}><span key={slide === i ? `run-${slide}` : 'idle'} className={`${s.bar} ${slide === i ? s.barRun : ''}`} /></span>
                       </button>
                     ))}
                   </div>

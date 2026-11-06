@@ -16,6 +16,7 @@ export const LINKS = {
   github: 'https://github.com/lprnmns',
   linkedin: 'https://www.linkedin.com/in/alperen-manas-a92aa2378/',
   mail: 'mailto:manasalperen@gmail.com',
+  wa: 'https://wa.me/905075086027',
   email: 'manasalperen@gmail.com',
   allPrs: 'https://github.com/search?q=author%3Alprnmns+is%3Apr+is%3Amerged+-user%3Alprnmns&type=pullrequests',
 };
@@ -57,7 +58,11 @@ type Txt = {
   paperA: string; // {repos} {total}
   paperMark: string;
   paperB: string;
-  strip: { id: string; t: string; d: string; img?: string; dual?: boolean }[];
+  strip: { id: string; t: string; d: string; img?: string; dual?: boolean; rows?: { img: string; t: string; d: string }[] }[];
+  btnGh: string;
+  btnLi: string;
+  btnWa: string;
+  waText: string;
   monthNames: string[];
   monthLabel: string; // {m} {y} {n}
   firstLabel: string; // {m} {y}
@@ -82,6 +87,10 @@ const TR: Txt = {
   roles: 'Backend · Full-stack · Yapay Zekâ / LLM · Taşınmaya açığım',
   btnCv: 'CV’yi aç',
   btnMail: 'E-posta gönder',
+  btnGh: 'GitHub',
+  btnLi: 'LinkedIn',
+  btnWa: 'WhatsApp',
+  waText: 'Merhaba Alperen, sitenden ulaşıyorum.',
   paperA: 'Aralarında Vite, Node.js undici ve three.js’in de bulunduğu, dünya çapında kullanılan ',
   paperMark: '{repos} projeye {total} kod katkım kabul edildi.',
   paperB: 'Yapay zekâ destekli denetimle hata adayı buluyorum, resmî referansla doğruluyorum, düzeltmeyi hatayı kanıtlayan bir testle gönderiyorum.',
@@ -89,7 +98,7 @@ const TR: Txt = {
     { id: 'teknofest', img: IMG.t, t: 'TEKNOFEST 2026 finalisti', d: 'En İyi Sistem Tasarımı · 11/12 isabet' },
     { id: 'monad', img: IMG.m, t: 'Hackathon birinciliği', d: 'Monad Blitz, 2025' },
     { id: 'klinik', img: IMG.k, t: '2 canlı ürün', d: 'Klinik Akış AI · Zenith Trader (100+)' },
-    { id: 'bgts', dual: true, t: 'Deneyim', d: 'BGTS · Yapay zekâ stajı\nPTT · DevOps stajı' },
+    { id: 'bgts', dual: true, t: 'Deneyim', d: '', rows: [{ img: IMG.bgts, t: 'BGTS (BilgeAdam)', d: 'Yapay zekâ stajı · 2026' }, { img: IMG.ptt, t: 'PTT Genel Müdürlüğü', d: 'DevOps stajı · 2025' }] },
   ],
   monthNames: ['OCAK', 'ŞUBAT', 'MART', 'NİSAN', 'MAYIS', 'HAZİRAN', 'TEMMUZ', 'AĞUSTOS', 'EYLÜL', 'EKİM', 'KASIM', 'ARALIK'],
   monthLabel: '{m} {y} · {n} KABUL EDİLEN KATKI',
@@ -141,6 +150,10 @@ const EN: Txt = {
   roles: 'Backend · Full-stack · AI / LLM · Open to relocating',
   btnCv: 'Open CV',
   btnMail: 'Send email',
+  btnGh: 'GitHub',
+  btnLi: 'LinkedIn',
+  btnWa: 'WhatsApp',
+  waText: 'Hi Alperen, I found you through your website.',
   paperA: 'In widely used open-source projects, including Vite, Node.js undici and three.js: ',
   paperMark: '{total} merged contributions in {repos} projects.',
   paperB: 'I find bug candidates with AI-assisted review, confirm them against an official reference, and send each fix with a test that proves the bug.',
@@ -148,7 +161,7 @@ const EN: Txt = {
     { id: 'teknofest', img: IMG.t, t: 'TEKNOFEST 2026 finalist', d: 'Best System Design · 11/12 hits' },
     { id: 'monad', img: IMG.m, t: 'Hackathon winner', d: 'Monad Blitz, 2025' },
     { id: 'klinik', img: IMG.k, t: '2 live products', d: 'Klinik Akış AI · Zenith Trader (100+)' },
-    { id: 'bgts', dual: true, t: 'Experience', d: 'BGTS · AI internship\nPTT · DevOps internship' },
+    { id: 'bgts', dual: true, t: 'Experience', d: '', rows: [{ img: IMG.bgts, t: 'BGTS (BilgeAdam)', d: 'AI internship · 2026' }, { img: IMG.ptt, t: 'PTT (Turkish Post)', d: 'DevOps internship · 2025' }] },
   ],
   monthNames: ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'],
   monthLabel: '{m} {y} · {n} MERGED CONTRIBUTIONS',
