@@ -222,7 +222,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
         : <ul className={s.bullets}>{it.bullets.map((b) => <li key={b}>{b}</li>)}</ul>)}
       {!!it.how?.length && (
         <div className={s.how}>
-          <p className={s.howT}>{t.howT}</p>
+          <p className={s.howT}>{it.howTitle ?? t.howT}</p>
           <dl>
             {it.how.map((h) => <div key={h.k}><dt>{h.k}</dt><dd>{h.v}</dd></div>)}
           </dl>
