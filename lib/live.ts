@@ -11,7 +11,7 @@ export async function getSummary(): Promise<Summary> {
     const items: { closed_at: string; repository_url: string }[] = [];
     let total = 0;
     for (let page = 1; page <= 10; page++) {
-      const r = await fetch(`https://api.github.com/search/issues?q=${q}&per_page=100&page=${page}`, { headers, next: { revalidate: 3600 } });
+      const r = await fetch(`https://api.github.com/search/issues?q=${q}&per_page=100&page=${page}`, { headers, next: { revalidate: 600 } });
       if (!r.ok) throw new Error(String(r.status));
       const j = await r.json();
       total = j.total_count;

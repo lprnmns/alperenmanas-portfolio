@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IMG, LINKS, TEXT, type Item, type Lang } from '@/lib/tl';
 import type { Summary } from '@/lib/live';
 import s from './h.module.css';
@@ -42,12 +42,41 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
   const [demo, setDemo] = useState<DemoRes>(null);
   const [busy, setBusy] = useState(false);
   const [showAll, setShowAll] = useState(false);
-  const [cardIdx, setCardIdx] = useState(0);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const sheetRef = useRef<HTMLElement>(null);
+
+  // Sayfa açılınca GitHub'dan güncel toplamı çek (repo sayısı sunucudan gelir); yeni katkılar bu aya eklenir
+  const [liveTotal, setLiveTotal] = useState<number | null>(null);
+  useEffect(() => {
+    const q = encodeURIComponent('author:lprnmns is:pr is:merged -user:lprnmns');
+    fetch(`https://api.github.com/search/issues?q=${q}&per_page=1`, { headers: { Accept: 'application/vnd.github+json' } })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => { if (j && typeof j.total_count === 'number' && j.total_count >= sum.total) setLiveTotal(j.total_count); })
+      .catch(() => {});
+  }, [sum.total]);
+  const months = useMemo(() => {
+    const m = { ...sum.months };
+    if (liveTotal && liveTotal > sum.total) {
+      const k = new Date().toISOString().slice(0, 7);
+      m[k] = (m[k] ?? 0) + (liveTotal - sum.total);
+    }
+    return m;
+  }, [sum, liveTotal]);
+
+  // İsim animasyonu, fotoğraf dokusu yüklenmeden başlamaz (yavaş bağlantıda isim görünmez kalmasın)
+  const [nameReady, setNameReady] = useState(false);
+  useEffect(() => {
+    const im = new Image();
+    im.onload = () => setNameReady(true);
+    im.src = '/img/name-sprite.webp';
+    if (im.complete) setNameReady(true);
+  }, []);
+  const nameCls = nameReady ? (play ? s.play1 : s.play0) : '';
 
   const vars = {
     mj: sum.perRepo['mitsuhiko/minijinja'] ?? 17,
     mer: sum.perRepo['meriyah/meriyah'] ?? 23,
-    total: sum.total,
+    total: liveTotal ?? sum.total,
     repos: sum.repos,
   };
   const items: Item[] = useMemo(
@@ -58,15 +87,15 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
 
   // ay grupları: canlı veriden; seçilmiş katkılar kendi ayının altında, kalanı "N katkı daha"
   const groups = useMemo(() => {
-    const months = Object.keys(sum.months).sort().reverse();
-    const earliest = months[months.length - 1];
+    const monthKeys = Object.keys(months).sort().reverse();
+    const earliest = monthKeys[monthKeys.length - 1];
     const out: { key: string; label: string; items: Item[]; more: number }[] = [];
     out.push({ key: 'next', label: '', items: items.filter((i) => i.group === 'next'), more: 0 });
-    for (const m of months) {
+    for (const m of monthKeys) {
       const [y, mm] = m.split('-');
       const its = items.filter((i) => i.month === m);
       const prs = its.filter((i) => i.isPr).length;
-      const n = sum.months[m];
+      const n = months[m];
       const name = t.monthNames[Number(mm) - 1];
       out.push({ key: m, label: m === earliest && its.length === 0 ? fill(t.firstLabel, { m: name, y }) : fill(t.monthLabel, { m: name, y, n }), items: its, more: Math.max(0, n - prs) });
     }
@@ -76,7 +105,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
     if (orphan.length) out.push({ key: 'other', label: '', items: orphan, more: 0 });
     out.push({ key: '2025', label: '2025', items: items.filter((i) => i.group === '2025'), more: 0 });
     return out;
-  }, [items, sum, t]);
+  }, [items, months, t]);
 
   const cur = items.find((i) => i.id === sel) ?? null;
   const awards = [items.find((i) => i.id === 'teknofest')!, items.find((i) => i.id === 'monad')!];
@@ -99,13 +128,23 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
     return () => window.clearTimeout(id);
   }, [slide, sel]);
 
-  // telefonda detay penceresi açıkken arka sayfa kaymasın
+  // telefonda detay penceresi: arka sayfa kaymaz, odak pencereye geçer, kapanınca açan öğeye döner
   useEffect(() => {
     if (!sel || !window.matchMedia('(max-width: 720px)').matches) return;
+    const opener = document.activeElement as HTMLElement | null;
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = prev; };
+    closeRef.current?.focus();
+    return () => { document.body.style.overflow = prev; opener?.focus?.(); };
   }, [sel]);
+  const trapTab = (e: React.KeyboardEvent) => {
+    if (e.key !== 'Tab' || !sheetRef.current) return;
+    const f = sheetRef.current.querySelectorAll<HTMLElement>('button, a[href]');
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  };
 
   // #ev-... bağlantısıyla gelindiyse o kaydı aç; Esc ile ödüllere dön
   useEffect(() => {
@@ -116,8 +155,11 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
     return () => window.removeEventListener('keydown', k);
   }, [back, t.items]);
 
+  const [demoErr, setDemoErr] = useState(false);
   async function run(code = demoCode) {
     setBusy(true);
+    setDemoErr(false);
+    try {
     const imp = (p: string) => import(/* webpackIgnore: true */ p);
     const [acorn, m0, m1] = await Promise.all([imp('/demo/acorn-8.14.0.mjs'), imp('/demo/meriyah-7.4.0.mjs'), imp('/demo/meriyah-7.4.1.mjs')]);
     const ok = (f: () => unknown) => { try { f(); return true; } catch { return false; } };
@@ -126,7 +168,12 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
       before: ok(() => m0.parseScript(code)),
       after: ok(() => m1.parseScript(code)),
     });
-    setBusy(false);
+    } catch {
+      setDemo(null);
+      setDemoErr(true);
+    } finally {
+      setBusy(false);
+    }
   }
   const verdict = (accepted: boolean, ref: boolean, role: 'ref' | 'before' | 'after') => {
     if (role === 'ref') return accepted ? t.demo.accepted : t.demo.rejected;
@@ -156,6 +203,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
               </div>
             ))}
           </div>
+          {demoErr && <p className={s.demoErr}>{lang === 'tr' ? 'Demo yüklenemedi. Bağlantınızı kontrol edip tekrar deneyin.' : 'The demo could not load. Check your connection and try again.'}</p>}
           <button
             type="button"
             className={s.demoSwitch}
@@ -177,6 +225,14 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
       {!!it.bullets?.length && (phone
         ? it.bullets.map((b) => <p key={b} className={s.phoneBullet}>{b}</p>)
         : <ul className={s.bullets}>{it.bullets.map((b) => <li key={b}>{b}</li>)}</ul>)}
+      {!!it.how?.length && (
+        <div className={s.how}>
+          <p className={s.howT}>{t.howT}</p>
+          <dl>
+            {it.how.map((h) => <div key={h.k}><dt>{h.k}</dt><dd>{h.v}</dd></div>)}
+          </dl>
+        </div>
+      )}
       {!phone && it.orig && <p className={s.orig}>{it.orig}</p>}
       {it.href && <p className={phone ? s.phoneLink : s.pLink}><a href={it.href} target={it.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer">{it.linkText}</a></p>}
     </>
@@ -189,7 +245,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
         <section className={s.mHead}>
           <p className={s.mTop}>{t.m.top}</p>
           <h1 className={s.h1}>
-            <button type="button" className={`${s.name} ${s.mName} ${play ? s.play1 : s.play0}`} onClick={() => setPlay((p) => (p ? 0 : 1))} aria-label={t.nameAria}>
+            <button type="button" className={`${s.name} ${s.mName} ${nameCls}`} onClick={() => setPlay((p) => (p ? 0 : 1))} aria-label={t.nameAria}>
               ALPEREN MANAS
             </button>
           </h1>
@@ -199,39 +255,25 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
             <p className={s.mPaperBig}>{t.m.paperA}<mark className={s.pen}>{withCounts(t.paperMark, vars)}</mark></p>
             <p className={s.mPaperSmall}>{t.m.paperB}</p>
           </div>
-          <div className={s.mHiHead}>
-            <h2>{t.m.highlights} · {cardIdx + 1} / {t.m.cards.length}</h2>
-            <span>{t.m.swipe}</span>
-          </div>
-          <div
-            className={s.mCards}
-            onScroll={(e) => {
-              const el = e.currentTarget;
-              const w = (el.firstElementChild as HTMLElement | null)?.offsetWidth ?? 1;
-              setCardIdx(Math.min(t.m.cards.length - 1, Math.round(el.scrollLeft / (w + 10))));
-            }}
-          >
+          <h2 className={s.mHiLabel}>{t.m.highlights}</h2>
+          <div className={s.mTiles}>
             {t.m.cards.map((c) => {
               const it = items.find((i) => i.id === c.id);
-              const img = it?.panelImg ?? it?.img;
+              const img = c.id === 'teknofest' ? IMG.t : it?.img;
               return (
-                <button key={c.id} type="button" className={s.mCard} onClick={() => pick(c.id)}>
+                <button key={c.id} type="button" className={s.mTile} onClick={() => pick(c.id)}>
                   {c.logo ? (
-                    <span className={s.mLogoTile}><img src={c.logo === 'bgts' ? IMG.bgts : IMG.ptt} alt="" /></span>
+                    <span className={s.mTileLogo}><img src={c.logo === 'bgts' ? IMG.bgts : IMG.ptt} alt="" /></span>
                   ) : (
-                    <img src={img} alt="" className={s.mCardImg} loading="lazy" />
+                    <img src={img} alt="" className={s.mTileImg} loading="lazy" />
                   )}
-                  <span className={s.mCardBody}>
-                    <span className={s.mCardTag}>{c.tag}</span>
-                    <span className={s.mCardT}>{c.t}</span>
-                    <span className={s.mCardD}>{c.d}</span>
+                  <span className={s.mTileBody}>
+                    <span className={s.mTileT}>{c.t}</span>
+                    <span className={s.mTileD}>{c.d}</span>
                   </span>
                 </button>
               );
             })}
-          </div>
-          <div className={s.mDots} aria-hidden="true">
-            {t.m.cards.map((c, i) => <span key={c.id} className={i === cardIdx ? s.mDotOn : ''} />)}
           </div>
         </section>
 
@@ -244,15 +286,15 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
           </div>
           <div className={s.mBars}>
             {(() => {
-              const ms = Object.keys(sum.months).sort().reverse();
-              const max = Math.max(...ms.map((m) => sum.months[m]));
+              const ms = Object.keys(months).sort().reverse();
+              const max = Math.max(...ms.map((m) => months[m]));
               return ms.map((m) => {
                 const [y, mm] = m.split('-');
                 return (
                   <div key={m} className={s.mBar}>
                     <span>{t.m.monthShort[Number(mm) - 1]} {y}</span>
-                    <span className={s.mBarTrack}><i style={{ width: `${Math.max(4, (sum.months[m] / max) * 100)}%` }} /></span>
-                    <b>{sum.months[m]}</b>
+                    <span className={s.mBarTrack}><i style={{ width: `${Math.max(4, (months[m] / max) * 100)}%` }} /></span>
+                    <b>{months[m]}</b>
                   </div>
                 );
               });
@@ -284,7 +326,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
                 {!showAll && list.length > 5 && (
                   <button type="button" className={s.mMore} onClick={() => setShowAll(true)}>{fill(t.m.showMore, { n: list.length - 5 })}</button>
                 )}
-                <p className={s.mAll}><a href={LINKS.allPrs} target="_blank" rel="noopener noreferrer">{fill(t.seeAll, { n: sum.total })}</a></p>
+                <p className={s.mAll}><a href={LINKS.allPrs} target="_blank" rel="noopener noreferrer">{fill(t.seeAll, { n: vars.total })}</a></p>
               </>
             );
           })()}
@@ -296,7 +338,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
             const it = items.find((i) => i.id === id)!;
             return (
               <button key={id} type="button" className={s.mExp} onClick={() => pick(id)}>
-                {id === 'sic' ? <span className={s.mSq} /> : <img src={id === 'bgts' ? IMG.bgts : IMG.ptt} alt="" />}
+                {id === 'sic' ? <span className={s.mSq}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden="true"><path d="M2 9.5 12 5l10 4.5-10 4.5L2 9.5z" /><path d="M6 11.5V16c0 1.2 2.7 2.5 6 2.5s6-1.3 6-2.5v-4.5" /><path d="M21 10v5" /></svg></span> : <img src={id === 'bgts' ? IMG.bgts : IMG.ptt} alt="" />}
                 <span>
                   <span className={s.mExpT}>{it.title}</span>
                   <span className={s.mExpW}>{it.date} · {it.tag.replace(/^(Staj|Internship|Eğitim|Education) · /, '')}</span>
@@ -325,9 +367,9 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
 
         {cur && (
           <div className={s.mSheetBg} onClick={back}>
-            <section className={s.mSheet} role="dialog" aria-modal="true" aria-label={cur.title} onClick={(e) => e.stopPropagation()}>
+            <section ref={sheetRef} className={s.mSheet} role="dialog" aria-modal="true" aria-label={cur.title} onClick={(e) => e.stopPropagation()} onKeyDown={trapTab}>
               <span className={s.mGrip} aria-hidden="true" />
-              <button type="button" className={s.mClose} onClick={back} aria-label={t.m.close}>×</button>
+              <button ref={closeRef} type="button" className={s.mClose} onClick={back} aria-label={t.m.close}>×</button>
               <div className={s.mSheetIn}><Detail it={cur} /></div>
             </section>
           </div>
@@ -348,7 +390,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
             </nav>
           </div>
           <h1 className={s.h1}>
-            <button type="button" className={`${s.name} ${play ? s.play1 : s.play0}`} onClick={() => setPlay((p) => (p ? 0 : 1))} aria-label={t.nameAria}>
+            <button type="button" className={`${s.name} ${nameCls}`} onClick={() => setPlay((p) => (p ? 0 : 1))} aria-label={t.nameAria}>
               ALPEREN MANAS
             </button>
           </h1>
@@ -449,7 +491,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
                   </div>
                 ))}
               </div>
-              <p className={s.seeAll}><a href={LINKS.allPrs} target="_blank" rel="noopener noreferrer">{fill(t.seeAll, { n: sum.total })}</a></p>
+              <p className={s.seeAll}><a href={LINKS.allPrs} target="_blank" rel="noopener noreferrer">{fill(t.seeAll, { n: vars.total })}</a></p>
             </section>
 
             <aside className={s.panel} aria-label={t.panelAria} aria-live={cur ? 'polite' : 'off'}>

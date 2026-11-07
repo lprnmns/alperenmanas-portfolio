@@ -258,7 +258,8 @@
 .mExp:last-child { border-bottom: 0; }
 .mExp img { width: 40px; height: 40px; object-fit: contain; }
 .mExp > span:last-child { display: flex; flex-direction: column; min-width: 0; }
-.mSq { width: 40px; height: 40px; background: #FFE14D; border: 2px solid #0E0F12; box-sizing: border-box; }
+.mSq { width: 40px; height: 40px; background: #FFE14D; border: 2px solid #0E0F12; box-sizing: border-box; display: grid; place-items: center; color: #0E0F12; }
+.mSq svg { width: 24px; height: 24px; }
 .mExpT { font-size: 16px; font-weight: 800; line-height: 1.25; }
 .mExpW { margin-top: 2px; font-family: var(--font-mono), 'JetBrains Mono', monospace; font-size: 12px; color: #5A5F66; }
 .mExpD { margin-top: 6px; font-size: 14px; line-height: 1.4; color: #3F4349; }
@@ -292,3 +293,41 @@
   .mSeek { font-size: 19px; }
   .mPaper { padding: 12px 14px; }
 }
+
+/* kod ve tek aralıklı yazılarda bitişik harf yok: "=>" ok işaretine dönüşmesin */
+.root code, .orig, .dateTxt, .gLabel, .pMeta, .footNote, .mTop, .mLabel, .mExpW, .mFoot span, .mBar > span:first-child { font-variant-ligatures: none; font-feature-settings: 'liga' 0, 'calt' 0; }
+
+/* derin vaka (detayda) */
+.how { margin-top: 18px; border-top: 1px solid #2B2E33; padding-top: 14px; }
+.howT { margin: 0 0 8px; font-family: var(--font-mono), 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .04em; color: #FFE14D; text-transform: uppercase; }
+.how dl { margin: 0; display: grid; gap: 10px; }
+.how dt { font-size: 13px; font-weight: 700; color: #A8ADB5; }
+.how dd { margin: 2px 0 0; font-size: 15px; line-height: 1.5; color: #E4E5E8; }
+.demoErr { margin: 10px 0 0; font-size: 13px; color: #fca5a5; }
+
+/* telefon: öne çıkanlar 2×3 */
+.mHiLabel { margin: 18px 16px 8px; font-family: var(--font-mono), 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: .06em; color: #A8ADB5; }
+.mTiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: 0 16px; background: #2B2E33; border: 1px solid #2B2E33; }
+.mTile { display: flex; gap: 10px; align-items: center; min-height: 72px; padding: 10px; background: #0E0F12; border: 0; color: #fff; text-align: left; font: inherit; cursor: pointer; }
+.mTile:active { background: #1A1C20; }
+.mTileImg { width: 48px; height: 48px; object-fit: cover; flex: none; }
+.mTileLogo { width: 48px; height: 48px; flex: none; background: #fff; display: grid; place-items: center; }
+.mTileLogo img { width: 36px; height: 36px; object-fit: contain; }
+.mTileBody { display: flex; flex-direction: column; min-width: 0; }
+.mTileT { font-size: 14px; font-weight: 800; line-height: 1.2; }
+.mTileD { margin-top: 2px; font-size: 12.5px; line-height: 1.25; color: #C9CCD1; }
+
+/* dokunma alanları ≥44px */
+.mAll a, .mLang { display: inline-flex; align-items: center; min-height: 44px; }
+.mFoot { gap: 2px; }
+
+/* çok dar ekran: WhatsApp yalnız ikon */
+@media (max-width: 359px) {
+  .mBar2 .mWa { flex: 0 0 46px; font-size: 0; gap: 0; }
+  .mBar2 .mWa svg { width: 22px; height: 22px; }
+  .mBar2 .mCv { flex: 1 1 auto; }
+  .mBar2 { gap: 6px; padding-left: 10px; padding-right: 10px; }
+  .mTileImg, .mTileLogo { display: none; }
+  .mTile { min-height: 64px; }
+}
+.mTileT, .mTileD { overflow-wrap: anywhere; }
