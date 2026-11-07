@@ -19,8 +19,8 @@
   background: url(/img/name-sprite.webp) 0 0 repeat-x; background-size: auto 800%;
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: #fff;
 }
-.play0 { animation: flip0 3.5s step-end both, settle0 3.5s linear both; }
-.play1 { animation: flip1 3.5s step-end both, settle1 3.5s linear both; }
+.play0 { animation: flip0 2s step-end both, settle0 2s linear both; }
+.play1 { animation: flip1 2s step-end both, settle1 2s linear both; }
 @keyframes flip0 { 0% { background-position: 0 0 } 12.5% { background-position: 0 14.2857% } 25% { background-position: 0 28.5714% } 37.5% { background-position: 0 42.8571% } 50% { background-position: 0 57.1428% } 62.5% { background-position: 0 71.4285% } 75% { background-position: 0 85.7142% } 87.5% { background-position: 0 100% } 100% { background-position: 0 100% } }
 @keyframes flip1 { 0% { background-position: 0 0 } 12.5% { background-position: 0 14.2857% } 25% { background-position: 0 28.5714% } 37.5% { background-position: 0 42.8571% } 50% { background-position: 0 57.1428% } 62.5% { background-position: 0 71.4285% } 75% { background-position: 0 85.7142% } 87.5% { background-position: 0 100% } 100% { background-position: 0 100% } }
 @keyframes settle0 { 0%, 78% { -webkit-text-fill-color: transparent } 100% { -webkit-text-fill-color: #fff } }
