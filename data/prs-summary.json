@@ -1,15 +1,15 @@
 {
- "total": 152,
+ "total": 157,
  "repos": 56,
  "months": {
   "2026-08": 4,
   "2026-09": 33,
   "2026-10": 81,
-  "2026-11": 34
+  "2026-11": 39
  },
  "perRepo": {
-  "meriyah/meriyah": 23,
-  "mitsuhiko/minijinja": 17
+  "meriyah/meriyah": 25,
+  "mitsuhiko/minijinja": 19
  },
- "updated": "2026-11-06"
+ "updated": "2026-11-07"
 }

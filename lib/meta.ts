@@ -10,8 +10,8 @@ export function metaFor(lang: Lang, n?: { total: number; repos: number }): Metad
   const repos = n?.repos ?? 56;
   const description =
     lang === 'tr'
-      ? `Bilgisayar mühendisliği 4. sınıf öğrencisi. ${repos} açık kaynak projede ${total} kabul edilen kod katkısı, hackathon birinciliği, TEKNOFEST 2026 finali. 8 Şubat 2027'den itibaren 14 haftalık İME stajı arıyor.`
-      : `Final-year computer engineering student. ${total} merged contributions in ${repos} open-source projects, hackathon winner, TEKNOFEST 2026 finalist. Looking for a 14-week internship from 8 February 2027.`;
+      ? `Bilgisayar mühendisliği 4. sınıf öğrencisi. ${repos} açık kaynak projede ${total} kabul edilen kod katkısı, hackathon birinciliği, TEKNOFEST 2026 finali. Tam zamanlı, uzun dönem staj arıyor; üniversite sigortasıyla 8 Şubat 2027'den itibaren 14 hafta, şirket sigortasıyla daha erken.`
+      : `Final-year computer engineering student. ${total} merged contributions in ${repos} open-source projects, hackathon winner, TEKNOFEST 2026 finalist. Seeking a full-time, long-term internship; 14 weeks from 8 February 2027 with university insurance, earlier with company insurance.`;
   const og = lang === 'tr' ? '/img/og.jpg' : '/img/og-en.jpg';
   const path = lang === 'tr' ? '/tr' : '/en';
   return {

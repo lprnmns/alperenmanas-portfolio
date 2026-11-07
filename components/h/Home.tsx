@@ -12,14 +12,9 @@ type DemoRes = { ref: boolean; before: boolean; after: boolean } | null; // true
 
 const fill = (t: string, v: Record<string, string | number>) => t.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ''));
 
-// Sayı CSS ile sıfırdan sayarak yükselir (@property); ekran okuyucu gerçek sayıyı okur, JS beklenmez
+// Sayılar ilk kareden itibaren gerçek değerini gösterir (sayaç animasyonu ara değerlerde yanlış okunuyordu)
 function Count({ to }: { to: number }) {
-  return (
-    <>
-      <span className={s.count} style={{ ['--to' as string]: to }} aria-hidden="true" />
-      <span className={s.srOnly}>{to}</span>
-    </>
-  );
+  return <span className={s.num}>{to}</span>;
 }
 function withCounts(t: string, v: Record<string, number>) {
   return t.split(/(\{\w+\})/).map((part, i) => {
@@ -250,26 +245,51 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
             </button>
           </h1>
           <p className={s.mSeek}>{t.seek}</p>
-          <p className={s.mRoles}>{t.roles}</p>
+          <p className={s.mSeekSub}>{t.seekSub} {t.roles.split(' · ').slice(-1)[0]}.</p>
+          <p className={s.mChips}>
+            {t.roles.split(' · ').slice(0, -1).map((r) => <span key={r} className={s.mChip}>{r}</span>)}
+          </p>
           <div className={s.mPaper}>
-            <p className={s.mPaperBig}>{t.m.paperA}<mark className={s.pen}>{withCounts(t.paperMark, vars)}</mark></p>
-            <p className={s.mPaperSmall}>{t.m.paperB}</p>
+            <p className={s.mPaperBig}>{t.paperA}<mark className={s.pen}>{withCounts(t.paperMark, vars)}</mark></p>
           </div>
-          <h2 className={s.mHiLabel}>{t.m.highlights}</h2>
-          <div className={s.mTiles}>
-            {t.m.cards.map((c) => {
-              const it = items.find((i) => i.id === c.id);
-              const img = c.id === 'teknofest' ? IMG.t : it?.img;
+          <div className={s.mAward}>
+            {t.m.cards.slice(0, 2).map((c, i) => {
+              const it = items.find((x) => x.id === c.id);
               return (
-                <button key={c.id} type="button" className={s.mTile} onClick={() => pick(c.id)}>
+                <button key={c.id} type="button" className={`${s.mAwardSlide} ${slide === i ? s.mAwardOn : ''}`} onClick={() => pick(c.id)} aria-hidden={slide !== i} tabIndex={slide === i ? 0 : -1}>
+                  <span className={s.mAwardImgWrap}>
+                    <img src={it?.panelImg ?? it?.img} alt={it?.alt ?? ''} className={s.mAwardImg} />
+                    <span className={s.mAwardBadge}>{c.tag}</span>
+                  </span>
+                  <span className={s.mAwardBody}>
+                    <span className={s.mAwardT}>{c.t}</span>
+                    <span className={s.mAwardD}>{c.d}</span>
+                  </span>
+                </button>
+              );
+            })}
+            <div className={s.mAwardTabs}>
+              {t.m.cards.slice(0, 2).map((c, i) => (
+                <button key={c.id} type="button" onClick={() => setSlide(i)} aria-label={c.t} aria-pressed={slide === i}>
+                  <span className={s.track}><span key={slide === i ? `m-${slide}` : 'idle'} className={`${s.bar} ${slide === i ? s.barRun : ''}`} /></span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className={s.mGrid}>
+            {t.m.cards.slice(2).map((c) => {
+              const it = items.find((x) => x.id === c.id);
+              return (
+                <button key={c.id} type="button" className={s.mCell} onClick={() => pick(c.id)}>
                   {c.logo ? (
-                    <span className={s.mTileLogo}><img src={c.logo === 'bgts' ? IMG.bgts : IMG.ptt} alt="" /></span>
+                    <span className={s.mCellLogo}><img src={c.logo === 'bgts' ? IMG.bgts : IMG.ptt} alt="" /></span>
                   ) : (
-                    <img src={img} alt="" className={s.mTileImg} loading="lazy" />
+                    <img src={it?.img} alt="" className={s.mCellImg} loading="lazy" />
                   )}
-                  <span className={s.mTileBody}>
-                    <span className={s.mTileT}>{c.t}</span>
-                    <span className={s.mTileD}>{c.d}</span>
+                  <span className={s.mCellBody}>
+                    <span className={s.mCellTag}>{c.tag}</span>
+                    <span className={s.mCellT}>{c.t}</span>
+                    <span className={s.mCellD}>{c.d}</span>
                   </span>
                 </button>
               );
@@ -281,7 +301,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
           <h2 className={s.mLabel}>{t.m.oss}</h2>
           <div className={s.mStats}>
             {t.m.stats.map((st) => (
-              <div key={st.l}><b>{fill(st.v, vars)}</b><span>{st.l}</span></div>
+              <div key={st.l}><b>{fill(st.v, vars)}</b><span>{st.l}</span>{st.s && <em>{st.s}</em>}</div>
             ))}
           </div>
           <div className={s.mBars}>
@@ -308,7 +328,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
             const prs = items.filter((i) => i.isPr);
             const order = ['mer671', ...prs.map((p) => p.id).filter((id) => id !== 'mer671')];
             const list = order.map((id) => prs.find((p) => p.id === id)!).filter(Boolean);
-            const shown = showAll ? list : list.slice(0, 5);
+            const shown = showAll ? list : list.slice(0, 3);
             return (
               <>
                 {shown.map((it) => (
@@ -319,12 +339,13 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
                         {it.demo && <em>{t.m.demoBadge}</em>}
                       </span>
                       <span className={s.mFixT}>{it.title}</span>
+                      {it.by && <span className={s.mFixBy}>{t.m.testTag} · {t.m.byLabel}: {it.by}</span>}
                     </span>
                     <span className={s.mChev} aria-hidden="true">›</span>
                   </button>
                 ))}
-                {!showAll && list.length > 5 && (
-                  <button type="button" className={s.mMore} onClick={() => setShowAll(true)}>{fill(t.m.showMore, { n: list.length - 5 })}</button>
+                {!showAll && list.length > 3 && (
+                  <button type="button" className={s.mMore} onClick={() => setShowAll(true)}>{fill(t.m.showMore, { n: list.length - 3 })}</button>
                 )}
                 <p className={s.mAll}><a href={LINKS.allPrs} target="_blank" rel="noopener noreferrer">{fill(t.seeAll, { n: vars.total })}</a></p>
               </>
@@ -349,6 +370,16 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
           })}
         </section>
 
+        <section className={s.mCta}>
+          <p className={s.mCtaT}>{t.cta.title}</p>
+          <p className={s.mCtaD}>{t.cta.text}</p>
+          <p className={s.mCtaBtns}>
+            <a className={s.ctaCv} href={LINKS.cv} target="_blank" rel="noopener noreferrer">{t.btnCv}</a>
+            <a className={s.ctaMail} href={LINKS.mail}>{t.cta.mail}</a>
+            <a className={s.ctaWa} href={`${LINKS.wa}?text=${encodeURIComponent(t.waText)}`} target="_blank" rel="noopener noreferrer">{WA}WhatsApp</a>
+          </p>
+        </section>
+
         <footer className={s.mFoot}>
           <a href={LINKS.mail}>{LINKS.email}</a>
           <span>{fill(t.footer, { date: fmtDate(sum.updated, lang) })}</span>
@@ -356,11 +387,11 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
         </footer>
 
         <nav className={s.mBar2} aria-label={t.m.contact}>
-          <a className={s.mCv} href={LINKS.cv} target="_blank" rel="noopener noreferrer">CV</a>
-          <a className={s.mWa} href={`${LINKS.wa}?text=${encodeURIComponent(t.waText)}`} target="_blank" rel="noopener noreferrer">{WA}WhatsApp</a>
+          <a className={s.mCv} href={LINKS.cv} target="_blank" rel="noopener noreferrer">{t.btnCv}</a>
           <a className={s.mIco} href={LINKS.mail} aria-label={t.nav.email}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3.5 6.5 12 13l8.5-6.5" /></svg>
           </a>
+          <a className={s.mWaIco} href={`${LINKS.wa}?text=${encodeURIComponent(t.waText)}`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">{WA}</a>
           <a className={s.mIco} href={LINKS.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">{GH}</a>
           <a className={s.mIco} href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">{LI}</a>
         </nav>
@@ -397,6 +428,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
           <div className={s.heroRow}>
             <div>
               <p className={s.seek}>{t.seek}</p>
+              <p className={s.seekSub}>{t.seekSub}</p>
               <p className={s.roles}>{t.roles}</p>
               <div className={s.btns}>
                 <a className={`${s.btn} ${s.btnWhite}`} href={LINKS.cv} target="_blank" rel="noopener noreferrer">{t.btnCv}</a>
@@ -443,6 +475,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
         <div className={s.max}>
           <div className={s.split}>
             <section aria-label={t.timelineAria}>
+              <p className={s.hint}>{t.hint}</p>
               <div className={s.tl}>
                 {groups.map((g) => (
                   <div key={g.key}>
@@ -464,10 +497,12 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
                                 {it.big && it.img && <img src={it.img} alt="" className={s.rowImg} loading="lazy" />}
                                 <span className={s.rowText}>
                                   <span className={s.dateIn}>{it.date}</span>
-                                  <span className={s.tag}>{it.tag}</span>
+                                  <span className={s.tag}>{it.tag}{it.demo && <em className={s.demoTag}>{t.m.demoBadge}</em>}</span>
                                   <span className={it.big ? s.titleBig : s.titleSmall}>{it.title}</span>
                                   {it.big && it.short && <span className={s.short}>{it.short}</span>}
+                                  {it.by && <span className={s.byLine}>{t.m.testTag} · {t.m.byLabel}: {it.by}</span>}
                                 </span>
+                                <span className={s.chev} aria-hidden="true">›</span>
                               </span>
                             </span>
                           </button>
@@ -529,6 +564,18 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
               )}
             </aside>
           </div>
+
+          <section className={s.cta}>
+            <div>
+              <p className={s.ctaT}>{t.cta.title}</p>
+              <p className={s.ctaD}>{t.cta.text}</p>
+            </div>
+            <p className={s.ctaBtns}>
+              <a className={s.ctaCv} href={LINKS.cv} target="_blank" rel="noopener noreferrer">{t.btnCv}</a>
+              <a className={s.ctaMail} href={LINKS.mail}>{t.cta.mail}</a>
+              <a className={s.ctaWa} href={`${LINKS.wa}?text=${encodeURIComponent(t.waText)}`} target="_blank" rel="noopener noreferrer">{WA}WhatsApp</a>
+            </p>
+          </section>
 
           <footer className={s.footer}>
             <a href={LINKS.mail} className={s.footMail}>{LINKS.email}</a>

@@ -120,7 +120,8 @@
 .slideOn { opacity: 1; visibility: visible; }
 .slideImgWrap { overflow: hidden; margin-bottom: 18px; }
 .slideImg { display: block; width: 100%; height: 340px; object-fit: cover; }
-.slideOn .slideText { animation: fadeIn .8s ease .2s both; }
+.slide .slideText { opacity: 0; transition: opacity .15s ease; }
+.slideOn .slideText { opacity: 1; transition: opacity .45s ease .5s; }
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 @keyframes rise { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
 .pMeta { margin: 0 0 8px; font-family: var(--font-mono), 'JetBrains Mono', monospace; font-size: 12px; color: #A8ADB5; }
@@ -208,7 +209,11 @@
 .mHead { background: #0E0F12; color: #fff; padding: 14px 0 20px; }
 .mTop { margin: 0 16px; font-family: var(--font-mono), 'JetBrains Mono', monospace; font-size: 11.5px; line-height: 1.4; color: #A8ADB5; }
 .mName { font-size: clamp(26px, calc((100vw - 34px) / 9.1), 70px) !important; white-space: nowrap !important; line-height: 1 !important; margin-top: 6px; padding: 0 16px !important; box-sizing: border-box; }
-.mSeek { margin: 14px 16px 0; font-size: 21px; line-height: 1.24; font-weight: 700; }
+.mSeek { margin: 14px 16px 0; font-size: 22px; line-height: 1.2; font-weight: 800; }
+.mSeekSub { margin: 6px 16px 0; font-size: 13.5px; line-height: 1.45; color: #C9CCD1; }
+.mChips { margin: 10px 16px 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.mChip { border: 1px solid #3A3D43; padding: 3px 8px; font-size: 12.5px; font-weight: 700; }
+.mChipPlain { font-size: 12.5px; color: #A8ADB5; padding: 3px 2px; }
 .mRoles { margin: 8px 16px 0; font-size: 14px; line-height: 1.4; color: #C9CCD1; }
 .mPaper { margin: 14px 16px 0; background: #F6F4EC; color: #0E0F12; padding: 14px 16px; }
 .mPaperBig { margin: 0; font-size: 17px; line-height: 1.38; font-weight: 500; }
@@ -331,3 +336,63 @@
   .mTile { min-height: 64px; }
 }
 .mTileT, .mTileD { overflow-wrap: anywhere; }
+
+/* ===== v2 ===== */
+.num { font-variant-numeric: tabular-nums; }
+.seekSub { margin: 8px 0 0; max-width: 620px; font-size: 16px; line-height: 1.45; color: #C9CCD1; animation: rise .6s ease .42s both; }
+.hint { margin: 0 0 6px 136px; font-size: 13px; font-weight: 700; color: #3F4349; }
+.demoTag { font-style: normal; background: #FFE14D; color: #0E0F12; padding: 0 5px; margin-left: 6px; font-size: 11.5px; }
+.byLine { display: block; margin-top: 3px; font-size: 12.5px; color: #3F4349; }
+.chev { margin-left: auto; align-self: center; padding-left: 10px; font-size: 22px; color: #8A8F96; transition: transform .15s; }
+.row:hover .chev { transform: translateX(3px); color: #0E0F12; }
+.cta { margin-top: 48px; background: #0E0F12; color: #fff; padding: 26px 28px; display: flex; flex-wrap: wrap; gap: 18px 32px; justify-content: space-between; align-items: center; }
+.ctaT { margin: 0; font-size: 26px; font-weight: 800; line-height: 1.2; }
+.ctaD { margin: 8px 0 0; font-size: 16px; line-height: 1.45; color: #C9CCD1; max-width: 640px; }
+.ctaBtns { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.ctaCv, .ctaMail, .ctaWa { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 4px; font-weight: 800; font-size: 15px; text-decoration: none; }
+.ctaCv { background: #fff; color: #0E0F12 !important; }
+.ctaMail { border: 1px solid #6B7077; color: #fff !important; }
+.ctaWa { background: #25D366; color: #0E0F12 !important; }
+.ctaWa svg { width: 18px; height: 18px; }
+
+/* telefon: büyük ödül kartı */
+.mAward { margin: 12px 16px 0; display: grid; }
+.mAwardSlide { grid-area: 1 / 1; display: flex; flex-direction: column; background: #1A1C20; color: #fff; border: 0; padding: 0; text-align: left; font: inherit; cursor: pointer; opacity: 0; visibility: hidden; transition: opacity .8s ease, visibility .8s; }
+.mAwardOn { opacity: 1; visibility: visible; }
+.mAwardImgWrap { position: relative; display: block; }
+.mAwardImg { display: block; width: 100%; aspect-ratio: 358 / 176; object-fit: cover; }
+.mAwardBadge { position: absolute; top: 8px; left: 8px; background: rgba(10, 10, 10, .75); border: 1px solid #FFE14D; color: #FDE68A; font-family: var(--font-mono), 'JetBrains Mono', monospace; font-size: 11px; padding: 3px 8px; }
+.mAwardBody { display: flex; flex-direction: column; padding: 10px 12px 32px; }
+.mAwardT { font-size: 17px; font-weight: 800; line-height: 1.2; }
+.mAwardD { margin-top: 3px; font-size: 13px; line-height: 1.35; color: #C9CCD1; }
+.mAwardTabs { grid-area: 1 / 1; align-self: end; display: flex; gap: 8px; padding: 0 12px 10px; z-index: 1; }
+.mAwardTabs button { flex: 1; height: 22px; padding: 0; border: 0; background: none; cursor: pointer; display: flex; align-items: flex-end; }
+.mAwardTabs .track { flex: 1; margin: 0; }
+.mAwardSlide .mAwardBody { opacity: 0; transition: opacity .15s ease; }
+.mAwardOn .mAwardBody { opacity: 1; transition: opacity .4s ease .45s; }
+
+/* telefon: 2×2 ızgara */
+.mGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 8px 16px 0; }
+.mCell { display: flex; flex-direction: column; background: #1A1C20; color: #fff; border: 0; padding: 0; text-align: left; font: inherit; cursor: pointer; min-width: 0; }
+.mCell:active { opacity: .85; }
+.mCellImg { display: block; width: 100%; height: 96px; object-fit: cover; object-position: top; }
+.mCellLogo { display: flex; align-items: center; justify-content: center; height: 96px; background: #fff; }
+.mCellLogo img { width: 64px; height: 64px; object-fit: contain; }
+.mCellBody { display: flex; flex-direction: column; padding: 8px 10px 10px; min-width: 0; }
+.mCellTag { font-family: var(--font-mono), 'JetBrains Mono', monospace; font-size: 10.5px; color: #FFE14D; }
+.mCellT { margin-top: 2px; font-size: 14.5px; font-weight: 800; line-height: 1.2; }
+.mCellD { margin-top: 2px; font-size: 12.5px; line-height: 1.3; color: #C9CCD1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* telefon: sayı kutularında ikinci satır, test/kabul eden satırı, kapanış */
+.mStats em { margin-top: 1px; font-style: normal; font-size: 12px; color: #5A5F66; line-height: 1.3; }
+.mLabel { color: #3F4349 !important; }
+.mFixBy { margin-top: 4px; font-size: 12px; color: #3F4349; line-height: 1.35; }
+.mCta { margin: 26px 16px 0; background: #0E0F12; color: #fff; padding: 18px 16px; }
+.mCtaT { margin: 0; font-size: 20px; font-weight: 800; line-height: 1.25; }
+.mCtaD { margin: 8px 0 0; font-size: 14px; line-height: 1.45; color: #C9CCD1; }
+.mCtaBtns { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+.mBar2 .mCv { flex: 1 1 auto; padding: 0 12px; }
+.mWaIco { flex: none; width: 46px; background: #25D366; color: #0E0F12 !important; }
+.mWaIco svg { width: 22px; height: 22px; }
+@media (max-width: 720px) and (max-height: 780px) { .mAwardImg { aspect-ratio: 358 / 140; } }
+@media (prefers-reduced-motion: reduce) { .mAwardSlide { transition: opacity .3s ease; } }
