@@ -112,7 +112,7 @@ const TR: Txt = {
   btnLi: 'LinkedIn',
   btnWa: 'WhatsApp',
   waText: 'Merhaba Alperen, sitenden ulaşıyorum.',
-  paperA: 'Aralarında Vite, Node.js undici ve three.js’in de bulunduğu, dünya çapında kullanılan ',
+  paperA: 'Aralarında Microsoft Semantic Kernel, Vite, Node.js undici ve three.js’in de bulunduğu, dünya çapında kullanılan ',
   paperMark: '{repos} projeye {total} kod katkım kabul edildi.',
   paperB: 'Yapay zekâ destekli denetimle hata adayı buluyorum, resmî referansla doğruluyorum, düzeltmeyi hatayı kanıtlayan bir testle gönderiyorum.',
   strip: [
@@ -139,7 +139,7 @@ const TR: Txt = {
   panelAria: 'Kanıt paneli',
   m: {
     top: 'Bilg. Müh. 4. sınıf · Kırıkkale Üni. · GNO 3.21 · Mezuniyet 2027',
-    paperA: 'Vite, Node.js undici ve three.js dahil, dünya çapında kullanılan ',
+    paperA: 'Microsoft Semantic Kernel, Vite, Node.js undici ve three.js dahil, dünya çapında kullanılan ',
     paperB: 'Hata adayını yapay zekâ destekli denetimle buluyor, resmî referansla doğruluyor, testle kanıtlayıp düzeltiyorum.',
     highlights: 'ÖNE ÇIKANLAR',
     swipe: 'kaydır →',
@@ -200,7 +200,7 @@ const EN: Txt = {
   btnLi: 'LinkedIn',
   btnWa: 'WhatsApp',
   waText: 'Hi Alperen, I found you through your website.',
-  paperA: 'In widely used open-source projects, including Vite, Node.js undici and three.js: ',
+  paperA: 'In widely used open-source projects, including Microsoft Semantic Kernel, Vite, Node.js undici and three.js: ',
   paperMark: '{total} merged contributions in {repos} projects.',
   paperB: 'I find bug candidates with AI-assisted review, confirm them against an official reference, and send each fix with a test that proves the bug.',
   strip: [
@@ -227,7 +227,7 @@ const EN: Txt = {
   panelAria: 'Evidence panel',
   m: {
     top: 'Comp. Eng., final year · Kırıkkale Univ. · GPA 3.21 · Class of 2027',
-    paperA: 'Including Vite, Node.js undici and three.js: ',
+    paperA: 'Including Microsoft Semantic Kernel, Vite, Node.js undici and three.js: ',
     paperB: 'I find bug candidates with AI-assisted review, confirm them against an official reference, and fix them with a test that proves the bug.',
     highlights: 'HIGHLIGHTS',
     swipe: 'swipe →',
