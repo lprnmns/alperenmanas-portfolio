@@ -489,7 +489,7 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
                       const on = it.id === sel;
                       return (
                         <div key={it.id} id={`ev-${it.id}`} className={s.anchor}>
-                          <button type="button" className={`${s.row} ${on ? s.rowOn : ''}`} onClick={() => (on ? back() : pick(it.id))} aria-pressed={on}>
+                          <button type="button" className={`${s.row} ${on ? s.rowOn : ''} ${it.rowLink && it.href ? s.rowHasLink : ''}`} style={it.rowLink && it.href ? { ['--link-w' as string]: `${new URL(it.href).host.length * 7.6 + 96}px` } : undefined} onClick={() => (on ? back() : pick(it.id))} aria-pressed={on}>
                             <span className={s.grid3}>
                               <span className={s.dateTxt}>{it.date}</span>
                               <span className={it.big ? s.sq : s.dot} />
@@ -506,6 +506,11 @@ export function Home({ lang, sum }: { lang: Lang; sum: Summary }) {
                               </span>
                             </span>
                           </button>
+                          {it.rowLink && it.href && (
+                            <a href={it.href} target="_blank" rel="noopener noreferrer" className={s.rowLink}>
+                              {new URL(it.href).host}<span aria-hidden="true">↗</span>
+                            </a>
+                          )}
                           {on && (
                             <div className={s.onlyPhone}>
                               <div className={s.phoneCard}><Detail it={it} phone /></div>
